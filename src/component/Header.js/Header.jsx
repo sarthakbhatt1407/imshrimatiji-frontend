@@ -23,6 +23,12 @@ const MainHeader = styled.header`
     left: 0;
     z-index: -1;
     opacity: 0.75;
+    @media only screen and (max-width: 949px) {
+      width: 100%;
+      background-position: center;
+      height: 90vh;
+      opacity: 0.6;
+    }
   }
 `;
 

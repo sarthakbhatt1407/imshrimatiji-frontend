@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 // Logo
@@ -19,7 +19,7 @@ const PcNav = styled.div`
   display: grid;
   gap: 2rem;
   grid-template-columns: 0.6fr 4fr 1fr;
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 949px) {
     display: none;
   }
 `;
@@ -30,6 +30,9 @@ const LogoDiv = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   height: 3rem;
+  @media only screen and (max-width: 949px) {
+    width: 25%;
+  }
 `;
 
 const PageLinksDiv = styled.div`
@@ -80,18 +83,69 @@ const UserControlsDiv = styled.div`
 // Mobile Navbar
 
 const MobileNav = styled.div`
-  @media only screen and (max-width: 768px) {
+  position: relative;
+  overflow: hidden;
+  @media only screen and (max-width: 949px) {
     display: flex;
+    justify-content: space-between;
+    button {
+      border: none;
+      outline: none;
+      background-color: transparent;
+
+      div {
+        width: 35px;
+        height: 3px;
+        background-color: black;
+        margin: 6px 0;
+      }
+    }
   }
-  @media only screen and (min-width: 769px) and (max-width: 2500px) {
+
+  /*  */
+
+  @media only screen and (min-width: 950px) and (max-width: 2500px) {
+    display: none;
+  }
+`;
+
+const HiddenMobileDiv = styled.div`
+  width: 70%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #ffffffb2;
+  position: absolute;
+  z-index: 2;
+  transition: all 0.7s ease-in-out;
+  transform: ${(props) =>
+    props.status === false ? "translateX(100%)" : "translateX(0)"};
+  span {
+    position: absolute;
+    top: 2rem;
+    color: white;
+    right: 1rem;
+    background-color: black;
+    padding: 1rem 1.5rem;
+    border-radius: 50%;
+  }
+  @media only screen and (min-width: 950px) and (max-width: 2500px) {
     display: none;
   }
 `;
 
 // Component
 const Navbar = () => {
+  const [mobileNav, setMobileNav] = useState(false);
+  const menuButtonHandler = () => {
+    setMobileNav(!mobileNav);
+  };
+
   return (
     <MainNav>
+      <HiddenMobileDiv status={mobileNav}>
+        <span onClick={menuButtonHandler}>x</span>
+      </HiddenMobileDiv>
       <PcNav>
         <LogoDiv logo={Logo}></LogoDiv>
         <PageLinksDiv>
@@ -110,7 +164,16 @@ const Navbar = () => {
           </Badge>
         </UserControlsDiv>
       </PcNav>
-      <MobileNav>2</MobileNav>
+      <MobileNav>
+        <LogoDiv logo={Logo}></LogoDiv>
+        {!mobileNav && (
+          <button onClick={menuButtonHandler}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </button>
+        )}
+      </MobileNav>
     </MainNav>
   );
 };

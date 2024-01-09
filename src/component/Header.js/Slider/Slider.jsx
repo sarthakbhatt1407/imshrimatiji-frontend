@@ -15,32 +15,11 @@ const MainBox = styled.div`
   overflow: hidden;
   margin: auto;
 
-  @media (max-width: 450px) {
-    height: 35vh;
-  }
-  @media only screen and (min-width: 451px) and (max-width: 1020px) {
-    height: 40vh;
+  @media only screen and (max-width: 949px) {
+    overflow: visible;
   }
 `;
-const SwicthBtn = styled.button`
-  position: absolute;
-  font-size: 1.5rem;
-  top: 44%;
-  left: ${(props) => (props.btnName === "prev" ? "0.5%" : "")};
-  right: ${(props) => (props.btnName === "next" ? "0.5%" : "")};
-  z-index: 2;
-  border: none;
-  background-color: transparent;
-  color: black;
-  opacity: 0.5;
-  width: 40px;
-  height: 40px;
-  padding: 0 0.2rem;
-  text-align: center;
-  @media (max-width: 450px) {
-    top: 40%;
-  }
-`;
+
 const SlideBox = styled.div`
   position: absolute;
   width: 100%;
@@ -50,8 +29,13 @@ const SlideBox = styled.div`
   grid-template-columns: 1fr 1.2fr;
   justify-content: center;
   align-items: center;
-  @media (max-width: 450px) {
-    height: 30vh;
+  @media only screen and (max-width: 949px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    div {
+    }
   }
 `;
 
@@ -88,6 +72,16 @@ const TextBox = styled.div`
         transform: translateY(0);
         box-shadow: 0.1rem 0.1rem 0.4rem #5e5d5d;
       }
+    }
+  }
+  @media only screen and (max-width: 949px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 `;
@@ -134,24 +128,7 @@ const Slider = () => {
       discount: "Up to 50% off",
       additional: "Limited Stocks",
       img: slide1,
-    },
-    {
-      event: "Republic Day Sale",
-      discount: "Up to 50% off",
-      additional: "Limited Stocks",
-      img: slide1,
-    },
-    {
-      event: "Republic Day Sale",
-      discount: "Up to 50% off",
-      additional: "Limited Stocks",
-      img: slide1,
-    },
-    {
-      event: "Republic Day Sale",
-      discount: "Up to 50% off",
-      additional: "Limited Stocks",
-      img: slide1,
+      id: "1",
     },
   ];
   useEffect(() => {}, []);
@@ -209,12 +186,6 @@ const Slider = () => {
   return (
     <>
       <SliderBox>
-        <SwicthBtn btnName="prev" onClick={prev}>
-          <ArrowBackIosNewIcon />
-        </SwicthBtn>
-        <SwicthBtn btnName="next" onClick={next}>
-          <ArrowForwardIosIcon />
-        </SwicthBtn>
         <MainBox>
           {slides.map((item) => {
             const { event, discount, id, img, additional } = item;
@@ -230,8 +201,6 @@ const Slider = () => {
                       <button>Shop Now</button>
                     </div>
                   </TextBox>
-
-                  {/* <ImgBox img={img}></ImgBox> */}
                 </SlideBox>
               </Link>
             );
