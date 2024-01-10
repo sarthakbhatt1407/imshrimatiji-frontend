@@ -70,7 +70,6 @@ const TextBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   span {
     color: black;
   }
@@ -97,9 +96,8 @@ const TextBox = styled.div`
     text-transform: uppercase;
     animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
     @media only screen and (max-width: 949px) {
-      width: 8rem;
       letter-spacing: 0.1rem;
-      padding: 0.8rem 0.6rem;
+      padding: 0.8rem 0.7rem;
     }
     &:hover {
       transform: translateY(-5px);
@@ -115,11 +113,18 @@ const TextBox = styled.div`
     width: 100vw;
     display: flex;
     justify-content: center;
+    /* background-color: yellow; */
     align-items: center;
     margin-top: -12rem;
     div {
+      width: 70%;
       display: flex;
-      justify-content: center;
+      gap: 2rem;
+      align-items: center;
+      /* background-color: red; */
+      span {
+        text-align: center;
+      }
     }
   }
 `;
@@ -130,18 +135,25 @@ const DiscountSpan = styled.span`
   font-weight: bold;
 
   @media only screen and (max-width: 949px) {
-    font-size: 3rem;
+    font-size: 4rem;
+    /* background-color: yellow; */
   }
 `;
 
 const EventSpan = styled.span`
   font-size: 1rem;
   font-weight: 200;
+  @media only screen and (max-width: 949px) {
+    font-size: 1.6rem;
+  }
 `;
 const AddiSpan = styled.span`
   font-size: 1.3rem;
   text-transform: capitalize;
   font-size: 500;
+  @media only screen and (max-width: 949px) {
+    font-size: 1.6rem;
+  }
 `;
 
 const Slider = () => {

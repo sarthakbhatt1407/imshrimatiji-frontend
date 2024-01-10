@@ -19,7 +19,7 @@ import { colors } from "../../../data";
 const MainNav = styled.nav`
   padding: 1rem;
   @media only screen and (max-width: 949px) {
-    padding: 0.4rem 0rem 0.4rem 1rem;
+    /* padding: 0.4rem 1rem 0.4rem 1rem; */
   }
 `;
 
@@ -42,7 +42,6 @@ const LogoDiv = styled.div`
   height: 3rem;
   @media only screen and (max-width: 949px) {
     width: 25%;
-    /* margin-right: 0.2rem; */
   }
 `;
 
@@ -93,7 +92,8 @@ const UserControlsDiv = styled.div`
 const MobileNav = styled.div`
   position: relative;
   overflow: hidden;
-  padding-right: 0.9rem;
+  padding-right: 1rem;
+  padding-top: 0.2rem;
   span {
     svg {
       color: ${colors.mainColor};
@@ -283,9 +283,11 @@ const Navbar = () => {
         </button>
 
         <LogoDiv logo={Logo}></LogoDiv>
-        <Badge badgeContent={4} color="primary">
-          <LocalMall color="action" />
-        </Badge>
+        <div>
+          <Badge badgeContent={4} color="primary">
+            <LocalMall color="action" />
+          </Badge>
+        </div>
       </MobileNav>
     </MainNav>
   );
