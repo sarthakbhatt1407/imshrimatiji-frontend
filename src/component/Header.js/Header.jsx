@@ -7,7 +7,7 @@ import bg from "../../assets/images/background/bg.jpg";
 // CSS
 const MainHeader = styled.header`
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   overflow: hidden;
   position: relative;
   &::before {

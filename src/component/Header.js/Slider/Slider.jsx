@@ -96,7 +96,11 @@ const TextBox = styled.div`
     outline: none;
     text-transform: uppercase;
     animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-
+    @media only screen and (max-width: 949px) {
+      width: 8rem;
+      letter-spacing: 0.1rem;
+      padding: 0.8rem 0.6rem;
+    }
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0.3rem 0.3rem 0.4rem #5e5d5d;

@@ -6,6 +6,7 @@ const EnvVariables = {
 
 const colors = {
   mainColor: " #ba445e",
+  secondaryColor: "#52A892",
 };
 
 exports.EnvVariables = EnvVariables;
