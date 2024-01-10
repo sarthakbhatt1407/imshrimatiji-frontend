@@ -117,7 +117,7 @@ const TextBox = styled.div`
     align-items: center;
     margin-top: -12rem;
     div {
-      width: 70%;
+      width: 100%;
       display: flex;
       gap: 2rem;
       align-items: center;
@@ -135,8 +135,9 @@ const DiscountSpan = styled.span`
   font-weight: bold;
 
   @media only screen and (max-width: 949px) {
-    font-size: 4rem;
-    /* background-color: yellow; */
+    font-size: 5rem;
+    width: 100%;
+    letter-spacing: 0.5rem;
   }
 `;
 
@@ -144,7 +145,9 @@ const EventSpan = styled.span`
   font-size: 1rem;
   font-weight: 200;
   @media only screen and (max-width: 949px) {
-    font-size: 1.6rem;
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    font-weight: 400;
   }
 `;
 const AddiSpan = styled.span`
@@ -152,7 +155,9 @@ const AddiSpan = styled.span`
   text-transform: capitalize;
   font-size: 500;
   @media only screen and (max-width: 949px) {
-    font-size: 1.6rem;
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.2rem;
   }
 `;
 
