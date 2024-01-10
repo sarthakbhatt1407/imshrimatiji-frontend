@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import slide1 from "../../../assets/images/slider-image/1.webp";
 
@@ -58,7 +56,7 @@ const TextBox = styled.div`
       border-radius: 0.3rem;
       padding: 0.8rem 0.9rem;
       font-weight: bold;
-      letter-spacing: 0.09rem;
+      letter-spacing: 0.2rem;
       margin: 1rem 0;
       transition: all 0.5s;
       border: none;
@@ -102,109 +100,31 @@ const AddiSpan = styled.span`
   letter-spacing: 0.09rem;
 `;
 
-const ImgBox = styled.div`
-  width: 100%;
-  height: 70%;
-  padding: 3rem;
-  display: flex;
-  justify-content: center;
-  background: url(${(props) => props.img});
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  @media (max-width: 450px) {
-    width: 58%;
-  }
-  @media only screen and (min-width: 451px) and (max-width: 1020px) {
-    width: 60%;
-  }
-`;
-const SlideBoxImg = styled.img``;
-
 const Slider = () => {
-  const slides = [
-    {
-      event: "Republic Day Sale",
-      discount: "Up to 50% off",
-      additional: "Limited Stocks",
-      img: slide1,
-      id: "1",
-    },
-  ];
-  useEffect(() => {}, []);
-
-  const imageLeft = () => {
-    const images = document.querySelectorAll(".slide");
-    images.forEach((slide, ind) => {
-      slide.style.left = `${ind * 100}%`;
-    });
+  const headerInfo = {
+    event: "Republic Day Sale",
+    discount: "Up to 50% off",
+    additional: "Limited Stocks",
+    img: slide1,
+    id: "1",
   };
-  setTimeout(() => {
-    imageLeft();
-  }, 1);
-  const slider = () => {
-    const images = document.querySelectorAll(".slide");
-    images.forEach((slide) => {
-      slide.style.transform = `translateX(-${current * 100}%)`;
-    });
-  };
-
-  let current = 0;
-  const prev = () => {
-    const images = document.querySelectorAll(".slide");
-    if (current > 0) {
-      current--;
-      slider();
-    } else {
-      current = images.length - 1;
-      slider();
-    }
-  };
-
-  const next = () => {
-    const images = document.querySelectorAll(".slide");
-
-    if (current < images.length - 1) {
-      current++;
-      slider();
-    } else {
-      current = 0;
-      slider();
-    }
-  };
-  // const intv = setInterval(() => {
-  //   const images = document.querySelectorAll(".slide");
-  //   if (current < images.length - 1) {
-  //     current++;
-  //     slider();
-  //   } else {
-  //     current = 0;
-  //     slider();
-  //   }
-  // }, 3000);
 
   return (
     <>
       <SliderBox>
         <MainBox>
-          {slides.map((item) => {
-            const { event, discount, id, img, additional } = item;
-
-            return (
-              <Link key={id} to={`/`}>
-                <SlideBox className="slide">
-                  <TextBox>
-                    <div>
-                      <EventSpan>{event}</EventSpan>
-                      <DiscountSpan>{discount}</DiscountSpan>
-                      <AddiSpan>{additional}</AddiSpan>
-                      <button>Shop Now</button>
-                    </div>
-                  </TextBox>
-                </SlideBox>
-              </Link>
-            );
-          })}
+          <Link to={`/`}>
+            <SlideBox className="slide">
+              <TextBox>
+                <div>
+                  <EventSpan>{headerInfo.event}</EventSpan>
+                  <DiscountSpan>{headerInfo.discount}</DiscountSpan>
+                  <AddiSpan>{headerInfo.additional}</AddiSpan>
+                  <button>Shop Now</button>
+                </div>
+              </TextBox>
+            </SlideBox>
+          </Link>
         </MainBox>
       </SliderBox>
     </>

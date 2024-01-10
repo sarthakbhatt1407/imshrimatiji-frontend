@@ -58,7 +58,6 @@ const PageLinksDiv = styled.div`
 `;
 
 const UserControlsDiv = styled.div`
-  /* background-color: yellow; */
   height: 3rem;
   display: flex;
   justify-content: end;
@@ -71,7 +70,6 @@ const UserControlsDiv = styled.div`
     transition: all 0.2s;
     backface-visibility: hidden;
     color: black;
-    /* font-weight: 600; */
     letter-spacing: 0.09rem;
     &:hover {
       color: #ba445e;
