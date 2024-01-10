@@ -42,6 +42,7 @@ const LogoDiv = styled.div`
   height: 3rem;
   @media only screen and (max-width: 949px) {
     width: 25%;
+    transform: scale(1.15);
   }
 `;
 
@@ -97,6 +98,7 @@ const MobileNav = styled.div`
   span {
     svg {
       color: ${colors.mainColor};
+      transform: scale(1.5);
     }
     span {
       background-color: ${colors.secondaryColor};
@@ -143,6 +145,7 @@ const HiddenMobileDiv = styled.div`
   gap: 2rem;
   transform: ${(props) =>
     props.status === false ? "translateX(-100%)" : "translateX(0)"};
+
   span {
     position: absolute;
     top: 0.2rem;
