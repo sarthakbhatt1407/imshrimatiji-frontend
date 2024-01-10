@@ -79,43 +79,43 @@ const TextBox = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     span {
-      animation: ${SpanAni} 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+      animation: ${SpanAni} 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
       width: 100%;
-}
-    }
-    button {
-      width: 10rem;
-      background-color: black;
-      color: white;
-      border-radius: 0.3rem;
-      padding: 0.8rem 0.9rem;
-      font-weight: bold;
-      letter-spacing: 0.2rem;
-      margin: 1rem 0;
-      border: none;
-      outline: none;
-      text-transform: uppercase;
-      animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0.3rem 0.3rem 0.4rem #5e5d5d;
-      }
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0.1rem 0.1rem 0.4rem #5e5d5d;
-      }
     }
   }
+  button {
+    width: 10rem;
+    background-color: black;
+    color: white;
+    border-radius: 0.3rem;
+    padding: 0.8rem 0.9rem;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+    margin: 1rem 0;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0.3rem 0.3rem 0.4rem #5e5d5d;
+    }
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0.1rem 0.1rem 0.4rem #5e5d5d;
+    }
+  }
+
   @media only screen and (max-width: 949px) {
+    width: 100vw;
     display: flex;
-    width: 80vw;
     justify-content: center;
     align-items: center;
+    margin-top: -17rem;
     div {
       display: flex;
       justify-content: center;
-      align-items: center;
     }
   }
 `;
@@ -126,7 +126,7 @@ const DiscountSpan = styled.span`
   font-weight: bold;
 
   @media only screen and (max-width: 949px) {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 `;
 

@@ -12,6 +12,9 @@ import { colors } from "../../../data";
 
 const MainNav = styled.nav`
   padding: 1rem;
+  @media only screen and (max-width: 949px) {
+    padding: 0.4rem 1rem;
+  }
 `;
 
 // Pc Navbar
@@ -33,6 +36,7 @@ const LogoDiv = styled.div`
   height: 3rem;
   @media only screen and (max-width: 949px) {
     width: 25%;
+    margin-right: 0.8rem;
   }
 `;
 
@@ -93,10 +97,10 @@ const MobileNav = styled.div`
       background-color: transparent;
 
       div {
-        width: 35px;
-        height: 3px;
+        width: 30px;
+        height: 2.4px;
         background-color: black;
-        margin: 6px 0;
+        margin: 4px 0;
       }
     }
   }
