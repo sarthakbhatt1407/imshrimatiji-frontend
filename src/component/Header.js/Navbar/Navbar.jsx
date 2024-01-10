@@ -4,8 +4,9 @@ import styled from "styled-components";
 // Logo
 import Logo from "../../../assets/images/logo/logo-white.png";
 import { Link } from "react-router-dom";
-import { LocalMall } from "@mui/icons-material";
+import { CloseOutlined, LocalMall } from "@mui/icons-material";
 import { Badge } from "@mui/material";
+import { colors } from "../../../data";
 
 // css
 
@@ -37,7 +38,6 @@ const LogoDiv = styled.div`
 
 const PageLinksDiv = styled.div`
   height: 3rem;
-  /* background-color: red; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,7 +51,7 @@ const PageLinksDiv = styled.div`
     letter-spacing: 0.12rem;
     font-weight: 600;
     &:hover {
-      color: #ba445e;
+      color: ${colors.mainColor};
       transform: scale(1.15) translateZ(0);
     }
   }
@@ -72,7 +72,7 @@ const UserControlsDiv = styled.div`
     color: black;
     letter-spacing: 0.09rem;
     &:hover {
-      color: #ba445e;
+      color: ${colors.mainColor};
       transform: scale(1.15) translateZ(0);
     }
   }
@@ -83,6 +83,7 @@ const UserControlsDiv = styled.div`
 const MobileNav = styled.div`
   position: relative;
   overflow: hidden;
+
   @media only screen and (max-width: 949px) {
     display: flex;
     justify-content: space-between;
@@ -111,21 +112,21 @@ const HiddenMobileDiv = styled.div`
   width: 70%;
   height: 100%;
   top: 0;
-  right: 0;
-  background-color: #ffffffb2;
+  left: 0;
+  background-color: white;
   position: absolute;
   z-index: 2;
   transition: all 0.7s ease-in-out;
   transform: ${(props) =>
-    props.status === false ? "translateX(100%)" : "translateX(0)"};
+    props.status === false ? "translateX(-100%)" : "translateX(0)"};
   span {
     position: absolute;
-    top: 2rem;
-    color: white;
-    right: 1rem;
-    background-color: black;
+    top: 1.4rem;
+    color: #424242;
+    right: 0.7rem;
     padding: 1rem 1.5rem;
     border-radius: 50%;
+    transform: scale(1.6);
   }
   @media only screen and (min-width: 950px) and (max-width: 2500px) {
     display: none;
@@ -142,7 +143,9 @@ const Navbar = () => {
   return (
     <MainNav>
       <HiddenMobileDiv status={mobileNav}>
-        <span onClick={menuButtonHandler}>x</span>
+        <span onClick={menuButtonHandler}>
+          <CloseOutlined />
+        </span>
       </HiddenMobileDiv>
       <PcNav>
         <LogoDiv logo={Logo}></LogoDiv>
@@ -163,14 +166,13 @@ const Navbar = () => {
         </UserControlsDiv>
       </PcNav>
       <MobileNav>
+        <button onClick={menuButtonHandler}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </button>
+
         <LogoDiv logo={Logo}></LogoDiv>
-        {!mobileNav && (
-          <button onClick={menuButtonHandler}>
-            <div></div>
-            <div></div>
-            <div></div>
-          </button>
-        )}
       </MobileNav>
     </MainNav>
   );

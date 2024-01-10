@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import slide1 from "../../../assets/images/slider-image/1.webp";
 
 const SliderBox = styled.div`
   position: relative;
 `;
+
 const MainBox = styled.div`
   position: relative;
   width: 100%;
@@ -37,11 +38,39 @@ const SlideBox = styled.div`
   }
 `;
 
+const ButtonAni = keyframes`
+    0% {
+    opacity: 0;
+  }
+    70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+
+`;
+const SpanAni = keyframes`
+  0% {
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+
+
+`;
+
 const TextBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   span {
     color: black;
   }
@@ -49,8 +78,13 @@ const TextBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    span {
+      animation: ${SpanAni} 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+      width: 100%;
+}
+    }
     button {
-      width: 40%;
+      width: 10rem;
       background-color: black;
       color: white;
       border-radius: 0.3rem;
@@ -58,10 +92,11 @@ const TextBox = styled.div`
       font-weight: bold;
       letter-spacing: 0.2rem;
       margin: 1rem 0;
-      transition: all 0.5s;
       border: none;
       outline: none;
       text-transform: uppercase;
+      animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+
       &:hover {
         transform: translateY(-5px);
         box-shadow: 0.3rem 0.3rem 0.4rem #5e5d5d;
@@ -74,6 +109,7 @@ const TextBox = styled.div`
   }
   @media only screen and (max-width: 949px) {
     display: flex;
+    width: 80vw;
     justify-content: center;
     align-items: center;
     div {
@@ -83,21 +119,25 @@ const TextBox = styled.div`
     }
   }
 `;
+
 const DiscountSpan = styled.span`
   font-size: 4rem;
   margin-top: -0.5rem;
   font-weight: bold;
+
+  @media only screen and (max-width: 949px) {
+    font-size: 2.5rem;
+  }
 `;
+
 const EventSpan = styled.span`
   font-size: 1rem;
   font-weight: 200;
-  letter-spacing: 0.3rem;
 `;
 const AddiSpan = styled.span`
   font-size: 1.3rem;
   text-transform: capitalize;
   font-size: 500;
-  letter-spacing: 0.09rem;
 `;
 
 const Slider = () => {
