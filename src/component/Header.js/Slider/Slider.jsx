@@ -76,20 +76,20 @@ const TextBox = styled.div`
   div {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     span {
       animation: ${SpanAni} 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
       width: 100%;
     }
   }
   button {
-    width: 10rem;
+    width: 13rem;
     background-color: black;
     color: white;
-    border-radius: 0.3rem;
-    padding: 0.8rem 0.9rem;
+    border-radius: 0.7rem;
+    padding: 0.8rem 1.2rem;
     font-weight: bold;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.26rem;
     margin: 1rem 0;
     border: none;
     outline: none;
@@ -115,13 +115,12 @@ const TextBox = styled.div`
     justify-content: center;
     /* background-color: yellow; */
     align-items: center;
-    margin-top: -12rem;
+    margin-top: -25rem;
     div {
       width: 100%;
       display: flex;
-      gap: 2rem;
+      gap: 1rem;
       align-items: center;
-      /* background-color: red; */
       span {
         text-align: center;
       }
@@ -130,7 +129,7 @@ const TextBox = styled.div`
 `;
 
 const DiscountSpan = styled.span`
-  font-size: 4rem;
+  font-size: 6rem;
   margin-top: -0.5rem;
   font-weight: bold;
 
@@ -142,7 +141,7 @@ const DiscountSpan = styled.span`
 `;
 
 const EventSpan = styled.span`
-  font-size: 1rem;
+  font-size: 1.8rem;
   font-weight: 200;
   @media only screen and (max-width: 949px) {
     font-size: 2rem;
@@ -151,7 +150,7 @@ const EventSpan = styled.span`
   }
 `;
 const AddiSpan = styled.span`
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   text-transform: capitalize;
   font-size: 500;
   @media only screen and (max-width: 949px) {

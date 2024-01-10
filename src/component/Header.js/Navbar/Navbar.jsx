@@ -39,25 +39,26 @@ const LogoDiv = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  height: 3rem;
+  height: 3.7rem;
   @media only screen and (max-width: 949px) {
     width: 25%;
-    transform: scale(1.15);
+    height: 3.9rem;
   }
 `;
 
 const PageLinksDiv = styled.div`
-  height: 3rem;
+  height: 3.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
   text-transform: uppercase;
   a {
     text-decoration: none;
     transition: all 0.2s;
     backface-visibility: hidden;
     color: black;
+    font-size: 1.5rem;
     letter-spacing: 0.12rem;
     font-weight: 600;
     &:hover {
@@ -71,10 +72,10 @@ const UserControlsDiv = styled.div`
   height: 3rem;
   display: flex;
   justify-content: end;
-  gap: 1rem;
+  gap: 1.7rem;
   align-items: center;
-  font-size: 0.94rem;
-  padding-right: 1rem;
+  font-size: 1.3rem;
+  padding-right: 1.5rem;
   a {
     text-decoration: none;
     transition: all 0.2s;
