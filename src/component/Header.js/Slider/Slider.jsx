@@ -112,7 +112,7 @@ const TextBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -17rem;
+    margin-top: -12rem;
     div {
       display: flex;
       justify-content: center;
