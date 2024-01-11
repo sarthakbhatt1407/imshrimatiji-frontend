@@ -18,6 +18,8 @@ import { colors } from "../../../data";
 
 const MainNav = styled.nav`
   padding: 1rem;
+  position: sticky;
+  top: 0;
   @media only screen and (max-width: 949px) {
     /* padding: 0.4rem 1rem 0.4rem 1rem; */
   }

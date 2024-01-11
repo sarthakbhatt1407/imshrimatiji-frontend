@@ -6,6 +6,7 @@ import saree from "../../assets/images/category/saree.png";
 import kurti from "../../assets/images/category/kurti.png";
 import frock from "../../assets/images/category/frock.png";
 import suit from "../../assets/images/category/suit.png";
+import SectionHeading from "../UI/SectionHeading";
 
 //
 
@@ -23,34 +24,19 @@ const InnerBox = styled.div`
   gap: 3rem;
 `;
 
-const TextBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  h1 {
-    margin-top: 0.1rem;
-    font-weight: bold;
-    font-size: 4rem;
-    letter-spacing: 0.1rem;
-  }
-  span {
-    font-size: 1.2rem;
-    letter-spacing: 0.2rem;
-    color: #676767;
-  }
-`;
-
 const ItemsBox = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   padding: 0 2rem;
   gap: 2rem;
-  @media only screen and (max-width: 949px) {
+
+  @media only screen and (max-width: 649px) {
     grid-template-columns: 1fr;
     justify-items: center;
+  }
+  @media only screen and (min-width: 649px) and (max-width: 949px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -110,13 +96,11 @@ const Categories = () => {
     { title: "frock", img: frock },
     { title: "suit", img: suit },
   ];
+
   return (
     <MainBox>
       <InnerBox>
-        <TextBox>
-          <span>Shop by category</span>
-          <h1>Shop by category</h1>
-        </TextBox>
+        <SectionHeading data={`Shop by category`} />
         <ItemsBox>
           {categoryItems.map((item) => {
             return (
