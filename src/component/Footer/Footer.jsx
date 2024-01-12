@@ -19,6 +19,7 @@ const MainBox = styled.footer`
   padding: 3rem 4rem;
   border-top: 1px solid #ebebeb;
   background-color: #f7f7f7;
+  width: 100vw;
   @media only screen and (max-width: 900px) {
     padding: 3rem 1rem;
     gap: 1rem;

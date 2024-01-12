@@ -139,6 +139,20 @@ const FadeUpAni = keyframes`
   }
 `;
 
+const FadeAni = keyframes`
+  0%{
+    opacity: 0;
+    display: none;
+    transform: translateY(30px);
+
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+`;
+
 const HiddenMobileDiv = styled.div`
   text-transform: uppercase;
   background-color: white;
@@ -164,6 +178,8 @@ const HiddenMobileDiv = styled.div`
     padding: 1rem 1.5rem;
     border-radius: 50%;
     transform: scale(1.3);
+    animation: ${FadeAni} 1s;
+    backface-visibility: hidden;
   }
   @media only screen and (min-width: 950px) and (max-width: 2500px) {
     display: none;
@@ -173,7 +189,8 @@ const HiddenMobileDiv = styled.div`
     font-size: 1.5rem;
     letter-spacing: 0.1rem;
     padding: 1rem 0;
-
+    animation: ${FadeAni} 1s;
+    backface-visibility: hidden;
     text-decoration: none;
     border-bottom: 1px solid #dedede;
   }
@@ -198,13 +215,13 @@ const HiddenNavLinksDiv = styled.div`
   border-bottom: 1px solid #dedede;
   gap: 1rem;
   padding: 1rem 0;
+  animation: ${FadeUpAni} 1s;
+  animation-delay: 0.9s;
   letter-spacing: 0.09rem;
   svg {
     transform: scale(1.6);
   }
   p {
-    animation: ${FadeUpAni} 1s;
-    animation-delay: 0.9s;
   }
 `;
 
@@ -226,8 +243,12 @@ const CollapsibleDiv = styled.div`
 const Navbar = () => {
   const [arrowDown, setArrowDown] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
+  const [linksActive, setLinksActive] = useState(false);
   const menuButtonHandler = () => {
     setMobileNav(!mobileNav);
+    setTimeout(() => {
+      setLinksActive(!linksActive);
+    }, 250);
   };
 
   return (
@@ -237,44 +258,48 @@ const Navbar = () => {
           <CloseOutlined />
         </span>
         <HiddenNavLinksDiv>
-          <AccountCircle />
-          <p>Log in</p>
+          <>
+            <AccountCircle />
+            <p>Log in</p>
+          </>
         </HiddenNavLinksDiv>
-        <Link to="/">Home</Link>
-        <Link to="/">
-          <p
-            onClick={() => {
-              setArrowDown(!arrowDown);
-            }}
-            type="button"
-            class="para"
-            data-toggle="collapse"
-            data-target="#demo"
-          >
-            <p>Shop</p>
-            <i
+        {linksActive && <Link to="/">Home</Link>}
+        {linksActive && (
+          <Link to="/">
+            <p
               onClick={() => {
-                const para = document.querySelector(".para");
-                para.click();
+                setArrowDown(!arrowDown);
               }}
+              type="button"
+              class="para"
+              data-toggle="collapse"
+              data-target="#demo"
             >
-              {arrowDown && <KeyboardArrowDown />}
-              {!arrowDown && <KeyboardArrowUp />}
-            </i>
-          </p>
-          <div id="demo" class="collapse">
-            <CollapsibleDiv>
-              <Link to="/">Saree</Link>
-              <Link to="/">Kurti</Link>
-              <Link to="/">Frock</Link>
-              <Link to="/">Suit</Link>
-            </CollapsibleDiv>
-          </div>
-        </Link>
+              <p>Shop</p>
+              <i
+                onClick={() => {
+                  const para = document.querySelector(".para");
+                  para.click();
+                }}
+              >
+                {arrowDown && <KeyboardArrowDown />}
+                {!arrowDown && <KeyboardArrowUp />}
+              </i>
+            </p>
+            <div id="demo" class="collapse">
+              <CollapsibleDiv>
+                <Link to="/">Saree</Link>
+                <Link to="/">Kurti</Link>
+                <Link to="/">Frock</Link>
+                <Link to="/">Suit</Link>
+              </CollapsibleDiv>
+            </div>
+          </Link>
+        )}
 
-        <Link to="/">Story</Link>
-        <Link to="/">Orders</Link>
-        <Link to="/">Account</Link>
+        {linksActive && <Link to="/">Story</Link>}
+        {linksActive && <Link to="/">Orders</Link>}
+        {linksActive && <Link to="/">Account</Link>}
       </HiddenMobileDiv>
       <PcNav>
         <LogoDiv data-aos="fade-down" logo={Logo}></LogoDiv>
