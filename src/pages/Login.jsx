@@ -23,46 +23,10 @@ const MobileLogin = styled.div`
 `;
 
 const PcLogin = styled.div`
-  width: 30vw;
-  height: 70vh;
+  /* transform: scale(1.1); */
   position: absolute;
-  top: 12%;
-  left: 13%;
-  border-radius: 1rem;
-  box-shadow: 0.2rem 0.2rem 1rem #d4d4d4;
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  padding: 2rem 3rem;
-
-  img {
-    width: 25%;
-  }
-  span {
-    margin-bottom: -3.5rem;
-    color: #bcbcbc;
-  }
-  h2 {
-    color: black;
-    font-weight: bold;
-    letter-spacing: 0.09rem;
-    font-size: 3.5rem;
-  }
-  p {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.6rem;
-    span {
-      margin: 0;
-      color: #d0d0d0;
-      letter-spacing: 0.09rem;
-      &:not(:first-child) {
-        color: ${colors.mainColor};
-      }
-    }
-  }
-
+  top: 10%;
+  left: 10%;
   @media only screen and (max-width: 900px) {
     display: none;
   }
@@ -110,6 +74,56 @@ const ButtonDiv = styled.div`
   }
 `;
 
+const PcSignUp = styled.div`
+  width: 30vw;
+  height: 70vh;
+  position: absolute;
+  top: 12%;
+  left: 13%;
+  border-radius: 1rem;
+  box-shadow: 0.2rem 0.2rem 1rem #d4d4d4;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 2rem 3rem;
+  transition: all 2s;
+  transform: rotateY(-180deg);
+  &:hover {
+    transform: rotateY(0deg);
+  }
+  img {
+    width: 25%;
+  }
+  span {
+    margin-bottom: -3.5rem;
+    color: #bcbcbc;
+  }
+  h2 {
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.09rem;
+    font-size: 3.5rem;
+  }
+  p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    span {
+      margin: 0;
+      color: #d0d0d0;
+      letter-spacing: 0.09rem;
+      &:not(:first-child) {
+        color: ${colors.mainColor};
+      }
+    }
+  }
+
+  @media only screen and (max-width: 900px) {
+    display: none;
+  }
+`;
+
 const Login = () => {
   return (
     <MainBox>
@@ -117,9 +131,12 @@ const Login = () => {
         <AccountBox />
       </MobileLogin>
       <PcLogin>
+        <AccountBox />
+      </PcLogin>
+      {/* <PcSignUp>
         <img src={logo} alt="" />
-        <span>Welcome back !!!</span>
-        <h2>Sign in</h2>
+        <span>Welcome</span>
+        <h2>Sign Up</h2>
         <LabelInpDiv>
           <Label>Email</Label>
           <Input type="text" />
@@ -132,13 +149,13 @@ const Login = () => {
           <Input type="text" />
         </LabelInpDiv>
         <ButtonDiv>
-          <button>Sign in</button>
+          <button>Sign Up</button>
         </ButtonDiv>
         <p>
-          <span>I dont have and account? </span>
-          <span> Sign up</span>
+          <span>already have account? </span>
+          <span> Log in</span>
         </p>
-      </PcLogin>
+      </PcSignUp> */}
     </MainBox>
   );
 };

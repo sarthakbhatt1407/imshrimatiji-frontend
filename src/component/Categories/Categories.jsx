@@ -122,15 +122,13 @@ const Categories = () => {
         <ItemsBox>
           {categoryItems.map((item) => {
             return (
-              <>
-                <CategoryBox data-aos={item.ani}>
-                  <img src={item.img} alt="" />
-                  <span>
-                    <b>{item.title}</b>
-                    <i>6 Products</i>
-                  </span>
-                </CategoryBox>
-              </>
+              <CategoryBox key={item.title} data-aos={item.ani}>
+                <img src={item.img} alt="" />
+                <span>
+                  <b>{item.title}</b>
+                  <i>6 Products</i>
+                </span>
+              </CategoryBox>
             );
           })}
         </ItemsBox>

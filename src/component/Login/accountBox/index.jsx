@@ -7,7 +7,7 @@ import { AccountContext } from "./accountContext";
 import { colors } from "../../../data";
 
 const BoxContainer = styled.div`
-  width: 280px;
+  width: 480px;
   min-height: 550px;
   display: flex;
   flex-direction: column;
@@ -35,8 +35,8 @@ const BackDrop = styled(motion.div)`
   display: flex;
   flex-direction: column;
   border-radius: 50%;
-  top: -290px;
-  left: -70px;
+  top: -400px;
+  left: -290px;
   transform: rotate(60deg);
   background: linear-gradient(
     58deg,

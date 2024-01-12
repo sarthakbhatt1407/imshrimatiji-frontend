@@ -168,7 +168,7 @@ const HiddenMobileDiv = styled.div`
   flex-direction: column;
   gap: 2rem;
   transform: ${(props) =>
-    props.status === false ? "translateX(-100%)" : "translateX(0)"};
+    props.status === "false" ? "translateX(-100%)" : "translateX(0)"};
 
   span {
     position: absolute;
@@ -210,18 +210,28 @@ const HiddenMobileDiv = styled.div`
 
 const HiddenNavLinksDiv = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: start;
+  /* align-items: center; */
   border-bottom: 1px solid #dedede;
   gap: 1rem;
   padding: 1rem 0;
   animation: ${FadeUpAni} 1s;
   animation-delay: 0.9s;
   letter-spacing: 0.09rem;
+  /* background-color: yellow; */
   svg {
     transform: scale(1.6);
+    margin-top: 0.6rem;
   }
   p {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    a {
+      border: none;
+      padding: 0;
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -253,14 +263,16 @@ const Navbar = () => {
 
   return (
     <MainNav>
-      <HiddenMobileDiv status={mobileNav}>
+      <HiddenMobileDiv status={mobileNav.toString()}>
         <span onClick={menuButtonHandler}>
           <CloseOutlined />
         </span>
         <HiddenNavLinksDiv>
           <>
             <AccountCircle />
-            <p>Log in</p>
+            <p>
+              <Link to="/login">log in</Link>
+            </p>
           </>
         </HiddenNavLinksDiv>
         {linksActive && <Link to="/">Home</Link>}
@@ -327,7 +339,7 @@ const Navbar = () => {
           <Link data-aos="fade-down" to="/">
             Orders
           </Link>
-          <Link data-aos="fade-down" to="/">
+          <Link data-aos="fade-down" to="/login">
             Login
           </Link>
           <Badge data-aos="fade-down" badgeContent={4} color="primary">

@@ -92,7 +92,7 @@ const WhyChooseUs = () => {
       <ContentBox>
         {data.map((d) => {
           return (
-            <TextBox data-aos={d.ani}>
+            <TextBox key={d.mainHeading} data-aos={d.ani}>
               {d.icon}
               <h3>{d.mainHeading}</h3>
               <p>{d.secondaryHeading}</p>
