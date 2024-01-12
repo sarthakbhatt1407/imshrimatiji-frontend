@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 // Logo
 import Logo from "../../../assets/images/logo/logo-white.png";
@@ -128,6 +128,16 @@ const MobileNav = styled.div`
     display: none;
   }
 `;
+const FadeUpAni = keyframes`
+  0%{
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0px);
+  }
+`;
 
 const HiddenMobileDiv = styled.div`
   text-transform: uppercase;
@@ -182,7 +192,7 @@ const HiddenMobileDiv = styled.div`
 `;
 
 const HiddenNavLinksDiv = styled.div`
-  /* display: flex;
+  display: flex;
   align-items: center;
   justify-content: start;
   border-bottom: 1px solid #dedede;
@@ -191,14 +201,20 @@ const HiddenNavLinksDiv = styled.div`
   letter-spacing: 0.09rem;
   svg {
     transform: scale(1.6);
-  } */
+  }
+  p {
+    animation: ${FadeUpAni} 1s;
+    animation-delay: 0.9s;
+  }
 `;
+
 const CollapsibleDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 1rem 0.2rem;
   a {
+    animation: ${FadeUpAni} 1s;
     border: none;
     text-transform: capitalize;
     font-weight: bold;
@@ -261,19 +277,35 @@ const Navbar = () => {
         <Link to="/">Account</Link>
       </HiddenMobileDiv>
       <PcNav>
-        <LogoDiv logo={Logo}></LogoDiv>
+        <LogoDiv data-aos="fade-down" logo={Logo}></LogoDiv>
         <PageLinksDiv>
-          <Link to="/">Home</Link>
-          <Link to="/">Saree</Link>
-          <Link to="/">Kurti</Link>
-          <Link to="/">Frock</Link>
-          <Link to="/">Suit</Link>
+          <Link data-aos="fade-down" to="/">
+            Home
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Saree
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Kurti
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Frock
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Suit
+          </Link>
         </PageLinksDiv>
         <UserControlsDiv>
-          <Link to="/">Story</Link>
-          <Link to="/">Orders</Link>
-          <Link to="/">Login</Link>
-          <Badge badgeContent={4} color="primary">
+          <Link data-aos="fade-down" to="/">
+            Story
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Orders
+          </Link>
+          <Link data-aos="fade-down" to="/">
+            Login
+          </Link>
+          <Badge data-aos="fade-down" badgeContent={4} color="primary">
             <LocalMall color="action" />
           </Badge>
         </UserControlsDiv>

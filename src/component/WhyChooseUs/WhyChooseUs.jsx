@@ -58,24 +58,28 @@ const WhyChooseUs = () => {
     {
       icon: <LocalShipping />,
       mainHeading: "Fast Delivery",
+      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-right",
       secondaryHeading:
         " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec.",
     },
     {
       icon: <CreditCard />,
       mainHeading: "Free Shipping",
+      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-left",
       secondaryHeading:
         " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec.",
     },
     {
       icon: <SecurityOutlined />,
       mainHeading: "Secure Checkout",
+      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-left",
       secondaryHeading:
         " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec.",
     },
     {
       icon: <AssignmentReturn />,
       mainHeading: "Easy Replacements",
+      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-left",
       secondaryHeading:
         " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec.",
     },
@@ -86,7 +90,7 @@ const WhyChooseUs = () => {
       <ContentBox>
         {data.map((d) => {
           return (
-            <TextBox>
+            <TextBox data-aos={d.ani}>
               {d.icon}
               <h3>{d.mainHeading}</h3>
               <p>{d.secondaryHeading}</p>

@@ -91,10 +91,26 @@ const CategoryBox = styled.div`
 
 const Categories = () => {
   const categoryItems = [
-    { title: "saree", img: saree },
-    { title: "kurti", img: kurti },
-    { title: "frock", img: frock },
-    { title: "suit", img: suit },
+    {
+      title: "saree",
+      img: saree,
+      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-right",
+    },
+    {
+      title: "kurti",
+      img: kurti,
+      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-left",
+    },
+    {
+      title: "frock",
+      img: frock,
+      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-right",
+    },
+    {
+      title: "suit",
+      img: suit,
+      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-left",
+    },
   ];
 
   return (
@@ -105,7 +121,7 @@ const Categories = () => {
           {categoryItems.map((item) => {
             return (
               <>
-                <CategoryBox>
+                <CategoryBox data-aos={item.ani}>
                   <img src={item.img} alt="" />
                   <span>
                     <b>{item.title}</b>

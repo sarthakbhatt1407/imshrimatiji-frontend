@@ -34,7 +34,7 @@ const MainHeader = styled.header`
 
 const Header = () => {
   return (
-    <MainHeader bg={bg}>
+    <MainHeader data-aos="fade-in" bg={bg}>
       <Navbar />
       <Slider />
     </MainHeader>

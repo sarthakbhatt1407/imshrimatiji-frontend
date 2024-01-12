@@ -78,7 +78,7 @@ const TextBox = styled.div`
     flex-direction: column;
     gap: 1rem;
     span {
-      animation: ${SpanAni} 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+      /* animation: ${SpanAni} 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both; */
       width: 100%;
     }
   }
@@ -94,7 +94,7 @@ const TextBox = styled.div`
     border: none;
     outline: none;
     text-transform: uppercase;
-    animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    /* animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both; */
     @media only screen and (max-width: 949px) {
       letter-spacing: 0.1rem;
       padding: 0.8rem 0.7rem;
@@ -177,10 +177,16 @@ const Slider = () => {
             <SlideBox className="slide">
               <TextBox>
                 <div>
-                  <EventSpan>{headerInfo.event}</EventSpan>
-                  <DiscountSpan>{headerInfo.discount}</DiscountSpan>
-                  <AddiSpan>{headerInfo.additional}</AddiSpan>
-                  <button>Shop Now</button>
+                  <EventSpan data-aos="fade-right">
+                    {headerInfo.event}
+                  </EventSpan>
+                  <DiscountSpan data-aos="fade-left">
+                    {headerInfo.discount}
+                  </DiscountSpan>
+                  <AddiSpan data-aos="fade-right">
+                    {headerInfo.additional}
+                  </AddiSpan>
+                  <button data-aos="fade-in">Shop Now</button>
                 </div>
               </TextBox>
             </SlideBox>
