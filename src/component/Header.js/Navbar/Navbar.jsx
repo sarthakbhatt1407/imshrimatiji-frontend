@@ -18,10 +18,7 @@ import { colors } from "../../../data";
 
 const MainNav = styled.nav`
   padding: 1rem;
-  position: sticky;
-  top: 0;
   @media only screen and (max-width: 949px) {
-    /* padding: 0.4rem 1rem 0.4rem 1rem; */
   }
 `;
 
@@ -134,14 +131,14 @@ const MobileNav = styled.div`
 
 const HiddenMobileDiv = styled.div`
   text-transform: uppercase;
+  background-color: white;
   padding: 2rem 2rem;
   width: 67%;
-  height: 100%;
+  height: 100vh;
   top: 0;
   left: 0;
-  background-color: white;
   position: absolute;
-  z-index: 2;
+  z-index: 10;
   transition: all 0.7s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -185,7 +182,7 @@ const HiddenMobileDiv = styled.div`
 `;
 
 const HiddenNavLinksDiv = styled.div`
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: start;
   border-bottom: 1px solid #dedede;
@@ -194,7 +191,7 @@ const HiddenNavLinksDiv = styled.div`
   letter-spacing: 0.09rem;
   svg {
     transform: scale(1.6);
-  }
+  } */
 `;
 const CollapsibleDiv = styled.div`
   display: flex;
