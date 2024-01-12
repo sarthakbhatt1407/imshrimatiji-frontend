@@ -46,6 +46,7 @@ const CategoryBox = styled.div`
   align-items: center;
   background-color: #f7f7f7;
   position: relative;
+  animation-delay: 0.7s;
   &:hover {
     img {
       transform: scale(1.05);
