@@ -88,7 +88,9 @@ const WhyChooseUs = () => {
   ];
   return (
     <MainBox>
-      <SectionHeading data={`Why choose us`} />
+      <SectionHeading
+        data={{ main: "Why choose Us", secondary: "Why choose us" }}
+      />
       <ContentBox>
         {data.map((d) => {
           return (

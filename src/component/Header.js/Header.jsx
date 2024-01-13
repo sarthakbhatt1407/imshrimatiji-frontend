@@ -26,7 +26,7 @@ const MainHeader = styled.header`
     @media only screen and (max-width: 949px) {
       width: 100%;
       background-position: center;
-      height: 70vh;
+      height: 80vh;
       opacity: 0.6;
     }
   }

@@ -9,11 +9,17 @@ import { colors } from "../../../data";
 const BoxContainer = styled.div`
   width: 480px;
   min-height: 550px;
+  @media only screen and (max-width: 951px) {
+    width: 280px;
+  }
+  /* @media only screen and (min-width: 200px) and (max-width: 950px) {
+    width: 280px;
+  } */
   display: flex;
   flex-direction: column;
   border-radius: 19px;
   background-color: #fff;
-  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
+  box-shadow: 0.1rem 0.1rem 0.9rem rgba(131, 130, 130, 0.28);
   position: relative;
   overflow: hidden;
 `;
@@ -35,8 +41,12 @@ const BackDrop = styled(motion.div)`
   display: flex;
   flex-direction: column;
   border-radius: 50%;
-  top: -400px;
-  left: -290px;
+  top: -399px;
+  left: -371px;
+  @media only screen and (max-width: 951px) {
+    top: -283px;
+    left: -173px;
+  }
   transform: rotate(60deg);
   background: linear-gradient(
     58deg,
@@ -124,7 +134,7 @@ export default function AccountBox(props) {
 
   return (
     <AccountContext.Provider value={contextValue}>
-      <BoxContainer>
+      <BoxContainer data-aos="fade-right">
         <TopContainer>
           <BackDrop
             initial={false}

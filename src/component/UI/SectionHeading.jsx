@@ -7,7 +7,7 @@ const TextBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  h1 {
+  h2 {
     margin-top: 0.1rem;
     font-weight: bold;
     font-size: 4rem;
@@ -24,8 +24,8 @@ const SectionHeading = (props) => {
   const data = props.data;
   return (
     <TextBox>
-      <span data-aos="fade-right">{data}</span>
-      <h1 data-aos="fade-left">{data}</h1>
+      <span data-aos="fade-right">{data.secondary}</span>
+      <h2 data-aos="fade-left">{data.main}</h2>
     </TextBox>
   );
 };

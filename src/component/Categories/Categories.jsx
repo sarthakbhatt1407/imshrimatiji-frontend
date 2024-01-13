@@ -36,7 +36,7 @@ const ItemsBox = styled.div`
     grid-template-columns: 1fr;
     justify-items: center;
   }
-  @media only screen and (min-width: 649px) and (max-width: 949px) {
+  @media only screen and (min-width: 649px) and (max-width: 900px) {
     grid-template-columns: repeat(2, 1fr);
   }
 `;
@@ -118,7 +118,9 @@ const Categories = () => {
   return (
     <MainBox>
       <InnerBox>
-        <SectionHeading data={`Shop by category`} />
+        <SectionHeading
+          data={{ main: "Shop by category", secondary: "Shop by category" }}
+        />
         <ItemsBox>
           {categoryItems.map((item) => {
             return (

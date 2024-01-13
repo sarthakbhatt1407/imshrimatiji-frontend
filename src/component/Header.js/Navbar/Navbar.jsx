@@ -313,36 +313,20 @@ const Navbar = () => {
         {linksActive && <Link to="/">Orders</Link>}
         {linksActive && <Link to="/">Account</Link>}
       </HiddenMobileDiv>
-      <PcNav>
-        <LogoDiv data-aos="fade-down" logo={Logo}></LogoDiv>
+      <PcNav data-aos="fade-down">
+        <LogoDiv logo={Logo}></LogoDiv>
         <PageLinksDiv>
-          <Link data-aos="fade-down" to="/">
-            Home
-          </Link>
-          <Link data-aos="fade-down" to="/">
-            Saree
-          </Link>
-          <Link data-aos="fade-down" to="/">
-            Kurti
-          </Link>
-          <Link data-aos="fade-down" to="/">
-            Frock
-          </Link>
-          <Link data-aos="fade-down" to="/">
-            Suit
-          </Link>
+          <Link to="/">Home</Link>
+          <Link to="/">Saree</Link>
+          <Link to="/">Kurti</Link>
+          <Link to="/">Frock</Link>
+          <Link to="/">Suit</Link>
         </PageLinksDiv>
         <UserControlsDiv>
-          <Link data-aos="fade-down" to="/">
-            Story
-          </Link>
-          <Link data-aos="fade-down" to="/">
-            Orders
-          </Link>
-          <Link data-aos="fade-down" to="/login">
-            Login
-          </Link>
-          <Badge data-aos="fade-down" badgeContent={4} color="primary">
+          <Link to="/">Story</Link>
+          <Link to="/">Orders</Link>
+          <Link to="/login">Login</Link>
+          <Badge badgeContent={4} color="primary">
             <LocalMall color="action" />
           </Badge>
         </UserControlsDiv>
