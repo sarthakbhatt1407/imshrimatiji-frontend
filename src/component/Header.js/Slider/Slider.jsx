@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import slide1 from "../../../assets/images/slider-image/1.webp";
 
@@ -10,7 +10,7 @@ const SliderBox = styled.div`
 const MainBox = styled.div`
   position: relative;
   width: 100%;
-  height: 78.5vh;
+  height: 88vh;
   overflow: hidden;
   margin: auto;
 
@@ -38,33 +38,6 @@ const SlideBox = styled.div`
   }
 `;
 
-const ButtonAni = keyframes`
-    0% {
-    opacity: 0;
-  }
-    70% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-
-`;
-const SpanAni = keyframes`
-  0% {
-    -webkit-filter: blur(12px);
-            filter: blur(12px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-filter: blur(0px);
-            filter: blur(0px);
-    opacity: 1;
-  }
-
-
-`;
-
 const TextBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,7 +51,6 @@ const TextBox = styled.div`
     flex-direction: column;
     gap: 1rem;
     span {
-      /* animation: ${SpanAni} 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) both; */
       width: 100%;
     }
   }
@@ -94,7 +66,6 @@ const TextBox = styled.div`
     border: none;
     outline: none;
     text-transform: uppercase;
-    /* animation: ${ButtonAni} 1.3s cubic-bezier(0.39, 0.575, 0.565, 1) both; */
     @media only screen and (max-width: 949px) {
       letter-spacing: 0.1rem;
       padding: 0.8rem 0.7rem;
@@ -113,9 +84,8 @@ const TextBox = styled.div`
     width: 100vw;
     display: flex;
     justify-content: center;
-    /* background-color: yellow; */
     align-items: center;
-    margin-top: -25rem;
+    margin-top: -2rem;
     div {
       width: 100%;
       display: flex;

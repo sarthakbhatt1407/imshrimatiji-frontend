@@ -26,9 +26,13 @@ const MainHeader = styled.header`
     @media only screen and (max-width: 949px) {
       width: 100%;
       background-position: center;
-      height: 80vh;
+      height: 93vh;
       opacity: 0.6;
     }
+  }
+  @media only screen and (max-width: 949px) {
+    height: 100vh;
+    margin-bottom: 1rem;
   }
 `;
 
