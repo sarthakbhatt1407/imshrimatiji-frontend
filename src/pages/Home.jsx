@@ -4,10 +4,8 @@ import Categories from "../component/Categories/Categories";
 import WhyChooseUs from "../component/WhyChooseUs/WhyChooseUs";
 import Footer from "../component/Footer/Footer";
 import FeatureProducts from "../component/FeaturedProducts/FeatureProducts";
-import AOS from "aos";
 
 const Home = () => {
-  AOS.refresh();
   return (
     <>
       <Header />

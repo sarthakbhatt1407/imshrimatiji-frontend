@@ -124,11 +124,7 @@ const Categories = () => {
         <ItemsBox>
           {categoryItems.map((item) => {
             return (
-              <CategoryBox
-                key={item.title}
-                data-aos={item.ani}
-                data-aos-once="true"
-              >
+              <CategoryBox key={item.title} data-aos={item.ani}>
                 <img src={item.img} alt="" />
                 <span>
                   <b>{item.title}</b>
