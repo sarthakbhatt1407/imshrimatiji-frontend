@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import SectionHeading from "../UI/SectionHeading";
 import "./FeatureProducts.css";
-
+import AOS from "aos";
 import saree from "../../assets/images/featured/Kanji Silk Saree_3.webp";
 import FeatureProductBox from "../UI/FeatureProductBox";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 const MainBox = styled.section`
   padding: 1rem 0;
@@ -15,6 +16,7 @@ const MainBox = styled.section`
   align-items: center;
   gap: 2rem;
   overflow-x: hidden;
+  position: relative;
 `;
 
 const CategoryBox = styled.div`
@@ -41,40 +43,93 @@ const CategoryButton = styled.button`
 `;
 
 const ProductsBox = styled.div`
-  /* background-color: red; */
-  width: 100%;
   height: fit-content;
   display: flex;
-  gap: 5rem;
+  gap: 3rem;
   padding: 1rem 0;
   align-items: center;
-  overflow-x: scroll;
-  justify-content: space-evenly;
-  width: 100%;
+  overflow: scroll;
+  justify-content: center;
+  padding: 0 1rem;
+  width: 80%;
+  justify-content: start;
+  position: relative;
   @media only screen and (max-width: 949px) {
     width: 80%;
     justify-content: start;
   }
+  scroll-behavior: smooth;
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
+const LeftBtn = styled.button`
+  position: absolute;
+  top: 58%;
+  left: 11%;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+  z-index: 2;
+  font-size: 1.7rem;
+  font-weight: bold;
+  text-align: center;
+  svg {
+    transform: scale(1.8);
+  }
+  @media only screen and (max-width: 949px) {
+    width: 5rem;
+    left: 14%;
+    height: 5rem;
+  }
+`;
+const RightBtn = styled.button`
+  position: absolute;
+  top: 58%;
+  right: 10.5%;
+  z-index: 2;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+  svg {
+    transform: scale(1.8);
+  }
+  @media only screen and (max-width: 949px) {
+    width: 5rem;
+    right: 11%;
+    height: 5rem;
+  }
+  text-align: center;
+`;
+
 const FeatureProducts = () => {
   const data = [
     {
-      title: "kurti 01",
+      title: "Anarkali Frock for women black kjhfdskjhfnskj i ugiurei",
       img: saree,
       category: "kurti",
       price: 1999,
-      colors: ["red", "black", "green"],
+      colors: ["red", "black", "green", "black"],
     },
     {
       title: "kurti 02",
       img: saree,
       category: "kurti",
       price: 1999,
-      colors: ["red", "black", "green"],
+      colors: ["red", "green", "yellow", "ggg"],
     },
     {
       title: "kurti 03",
@@ -242,8 +297,24 @@ const FeatureProducts = () => {
     setCurrentView(id);
   };
 
+  const RightLeftBtnHandler = (e) => {
+    const id = e.target.id;
+    if (id === "left") {
+      document.getElementById("productBox").scrollBy(-360, 0);
+    }
+    if (id === "right") {
+      document.getElementById("productBox").scrollBy(360, 0);
+    }
+  };
+
   return (
     <MainBox>
+      <LeftBtn data-aos="fade-up" id="left" onClick={RightLeftBtnHandler}>
+        <ChevronLeft id="left" onClick={RightLeftBtnHandler} />
+      </LeftBtn>
+      <RightBtn data-aos="fade-up" id="right" onClick={RightLeftBtnHandler}>
+        <ChevronRight id="right" onClick={RightLeftBtnHandler} />
+      </RightBtn>
       <SectionHeading
         data={{ main: "Feature Products", secondary: "Shop by category" }}
       />

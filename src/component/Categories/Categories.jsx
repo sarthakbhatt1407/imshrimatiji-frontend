@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import AOS from "aos";
 
 // images
-import saree from "../../assets/images/category/saree.png";
-import kurti from "../../assets/images/category/kurti.png";
-import frock from "../../assets/images/category/frock.png";
-import suit from "../../assets/images/category/suit.png";
 import SectionHeading from "../UI/SectionHeading";
+import { EnvVariables } from "../../data";
+import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 
 //
 
@@ -15,8 +14,9 @@ const MainBox = styled.section`
   margin: 3rem 0;
   @media only screen and (max-width: 949px) {
     margin-top: -4rem;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
   }
+  width: 100%;
 `;
 
 const InnerBox = styled.div`
@@ -92,28 +92,19 @@ const CategoryBox = styled.div`
 `;
 
 const Categories = () => {
-  const categoryItems = [
-    {
-      title: "saree",
-      img: saree,
-      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-right",
-    },
-    {
-      title: "kurti",
-      img: kurti,
-      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-left",
-    },
-    {
-      title: "frock",
-      img: frock,
-      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-right",
-    },
-    {
-      title: "suit",
-      img: suit,
-      ani: window.screen.availWidth > 949 ? "fade-up" : "fade-left",
-    },
-  ];
+  const [categoryItems, setCategoryItems] = useState(null);
+
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(`${EnvVariables.BASE_URL}/category/all-category`);
+      const data = await res.json();
+      setCategoryItems(data.categories);
+      console.log(data);
+    };
+    fetcher();
+    return () => {};
+  }, []);
+  let counter = 0;
 
   return (
     <MainBox>
@@ -122,17 +113,50 @@ const Categories = () => {
           data={{ main: "Shop by category", secondary: "Shop by category" }}
         />
         <ItemsBox>
-          {categoryItems.map((item) => {
-            return (
-              <CategoryBox key={item.title} data-aos={item.ani}>
-                <img src={item.img} alt="" />
-                <span>
-                  <b>{item.title}</b>
-                  <i>6 Products</i>
-                </span>
-              </CategoryBox>
-            );
-          })}
+          {!categoryItems && <CategoryLoader />}
+          {categoryItems &&
+            categoryItems.map((item) => {
+              console.log(`${EnvVariables.BASE_URL}/${item.image}`);
+              if (counter === 0) {
+                counter++;
+                return (
+                  <CategoryBox
+                    key={item.title}
+                    data-aos={
+                      window.screen.availWidth > 949 ? "fade-up" : "fade-right"
+                    }
+                  >
+                    <img
+                      src={`${EnvVariables.BASE_URL}/${item.image}`}
+                      alt=""
+                    />
+                    <span>
+                      <b>{item.title}</b>
+                      <i>6 Products</i>
+                    </span>
+                  </CategoryBox>
+                );
+              } else {
+                counter--;
+                return (
+                  <CategoryBox
+                    key={item.title}
+                    data-aos={
+                      window.screen.availWidth > 949 ? "fade-up" : "fade-left"
+                    }
+                  >
+                    <img
+                      src={`${EnvVariables.BASE_URL}/${item.image}`}
+                      alt=""
+                    />
+                    <span>
+                      <b>{item.title}</b>
+                      <i>6 Products</i>
+                    </span>
+                  </CategoryBox>
+                );
+              }
+            })}
         </ItemsBox>
       </InnerBox>
     </MainBox>

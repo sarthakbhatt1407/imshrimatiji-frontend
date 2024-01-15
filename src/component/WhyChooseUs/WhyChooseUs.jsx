@@ -16,7 +16,7 @@ const MainBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 4rem;
-  width: 100vw;
+  width: 100%;
   overflow-x: hidden;
 `;
 

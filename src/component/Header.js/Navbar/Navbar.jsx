@@ -326,7 +326,7 @@ const Navbar = () => {
           <Link to="/">Story</Link>
           <Link to="/">Orders</Link>
           <Link to="/login">Login</Link>
-          <Badge badgeContent={4} color="primary">
+          <Badge badgeContent={1} color="primary">
             <LocalMall color="action" />
           </Badge>
         </UserControlsDiv>
