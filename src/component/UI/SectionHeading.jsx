@@ -24,8 +24,12 @@ const SectionHeading = (props) => {
   const data = props.data;
   return (
     <TextBox>
-      <span data-aos="fade-right">{data.secondary}</span>
-      <h2 data-aos="fade-left">{data.main}</h2>
+      <span data-aos="fade-right" data-aos-once="true">
+        {data.secondary}
+      </span>
+      <h2 data-aos="fade-left" data-aos-once="true">
+        {data.main}
+      </h2>
     </TextBox>
   );
 };

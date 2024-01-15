@@ -247,7 +247,7 @@ const FeatureProducts = () => {
       <SectionHeading
         data={{ main: "Feature Products", secondary: "Shop by category" }}
       />
-      <CategoryBox data-aos="fade-up">
+      <CategoryBox data-aos="fade-up" data-aos-once="true">
         <CategoryButton
           onClick={onClickHandler}
           className="button notActive active"
