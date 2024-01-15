@@ -4,7 +4,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   height: fit-content;
 `;
 
@@ -15,7 +15,7 @@ const Animation = keyframes`
 `;
 
 const Loader = styled.div`
-  width: 93vw;
+  width: 100%;
   height: 45rem;
   background: linear-gradient(90deg, #0000, #f7f7f7) left -50px top 0/100px 45rem
     no-repeat #fefefe;
