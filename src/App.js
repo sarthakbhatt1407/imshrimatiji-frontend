@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -6,7 +6,12 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 const App = () => {
-  AOS.init();
+  useEffect(() => {
+    AOS.init();
+
+    return () => {};
+  }, []);
+
   return (
     <>
       <Routes>

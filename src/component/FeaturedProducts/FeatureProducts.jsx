@@ -283,24 +283,28 @@ const FeatureProducts = () => {
             if (item.category === "saree") {
               return <FeatureProductBox key={item.title} data={item} />;
             }
+            return <></>;
           })}
         {currentView === "kurti" &&
           data.map((item) => {
             if (item.category === "kurti") {
               return <FeatureProductBox key={item.title} data={item} />;
             }
+            return <></>;
           })}
         {currentView === "frock" &&
           data.map((item) => {
             if (item.category === "frock") {
               return <FeatureProductBox key={item.title} data={item} />;
             }
+            return <></>;
           })}
         {currentView === "suit" &&
           data.map((item) => {
             if (item.category === "suit") {
               return <FeatureProductBox key={item.title} data={item} />;
             }
+            return <></>;
           })}
       </ProductsBox>
     </MainBox>
