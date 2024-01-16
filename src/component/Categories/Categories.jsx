@@ -14,9 +14,9 @@ const MainBox = styled.section`
   margin: 3rem 0;
   @media only screen and (max-width: 949px) {
     margin-top: -4rem;
-    /* overflow-x: hidden; */
   }
   width: 100%;
+  overflow: hidden;
 `;
 
 const InnerBox = styled.div`

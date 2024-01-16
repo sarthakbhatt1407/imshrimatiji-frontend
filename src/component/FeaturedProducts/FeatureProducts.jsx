@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionHeading from "../UI/SectionHeading";
 import "./FeatureProducts.css";
-import AOS from "aos";
-import saree from "../../assets/images/featured/Kanji Silk Saree_3.webp";
 import FeatureProductBox from "../UI/FeatureProductBox";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { EnvVariables } from "../../data";
 import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
+import { Link } from "react-router-dom";
 
 const MainBox = styled.section`
   padding: 1rem 0;
@@ -56,6 +55,7 @@ const ProductsBox = styled.div`
   max-width: 73%;
   justify-content: start;
   position: relative;
+  height: fit-content;
   overflow-x: scroll;
   @media only screen and (max-width: 949px) {
     width: 80%;
@@ -64,6 +64,10 @@ const ProductsBox = styled.div`
   scroll-behavior: smooth;
   &::-webkit-scrollbar {
     display: none;
+  }
+  a {
+    text-decoration: none;
+    color: black;
   }
 `;
 
@@ -139,11 +143,16 @@ const FeatureProducts = () => {
     const fetcher = async () => {
       const res = await fetch(`${EnvVariables.BASE_URL}/product/all-items`);
       const data = await res.json();
-      setProducts(data.products);
+      setProducts(data.products.reverse());
       setIsLoading(false);
     };
     fetcher();
-    return () => {};
+    const intv = setInterval(() => {
+      fetcher();
+    }, 1000);
+    return () => {
+      clearInterval(intv);
+    };
   }, []);
 
   const [currentView, setCurrentView] = useState("saree");
@@ -168,10 +177,10 @@ const FeatureProducts = () => {
   const RightLeftBtnHandler = (e) => {
     const id = e.target.id;
     if (id === "left") {
-      document.getElementById("productBox").scrollBy(-360, 0);
+      document.getElementById("productBox").scrollBy(-300, 0);
     }
     if (id === "right") {
-      document.getElementById("productBox").scrollBy(360, 0);
+      document.getElementById("productBox").scrollBy(300, 0);
     }
   };
   let sareeCounter = 0;
@@ -234,10 +243,12 @@ const FeatureProducts = () => {
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
               return (
-                <FeatureProductBox
-                  key={item.title}
-                  data={{ ...item, colors: colors, img: image }}
-                />
+                <Link to={`/${item.slug}`} state={{ productId: `${item.id}` }}>
+                  <FeatureProductBox
+                    key={item.title}
+                    data={{ ...item, colors: colors, img: image }}
+                  />
+                </Link>
               );
             }
             return <></>;
@@ -251,11 +262,58 @@ const FeatureProducts = () => {
               kurtiCounter++;
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
+
               return (
-                <FeatureProductBox
-                  key={item.title}
-                  data={{ ...item, colors: colors, img: image }}
-                />
+                <Link
+                  to={{
+                    pathname: `/${item.slug}`,
+                    state: `${item.id}`,
+                  }}
+                >
+                  <FeatureProductBox
+                    key={item.title}
+                    data={{ ...item, colors: colors, img: image }}
+                  />
+                </Link>
+              );
+            }
+            return <></>;
+          })}
+        {currentView === "suit" &&
+          !isLoading &&
+          products.length > 0 &&
+          products.map((item) => {
+            if (item.category === "suit") {
+              suitCounter++;
+              const colors = item.color.split(",");
+              const image = item.images.split(" ")[0];
+              console.log(image);
+              return (
+                <Link to="">
+                  <FeatureProductBox
+                    key={item.title}
+                    data={{ ...item, colors: colors, img: image }}
+                  />
+                </Link>
+              );
+            }
+            return <></>;
+          })}
+        {currentView === "frock" &&
+          !isLoading &&
+          products.length > 0 &&
+          products.map((item) => {
+            if (item.category === "frock") {
+              frockCounter++;
+              const colors = item.color.split(",");
+              const image = item.images.split(" ")[0];
+              return (
+                <Link to="">
+                  <FeatureProductBox
+                    key={item.title}
+                    data={{ ...item, colors: colors, img: image }}
+                  />
+                </Link>
               );
             }
             return <></>;

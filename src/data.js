@@ -1,7 +1,6 @@
 const EnvVariables = {
   // BASE_URL: "http://localhost:5000",
   BASE_URL: "https://imshrimatiji.onrender.com",
-  // BASE_URL: "https://imshrimati-backend.vercel.app",
 };
 
 // css

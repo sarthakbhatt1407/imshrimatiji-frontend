@@ -15,7 +15,7 @@ const Animation = keyframes`
 `;
 
 const Loader = styled.div`
-  width: 100%;
+  width: 80%;
   border-radius: 2rem;
   border: none;
   height: 45rem;

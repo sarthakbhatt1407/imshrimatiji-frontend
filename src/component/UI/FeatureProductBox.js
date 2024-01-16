@@ -3,26 +3,46 @@ import styled from "styled-components";
 import { EnvVariables } from "../../data";
 
 const MainBox = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; */
+  display: grid;
+  grid-template-rows: 1fr 1fr;
   text-align: center;
   background-color: #f7f7f7;
   border-radius: 0.4rem;
   padding: 2rem;
+  height: 80vh;
+  max-height: 80vh;
   cursor: pointer;
   &:hover {
-    transform: scale(1.5);
+    /* transform: scale(1.5); */
+  }
+  @media only screen and (max-width: 949px) {
+    padding: 2rem 2rem;
+    width: 100%;
+    height: 60vh;
+    max-height: 60vh;
+    &:hover {
+      transform: scale(1);
+    }
   }
 `;
 
 const ImgBox = styled.div`
   img {
     width: 30rem;
+
+    @media only screen and (max-width: 949px) {
+      width: 26rem;
+    }
   }
 `;
 
 const TextBox = styled.div`
+  color: black;
+  text-transform: capitalize;
   h4 {
     display: flex;
     justify-content: center;
@@ -41,7 +61,6 @@ const ColorDiv = styled.div`
   justify-content: center;
   padding: 1rem 0;
   align-items: center;
-
   position: relative;
   i {
     width: 2rem;
@@ -61,7 +80,6 @@ const ColorDiv = styled.div`
     visibility: hidden;
     position: absolute;
     top: -2rem;
-    /* left: 0; */
     z-index: 2;
     background-color: black;
     padding: 0.3rem 0.5rem 0.7rem 0.5rem;
@@ -97,7 +115,10 @@ const FeatureProductBox = (props) => {
         <img src={`${EnvVariables.BASE_URL}/${img}`} alt="" />
       </ImgBox>
       <TextBox>
-        <h3>{titleArr[0] + " " + titleArr[1]}</h3>
+        <h3>
+          {titleArr[0] || ""} {}
+          {titleArr[1] || ""}
+        </h3>
         <h4>₹ {price}</h4>
         <span>
           {colors.map((clr) => {

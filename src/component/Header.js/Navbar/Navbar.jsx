@@ -41,7 +41,7 @@ const LogoDiv = styled.div`
   height: 3.7rem;
   @media only screen and (max-width: 949px) {
     width: 25%;
-    height: 3.9rem;
+    height: 4.1rem;
   }
 `;
 
