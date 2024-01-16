@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SectionHeading from "../UI/SectionHeading";
 import "./FeatureProducts.css";
@@ -6,6 +6,8 @@ import AOS from "aos";
 import saree from "../../assets/images/featured/Kanji Silk Saree_3.webp";
 import FeatureProductBox from "../UI/FeatureProductBox";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { EnvVariables } from "../../data";
+import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 
 const MainBox = styled.section`
   padding: 1rem 0;
@@ -48,12 +50,13 @@ const ProductsBox = styled.div`
   gap: 3rem;
   padding: 1rem 0;
   align-items: center;
-  overflow: scroll;
   justify-content: center;
   padding: 0 1rem;
-  width: 80%;
+  width: fit-content;
+  max-width: 73%;
   justify-content: start;
   position: relative;
+  overflow-x: scroll;
   @media only screen and (max-width: 949px) {
     width: 80%;
     justify-content: start;
@@ -67,7 +70,7 @@ const ProductsBox = styled.div`
 const LeftBtn = styled.button`
   position: absolute;
   top: 58%;
-  left: 11%;
+  left: 15%;
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
@@ -93,7 +96,7 @@ const LeftBtn = styled.button`
 const RightBtn = styled.button`
   position: absolute;
   top: 58%;
-  right: 10.5%;
+  right: 14%;
   z-index: 2;
   width: 6rem;
   height: 6rem;
@@ -115,186 +118,51 @@ const RightBtn = styled.button`
   text-align: center;
 `;
 
+const NoProductsFoundDiv = styled.div`
+  width: 60vw;
+  letter-spacing: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  color: #a4a1a1;
+  height: 60vh;
+  font-size: 1.7rem;
+  border-radius: 1rem;
+`;
+
 const FeatureProducts = () => {
-  const data = [
-    {
-      title: "Anarkali Frock for women black kjhfdskjhfnskj i ugiurei",
-      img: saree,
-      category: "kurti",
-      price: 1999,
-      colors: ["red", "black", "green", "black"],
-    },
-    {
-      title: "kurti 02",
-      img: saree,
-      category: "kurti",
-      price: 1999,
-      colors: ["red", "green", "yellow", "ggg"],
-    },
-    {
-      title: "kurti 03",
-      img: saree,
-      category: "kurti",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "kurti 04",
-      img: saree,
-      category: "kurti",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "saree 01",
-      img: saree,
-      category: "saree",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "frock 01",
-      img: saree,
-      category: "frock",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-    {
-      title: "suit 01",
-      img: saree,
-      category: "suit",
-      price: 1999,
-      colors: ["red", "black", "green"],
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(`${EnvVariables.BASE_URL}/product/all-items`);
+      const data = await res.json();
+      setProducts(data.products);
+      setIsLoading(false);
+    };
+    fetcher();
+    return () => {};
+  }, []);
 
   const [currentView, setCurrentView] = useState("saree");
 
   const onClickHandler = (e) => {
     document.querySelector("#productBox").scrollLeft = 0;
-    const id = e.target.id;
-    const buttons = document.querySelectorAll(".button");
-    for (const btn of buttons) {
-      btn.classList.remove("active");
-      btn.classList.add("notActive");
-    }
+    setTimeout(() => {
+      const id = e.target.id;
+      const buttons = document.querySelectorAll(".button");
+      for (const btn of buttons) {
+        btn.classList.remove("active");
+        btn.classList.add("notActive");
+      }
 
-    const activeEle = document.querySelector(`#${id}`);
-    activeEle.classList.add("active");
-    activeEle.classList.remove("notActive");
-    setCurrentView(id);
+      const activeEle = document.querySelector(`#${id}`);
+      activeEle.classList.add("active");
+      activeEle.classList.remove("notActive");
+      setCurrentView(id);
+    }, 100);
   };
 
   const RightLeftBtnHandler = (e) => {
@@ -306,15 +174,22 @@ const FeatureProducts = () => {
       document.getElementById("productBox").scrollBy(360, 0);
     }
   };
-
-  return (
-    <MainBox>
-      <LeftBtn data-aos="fade-up" id="left" onClick={RightLeftBtnHandler}>
+  let sareeCounter = 0;
+  let kurtiCounter = 0;
+  let frockCounter = 0;
+  let suitCounter = 0;
+  const slideBtns = (
+    <>
+      <LeftBtn id="left" onClick={RightLeftBtnHandler}>
         <ChevronLeft id="left" onClick={RightLeftBtnHandler} />
       </LeftBtn>
-      <RightBtn data-aos="fade-up" id="right" onClick={RightLeftBtnHandler}>
+      <RightBtn id="right" onClick={RightLeftBtnHandler}>
         <ChevronRight id="right" onClick={RightLeftBtnHandler} />
       </RightBtn>
+    </>
+  );
+  return (
+    <MainBox>
       <SectionHeading
         data={{ main: "Feature Products", secondary: "Shop by category" }}
       />
@@ -348,36 +223,68 @@ const FeatureProducts = () => {
           Suit
         </CategoryButton>
       </CategoryBox>
+      {isLoading && <CategoryLoader />}
       <ProductsBox id="productBox">
         {currentView === "saree" &&
-          data.map((item) => {
+          !isLoading &&
+          products.length > 0 &&
+          products.map((item) => {
             if (item.category === "saree") {
-              return <FeatureProductBox key={item.title} data={item} />;
+              sareeCounter++;
+              const colors = item.color.split(",");
+              const image = item.images.split(" ")[0];
+              return (
+                <FeatureProductBox
+                  key={item.title}
+                  data={{ ...item, colors: colors, img: image }}
+                />
+              );
             }
             return <></>;
           })}
+
         {currentView === "kurti" &&
-          data.map((item) => {
+          !isLoading &&
+          products.length > 0 &&
+          products.map((item) => {
             if (item.category === "kurti") {
-              return <FeatureProductBox key={item.title} data={item} />;
+              kurtiCounter++;
+              const colors = item.color.split(",");
+              const image = item.images.split(" ")[0];
+              return (
+                <FeatureProductBox
+                  key={item.title}
+                  data={{ ...item, colors: colors, img: image }}
+                />
+              );
             }
             return <></>;
           })}
-        {currentView === "frock" &&
-          data.map((item) => {
-            if (item.category === "frock") {
-              return <FeatureProductBox key={item.title} data={item} />;
-            }
-            return <></>;
-          })}
-        {currentView === "suit" &&
-          data.map((item) => {
-            if (item.category === "suit") {
-              return <FeatureProductBox key={item.title} data={item} />;
-            }
-            return <></>;
-          })}
+        {currentView === "saree" && !isLoading && sareeCounter === 0 && (
+          <NoProductsFoundDiv>
+            <p>No Products Found...</p>
+          </NoProductsFoundDiv>
+        )}
+        {currentView === "kurti" && !isLoading && kurtiCounter === 0 && (
+          <NoProductsFoundDiv>
+            <p>No Products Found...</p>
+          </NoProductsFoundDiv>
+        )}
+        {currentView === "suit" && !isLoading && suitCounter === 0 && (
+          <NoProductsFoundDiv>
+            <p>No Products Found...</p>
+          </NoProductsFoundDiv>
+        )}
+        {currentView === "frock" && !isLoading && frockCounter === 0 && (
+          <NoProductsFoundDiv>
+            <p>No Products Found...</p>
+          </NoProductsFoundDiv>
+        )}
       </ProductsBox>
+      {currentView === "saree" && !isLoading && sareeCounter !== 0 && slideBtns}
+      {currentView === "kurti" && !isLoading && kurtiCounter !== 0 && slideBtns}
+      {currentView === "suit" && !isLoading && suitCounter !== 0 && slideBtns}
+      {currentView === "frock" && !isLoading && frockCounter !== 0 && slideBtns}
     </MainBox>
   );
 };

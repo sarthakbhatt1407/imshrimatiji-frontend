@@ -4,7 +4,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 80%;
   height: fit-content;
 `;
 
@@ -16,9 +16,11 @@ const Animation = keyframes`
 
 const Loader = styled.div`
   width: 100%;
+  border-radius: 2rem;
+  border: none;
   height: 45rem;
-  background: linear-gradient(90deg, #0000, #f7f7f7) left -50px top 0/100px 45rem
-    no-repeat #fefefe;
+  background: linear-gradient(90deg, #0000, #ebebeb) left -50px top 0/100px 45rem
+    no-repeat #fefefe14;
   animation: ${Animation} 1s infinite linear;
 `;
 const CategoryLoader = () => {

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { EnvVariables } from "../../data";
 
 const MainBox = styled.div`
   display: flex;
@@ -93,7 +94,7 @@ const FeatureProductBox = (props) => {
   return (
     <MainBox data-aos="fade-down">
       <ImgBox>
-        <img src={img} alt="" />
+        <img src={`${EnvVariables.BASE_URL}/${img}`} alt="" />
       </ImgBox>
       <TextBox>
         <h3>{titleArr[0] + " " + titleArr[1]}</h3>
