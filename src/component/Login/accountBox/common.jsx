@@ -72,6 +72,23 @@ export const SubmitButton = styled.button`
     filter: brightness(1.03);
   }
 `;
+export const DisSubmitButton = styled.button`
+  width: 100%;
+  max-width: 150px;
+  padding: 10px;
+  color: #00000042;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 240ms ease-in-out;
+  background: linear-gradient(58deg, #e6e6e6 20%, #e6e6e6 100%);
+
+  &:hover {
+    filter: brightness(1.03);
+  }
+`;
 
 export const LineText = styled.p`
   font-size: 12px;

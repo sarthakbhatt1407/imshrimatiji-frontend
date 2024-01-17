@@ -3,18 +3,16 @@ import styled from "styled-components";
 import { EnvVariables } from "../../data";
 
 const MainBox = styled.div`
-  /* display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; */
-  display: grid;
-  grid-template-rows: 1fr 1fr;
+  justify-content: center;
   text-align: center;
   background-color: #f7f7f7;
   border-radius: 0.4rem;
+  height: 20vh;
   padding: 2rem;
-  height: 80vh;
-  max-height: 80vh;
+  height: fit-content;
   cursor: pointer;
   &:hover {
     /* transform: scale(1.5); */
@@ -22,8 +20,7 @@ const MainBox = styled.div`
   @media only screen and (max-width: 949px) {
     padding: 2rem 2rem;
     width: 100%;
-    height: 60vh;
-    max-height: 60vh;
+
     &:hover {
       transform: scale(1);
     }
@@ -43,6 +40,7 @@ const ImgBox = styled.div`
 const TextBox = styled.div`
   color: black;
   text-transform: capitalize;
+
   h4 {
     display: flex;
     justify-content: center;
@@ -105,9 +103,10 @@ const ColorDiv = styled.div`
 `;
 
 const FeatureProductBox = (props) => {
-  const { title, img, price, colors } = props.data;
+  const { title, img, price, colors, id } = props.data;
   const titleArr = title.split(" ");
   let counter = 0;
+  let fireCounter = false;
 
   return (
     <MainBox data-aos="fade-down">
@@ -122,15 +121,20 @@ const FeatureProductBox = (props) => {
         <h4>₹ {price}</h4>
         <span>
           {colors.map((clr) => {
-            if (counter < 3) {
+            if (counter <= 2) {
               counter++;
+              if (counter === 2) {
+                fireCounter = true;
+              }
               return (
-                <ColorDiv>
+                <ColorDiv key={id + "kd" + counter}>
                   <span>{clr}</span>
                   <i clr={clr} key={clr} style={{ backgroundColor: clr }}></i>
                 </ColorDiv>
               );
-            } else {
+            }
+            if (counter === 3 && fireCounter) {
+              fireCounter = false;
               return (
                 <ColorDiv>
                   <span>more</span>
@@ -142,6 +146,7 @@ const FeatureProductBox = (props) => {
                 </ColorDiv>
               );
             }
+            return <></>;
           })}
         </span>
       </TextBox>

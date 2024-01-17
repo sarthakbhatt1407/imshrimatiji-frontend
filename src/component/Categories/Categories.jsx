@@ -61,14 +61,15 @@ const Categories = () => {
         <SectionHeading
           data={{ main: "Shop by category", secondary: "Shop by category" }}
         />
+        {!categoryItems && <CategoryLoader />}
         <ItemsBox>
-          {!categoryItems && <CategoryLoader />}
           {categoryItems &&
             categoryItems.map((item) => {
               if (counter === 0) {
                 counter++;
                 return (
                   <CategoryBox
+                    key={item.id}
                     item={item}
                     data={
                       window.screen.availWidth > 949 ? "fade-up" : "fade-right"

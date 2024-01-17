@@ -13,6 +13,7 @@ import {
 } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import { colors } from "../../../data";
+import { useSelector } from "react-redux";
 
 // css
 
@@ -161,7 +162,7 @@ const HiddenMobileDiv = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   transition: all 0.7s ease-in-out;
   display: flex;
@@ -251,6 +252,8 @@ const CollapsibleDiv = styled.div`
 
 // Component
 const Navbar = () => {
+  const cartTotalItems = useSelector((state) => state.cartItems.length);
+
   const [arrowDown, setArrowDown] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
   const [linksActive, setLinksActive] = useState(false);
@@ -326,7 +329,7 @@ const Navbar = () => {
           <Link to="/">Story</Link>
           <Link to="/">Orders</Link>
           <Link to="/login">Login</Link>
-          <Badge badgeContent={1} color="primary">
+          <Badge badgeContent={cartTotalItems} color="primary">
             <LocalMall color="action" />
           </Badge>
         </UserControlsDiv>
@@ -340,7 +343,7 @@ const Navbar = () => {
 
         <LogoDiv logo={Logo}></LogoDiv>
         <div>
-          <Badge badgeContent={4} color="primary">
+          <Badge badgeContent={cartTotalItems} color="primary">
             <LocalMall color="action" />
           </Badge>
         </div>

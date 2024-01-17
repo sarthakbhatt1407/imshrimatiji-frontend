@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   BoldLink,
   BoxContainer,
@@ -7,30 +7,136 @@ import {
   LineText,
   MutedLink,
   SubmitButton,
+  DisSubmitButton,
 } from "./common";
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
+import { EnvVariables } from "../../../data";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import FullPageLoader from "../../Loaders/CategoryLoader/FullPageLoader";
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [allFieldsValid, setAllFieldsValid] = useState(false);
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+  const defaultField = { email: "", password: "" };
+  const [inpField, setInpField] = useState(defaultField);
+  const allFieldChecker = () => {
+    const email = document.querySelector("#email").value;
+    const password = document.querySelector("#password").value;
+    if (validateEmail(email) && password.trim().length > 7) {
+      setAllFieldsValid(true);
+    }
+  };
+
+  const onChangeHanlder = (e) => {
+    setAllFieldsValid(false);
+    const id = e.target.id;
+    const val = e.target.value;
+
+    const ele = document.querySelector(`#${id}`);
+    allFieldChecker();
+    ele.style.border = "1px solid rgba(200, 200, 200, 0.3)";
+
+    setInpField({ ...inpField, [id]: val });
+  };
+
+  const emailOnBlur = (e) => {
+    const val = e.target.value;
+    const ele = document.querySelector("#email");
+    if (validateEmail(val)) {
+      ele.style.border = "1px solid rgba(200, 200, 200, 0.3)";
+      ele.placeholder = "Email";
+    } else {
+      ele.style.borderBottom = "1px solid red";
+      ele.placeholder = "Invalid email";
+    }
+  };
+  const passOnBlur = (e) => {
+    const val = e.target.value;
+    const ele = document.querySelector("#password");
+    if (val.trim().length < 8) {
+      ele.style.borderBottom = "1px solid red";
+      ele.placeholder = "Invalid password";
+    } else {
+      ele.style.borderBottom = "1px solid rgba(200, 200, 200, 0.3)";
+      ele.placeholder = "Password";
+    }
+  };
+  const history = useNavigate();
+  const onClickHandler = async () => {
+    setIsLoading(true);
+    const res = await fetch(`${EnvVariables.BASE_URL}/user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: inpField.email,
+        password: inpField.password,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      dispatch({ type: "log in", data: { ...data } });
+      setInpField(defaultField);
+      history("/");
+    }
+    setIsLoading(false);
+  };
 
   return (
-    <BoxContainer>
-      <FormContainer>
-        <Input type="email" placeholder="Email" />
-        <Input type="password" placeholder="Password" />
-      </FormContainer>
-      <Marginer direction="vertical" margin={10} />
-      <MutedLink href="#">Forget your password?</MutedLink>
-      <Marginer direction="vertical" margin="1.6em" />
-      <SubmitButton type="submit">Signin</SubmitButton>
-      <Marginer direction="vertical" margin="5px" />
-      <LineText>
-        Don't have an accoun?{" "}
-        <BoldLink onClick={switchToSignup} href="#">
-          Signup
-        </BoldLink>
-      </LineText>
-    </BoxContainer>
+    <>
+      <BoxContainer>
+        <FormContainer>
+          <Input
+            type="email"
+            placeholder="Email"
+            id="email"
+            onChange={onChangeHanlder}
+            onBlur={emailOnBlur}
+            value={inpField.email}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            id="password"
+            onChange={onChangeHanlder}
+            onBlur={passOnBlur}
+            value={inpField.password}
+          />
+        </FormContainer>
+        <Marginer direction="vertical" margin={10} />
+        <MutedLink href="#">Forget your password?</MutedLink>
+        <Marginer direction="vertical" margin="1.6em" />
+        {!allFieldsValid && (
+          <DisSubmitButton disabled type="submit">
+            Signin
+          </DisSubmitButton>
+        )}
+        {allFieldsValid && (
+          <SubmitButton type="submit" onClick={onClickHandler}>
+            Signin
+          </SubmitButton>
+        )}
+        <Marginer direction="vertical" margin="5px" />
+        <LineText>
+          Don't have an accoun?{" "}
+          <BoldLink onClick={switchToSignup} href="#">
+            Signup
+          </BoldLink>
+        </LineText>
+      </BoxContainer>
+    </>
   );
 }

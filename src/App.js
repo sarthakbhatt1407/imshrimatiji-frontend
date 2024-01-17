@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ProductPage from "./pages/ProductPage";
+import { useDispatch } from "react-redux";
 
 const App = () => {
   useEffect(() => {
@@ -16,7 +17,8 @@ const App = () => {
       clearInterval(aosRefresh);
     };
   }, []);
-
+  const dispatch = useDispatch();
+  dispatch({ type: "login", data: { data: "s" } });
   return (
     <>
       <Routes>

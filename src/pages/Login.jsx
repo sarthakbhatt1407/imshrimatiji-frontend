@@ -17,8 +17,15 @@ const MainBox = styled.div`
 `;
 
 const MobileLogin = styled.div`
-  display: none;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  @media only screen and (min-width: 900px) and (max-width: 1149px) {
+    left: 7%;
+    transform: scale(0.9);
+  }
   @media only screen and (max-width: 900px) {
+    position: static;
     display: block;
   }
 `;
@@ -43,9 +50,6 @@ const Login = () => {
       <MobileLogin>
         <AccountBox />
       </MobileLogin>
-      <PcLogin>
-        <AccountBox />
-      </PcLogin>
     </MainBox>
   );
 };

@@ -149,7 +149,7 @@ const FeatureProducts = () => {
     fetcher();
     const intv = setInterval(() => {
       fetcher();
-    }, 1000);
+    }, 600);
     return () => {
       clearInterval(intv);
     };
@@ -243,7 +243,11 @@ const FeatureProducts = () => {
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
               return (
-                <Link to={`/${item.slug}`} state={{ productId: `${item.id}` }}>
+                <Link
+                  to={`/${item.slug}`}
+                  key={item.id}
+                  state={{ productId: `${item.id}` }}
+                >
                   <FeatureProductBox
                     key={item.title}
                     data={{ ...item, colors: colors, img: image }}
@@ -265,6 +269,7 @@ const FeatureProducts = () => {
 
               return (
                 <Link
+                  key={item.id}
                   to={{
                     pathname: `/${item.slug}`,
                     state: `${item.id}`,
@@ -289,7 +294,7 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               console.log(image);
               return (
-                <Link to="">
+                <Link key={item.id} to="">
                   <FeatureProductBox
                     key={item.title}
                     data={{ ...item, colors: colors, img: image }}
@@ -308,7 +313,7 @@ const FeatureProducts = () => {
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
               return (
-                <Link to="">
+                <Link to="" key={item.id}>
                   <FeatureProductBox
                     key={item.title}
                     data={{ ...item, colors: colors, img: image }}
@@ -339,10 +344,26 @@ const FeatureProducts = () => {
           </NoProductsFoundDiv>
         )}
       </ProductsBox>
-      {currentView === "saree" && !isLoading && sareeCounter !== 0 && slideBtns}
-      {currentView === "kurti" && !isLoading && kurtiCounter !== 0 && slideBtns}
-      {currentView === "suit" && !isLoading && suitCounter !== 0 && slideBtns}
-      {currentView === "frock" && !isLoading && frockCounter !== 0 && slideBtns}
+      {currentView === "saree" &&
+        !isLoading &&
+        sareeCounter !== 0 &&
+        sareeCounter > 3 &&
+        slideBtns}
+      {currentView === "kurti" &&
+        !isLoading &&
+        kurtiCounter !== 0 &&
+        kurtiCounter > 3 &&
+        slideBtns}
+      {currentView === "suit" &&
+        !isLoading &&
+        suitCounter !== 0 &&
+        suitCounter > 3 &&
+        slideBtns}
+      {currentView === "frock" &&
+        !isLoading &&
+        frockCounter !== 0 &&
+        frockCounter > 3 &&
+        slideBtns}
     </MainBox>
   );
 };
