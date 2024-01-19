@@ -244,12 +244,11 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               return (
                 <Link
-                  to={`/${item.slug}`}
-                  key={item.id}
+                  to={`/product/${item.slug}`}
+                  key={item.id + item.title}
                   state={{ productId: `${item.id}` }}
                 >
                   <FeatureProductBox
-                    key={item.title}
                     data={{ ...item, colors: colors, img: image }}
                   />
                 </Link>
@@ -269,9 +268,9 @@ const FeatureProducts = () => {
 
               return (
                 <Link
-                  key={item.id}
+                  key={item.id + item.title}
                   to={{
-                    pathname: `/${item.slug}`,
+                    pathname: `/prdouct/${item.slug}`,
                     state: `${item.id}`,
                   }}
                 >
@@ -294,9 +293,8 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               console.log(image);
               return (
-                <Link key={item.id} to="">
+                <Link key={item.id + item.title} to="">
                   <FeatureProductBox
-                    key={item.title}
                     data={{ ...item, colors: colors, img: image }}
                   />
                 </Link>
@@ -313,7 +311,7 @@ const FeatureProducts = () => {
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
               return (
-                <Link to="" key={item.id}>
+                <Link to="" key={item.id + item.title}>
                   <FeatureProductBox
                     key={item.title}
                     data={{ ...item, colors: colors, img: image }}

@@ -171,25 +171,25 @@ const Footer = () => {
       {/* Upper */}
 
       <LogoAndLinksBox>
-        <LogoBox>
+        <LogoBox data-aos="fade-up">
           <img src={logo} alt="logo" />
         </LogoBox>
         <LinkAndCategoryBox>
-          <LinksBox>
+          <LinksBox data-aos="fade-up">
             <h4>Links</h4>
             <Link to="/">Story</Link>
             <Link to="/">Orders</Link>
             <Link to="/">Account</Link>
             <Link to="/">Cart</Link>
           </LinksBox>
-          <LinksBox>
+          <LinksBox data-aos="fade-up">
             <h4>Categories</h4>
             <Link to="/">Saree</Link>
             <Link to="/">Kurti</Link>
             <Link to="/">Frock</Link>
             <Link to="/">Suit</Link>
           </LinksBox>
-          <EmailSubBox>
+          <EmailSubBox data-aos="fade-up">
             <h4>Subscribe</h4>
             <input type="text" placeholder="Enter Your Email" />
             <button>Subscribe</button>

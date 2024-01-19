@@ -8,13 +8,7 @@ import { useDispatch } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    const localStr = JSON.parse(localStorage.getItem("state"));
-
-    if (localStr) {
-      dispatch({ type: "reload", data: { ...localStr } });
-    }
-  }, []);
+  useEffect(() => {}, []);
   return (
     <>
       <Header />

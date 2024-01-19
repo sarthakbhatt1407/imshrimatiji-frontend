@@ -11,7 +11,7 @@ const storeReducer = (state = defaultState, action) => {
   if (action.type === "log in") {
     const data = action.data;
     const user = data.user;
-
+    console.log("done");
     const obj = {
       ...state,
       isLoggedIn: true,
@@ -23,7 +23,12 @@ const storeReducer = (state = defaultState, action) => {
 
     localStorage.setItem("state", JSON.stringify(obj));
     return {
-      ...obj,
+      ...state,
+      isLoggedIn: true,
+      userToken: data.token,
+      userEmail: user.email,
+      userId: user.id,
+      userName: user.name,
     };
   }
   if (action.type === "logout") {
@@ -44,8 +49,6 @@ const storeReducer = (state = defaultState, action) => {
     };
   }
   if (action.type === "reload") {
-    console.log(action.data);
-
     return {
       ...action.data,
     };

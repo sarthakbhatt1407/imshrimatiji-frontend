@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 const MainBox = styled.div`
   width: 100%;
-  height: 70vh;
+  height: 100%;
   margin: auto;
   position: relative;
   overflow: hidden;
@@ -13,7 +13,7 @@ const MainBox = styled.div`
   background-color: #f7f7f7;
   @media (max-width: 450px) {
     width: 100%;
-    height: 30vh;
+    height: 40vh;
   }
   @media only screen and (min-width: 451px) and (max-width: 1020px) {
     height: 35vh;

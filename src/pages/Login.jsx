@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import login from "../assets/images/background/login.png";
 import AccountBox from "../component/Login/accountBox/index.jsx";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const MainBox = styled.div`
   background: url(${login});
   background-position: center;

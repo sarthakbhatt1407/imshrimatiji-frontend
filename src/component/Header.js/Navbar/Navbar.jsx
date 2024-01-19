@@ -164,7 +164,7 @@ const HiddenMobileDiv = styled.div`
   left: 0;
   position: fixed;
   z-index: 10;
-  transition: all 0.7s ease-in-out;
+  transition: all 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -211,14 +211,12 @@ const HiddenMobileDiv = styled.div`
 
 const HiddenNavLinksDiv = styled.div`
   display: flex;
-  /* align-items: center; */
   border-bottom: 1px solid #dedede;
   gap: 1rem;
   padding: 1rem 0;
   animation: ${FadeUpAni} 1s;
   animation-delay: 0.9s;
   letter-spacing: 0.09rem;
-  /* background-color: yellow; */
   svg {
     transform: scale(1.6);
     margin-top: 0.6rem;
@@ -252,6 +250,7 @@ const CollapsibleDiv = styled.div`
 
 // Component
 const Navbar = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const cartTotalItems = useSelector((state) => state.cartItems.length);
 
   const [arrowDown, setArrowDown] = useState(true);
@@ -259,9 +258,10 @@ const Navbar = () => {
   const [linksActive, setLinksActive] = useState(false);
   const menuButtonHandler = () => {
     setMobileNav(!mobileNav);
+    setArrowDown(true);
     setTimeout(() => {
       setLinksActive(!linksActive);
-    }, 250);
+    }, 50);
   };
 
   return (
@@ -270,15 +270,21 @@ const Navbar = () => {
         <span onClick={menuButtonHandler}>
           <CloseOutlined />
         </span>
-        <HiddenNavLinksDiv>
-          <>
-            <AccountCircle />
-            <p>
-              <Link to="/login">log in</Link>
-            </p>
-          </>
-        </HiddenNavLinksDiv>
-        {linksActive && <Link to="/">Home</Link>}
+        {!isLoggedIn && (
+          <HiddenNavLinksDiv onClick={menuButtonHandler}>
+            <>
+              <AccountCircle />
+              <p>
+                <Link to="/login">log in</Link>
+              </p>
+            </>
+          </HiddenNavLinksDiv>
+        )}
+        {linksActive && (
+          <Link onClick={menuButtonHandler} to="/">
+            Home
+          </Link>
+        )}
         {linksActive && (
           <Link to="/">
             <p
@@ -286,11 +292,11 @@ const Navbar = () => {
                 setArrowDown(!arrowDown);
               }}
               type="button"
-              class="para"
+              className="para"
               data-toggle="collapse"
               data-target="#demo"
             >
-              <p>Shop</p>
+              <>Shop</>
               <i
                 onClick={() => {
                   const para = document.querySelector(".para");
@@ -301,20 +307,40 @@ const Navbar = () => {
                 {!arrowDown && <KeyboardArrowUp />}
               </i>
             </p>
-            <div id="demo" class="collapse">
+            <div id="demo" className="collapse">
               <CollapsibleDiv>
-                <Link to="/">Saree</Link>
-                <Link to="/">Kurti</Link>
-                <Link to="/">Frock</Link>
-                <Link to="/">Suit</Link>
+                <Link onClick={menuButtonHandler} to="/">
+                  Saree
+                </Link>
+                <Link onClick={menuButtonHandler} to="/">
+                  Kurti
+                </Link>
+                <Link onClick={menuButtonHandler} to="/">
+                  Frock
+                </Link>
+                <Link onClick={menuButtonHandler} to="/">
+                  Suit
+                </Link>
               </CollapsibleDiv>
             </div>
           </Link>
         )}
 
-        {linksActive && <Link to="/">Story</Link>}
-        {linksActive && <Link to="/">Orders</Link>}
-        {linksActive && <Link to="/">Account</Link>}
+        {linksActive && (
+          <Link onClick={menuButtonHandler} to="/">
+            Story
+          </Link>
+        )}
+        {linksActive && (
+          <Link onClick={menuButtonHandler} to="/">
+            Orders
+          </Link>
+        )}
+        {linksActive && (
+          <Link onClick={menuButtonHandler} to="/">
+            Account
+          </Link>
+        )}
       </HiddenMobileDiv>
       <PcNav data-aos="fade-down">
         <LogoDiv logo={Logo}>
@@ -329,8 +355,8 @@ const Navbar = () => {
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>
-          <Link to="/">Orders</Link>
-          <Link to="/login">Login</Link>
+          {isLoggedIn && <Link to="/">Orders</Link>}
+          {!isLoggedIn && <Link to="/login">Login</Link>}
           <Badge badgeContent={cartTotalItems} color="primary">
             <LocalMall color="action" />
           </Badge>

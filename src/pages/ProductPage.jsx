@@ -202,12 +202,18 @@ const CheckOutBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
     li {
-      width: 50%;
+      display: block;
+      margin: 0 auto;
       color: #7a7979;
       list-style: circle;
       text-transform: capitalize;
-
+      width: 30%;
+      @media only screen and (max-width: 949px) {
+        width: 80%;
+        margin: 0;
+      }
       span {
         display: flex;
         justify-content: space-between;
@@ -236,6 +242,14 @@ const MoneyInfoBox = styled.div`
     }
   }
 `;
+
+const OutOfStockPara = styled.h2`
+  font-size: 3rem;
+  letter-spacing: 0.1rem;
+  font-weight: bold;
+  color: #a7a7a7;
+`;
+
 // Desc
 const DescBox = styled.div`
   display: flex;
@@ -273,6 +287,9 @@ const ImgBox = styled.div`
   background-color: #f7f7f7;
   img {
     width: 45%;
+    @media only screen and (max-width: 949px) {
+      width: 80%;
+    }
   }
 `;
 
@@ -435,7 +452,7 @@ const ProductPage = (props) => {
                     <ColorAndInfoBox>
                       {colors.map((clr) => {
                         return (
-                          <ColorBox>
+                          <ColorBox key={product.id + clr}>
                             <span>{clr}</span>
                             <i
                               className="clrBox"
@@ -459,17 +476,26 @@ const ProductPage = (props) => {
                       </SelectedColorBox>
                     )}
 
-                    <AddToCartDiv data-aos="fade-up">
-                      <InpBox>
-                        <button onClick={quantityAdder}>
-                          <Add onClick={quantityAdder} />
-                        </button>
-                        <button>{quantity}</button>
-                        <button onClick={quantutyMinus}>
-                          <Remove onClick={quantutyMinus} />
-                        </button>
-                      </InpBox>
-                      <button onClick={addToCartHandler}>add to cart</button>
+                    <AddToCartDiv>
+                      {product.stock > 0 && (
+                        <>
+                          <InpBox>
+                            <button onClick={quantityAdder}>
+                              <Add onClick={quantityAdder} />
+                            </button>
+                            <button>{quantity}</button>
+                            <button onClick={quantutyMinus}>
+                              <Remove onClick={quantutyMinus} />
+                            </button>
+                          </InpBox>
+                          <button onClick={addToCartHandler}>
+                            add to cart
+                          </button>
+                        </>
+                      )}
+                      {product.stock < 1 && (
+                        <OutOfStockPara>Out of stock</OutOfStockPara>
+                      )}
                     </AddToCartDiv>
                     <CheckOutBox>
                       <h4>Safe Checkout</h4>
@@ -535,13 +561,16 @@ const ProductPage = (props) => {
                           swicther = false;
                           return (
                             <>
-                              <ImgBox data-aos="fade-left">
+                              <ImgBox key={ind + img} data-aos="fade-left">
                                 <img
                                   src={`${EnvVariables.BASE_URL}/${img}`}
                                   alt=""
                                 />
                               </ImgBox>
-                              <TextBox data-aos="fade-right">
+                              <TextBox
+                                key={ind + descData[ind].heading}
+                                data-aos="fade-right"
+                              >
                                 <h5>{descData[ind].heading}</h5>
                                 <p>{descData[ind].des}</p>
                               </TextBox>
@@ -551,11 +580,14 @@ const ProductPage = (props) => {
                           swicther = true;
                           return (
                             <>
-                              <TextBox data-aos="fade-left">
+                              <TextBox
+                                key={ind + descData[ind].heading}
+                                data-aos="fade-left"
+                              >
                                 <h5>{descData[ind].heading}</h5>
                                 <p>{descData[ind].des}</p>
                               </TextBox>
-                              <ImgBox data-aos="fade-right">
+                              <ImgBox key={ind + img} data-aos="fade-right">
                                 <img
                                   src={`${EnvVariables.BASE_URL}/${img}`}
                                   alt=""
@@ -573,13 +605,16 @@ const ProductPage = (props) => {
                         swicther = false;
                         return (
                           <>
-                            <ImgBox data-aos="fade-right">
+                            <ImgBox key={ind + img} data-aos="fade-right">
                               <img
                                 src={`${EnvVariables.BASE_URL}/${img}`}
                                 alt=""
                               />
                             </ImgBox>
-                            <TextBox data-aos="fade-left">
+                            <TextBox
+                              key={ind + descData[ind].heading}
+                              data-aos="fade-left"
+                            >
                               <h5>{descData[ind].heading}</h5>
                               <p>{descData[ind].des}</p>
                             </TextBox>

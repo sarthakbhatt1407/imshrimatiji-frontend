@@ -82,6 +82,7 @@ const Categories = () => {
                 return (
                   <CategoryBox
                     item={item}
+                    key={item.id}
                     data={
                       window.screen.availWidth > 949 ? "fade-up" : "fade-left"
                     }

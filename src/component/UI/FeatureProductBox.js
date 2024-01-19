@@ -127,7 +127,7 @@ const FeatureProductBox = (props) => {
                 fireCounter = true;
               }
               return (
-                <ColorDiv key={id + "kd" + counter}>
+                <ColorDiv key={id + clr}>
                   <span>{clr}</span>
                   <i clr={clr} key={clr} style={{ backgroundColor: clr }}></i>
                 </ColorDiv>
@@ -136,7 +136,7 @@ const FeatureProductBox = (props) => {
             if (counter === 3 && fireCounter) {
               fireCounter = false;
               return (
-                <ColorDiv>
+                <ColorDiv key={id + "more"}>
                   <span>more</span>
                   <i
                     clr={clr}
