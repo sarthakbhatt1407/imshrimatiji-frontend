@@ -30,13 +30,14 @@ const SliderAndProductInfoBox = styled.div`
     display: flex;
     width: 100%;
     flex-direction: column;
+    gap: 2rem;
   }
 `;
 
 const ProductInfoBox = styled.div`
   padding: 0 2rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   flex-direction: column;
   @media only screen and (max-width: 949px) {
   }
@@ -48,6 +49,17 @@ const ProductInfoBox = styled.div`
   }
   h3 {
     font-size: 2.1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+    /* background-color: red; */
+    i {
+      text-decoration: line-through;
+
+      color: #cac9c9;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 1.6rem;
+    }
   }
   p {
     color: #a0a0a0;
@@ -186,6 +198,25 @@ const CheckOutBox = styled.div`
     margin: 0 auto;
     opacity: 0.9;
   }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    li {
+      width: 50%;
+      color: #7a7979;
+      list-style: circle;
+      text-transform: capitalize;
+
+      span {
+        display: flex;
+        justify-content: space-between;
+        span {
+          text-align: start;
+        }
+      }
+    }
+  }
 `;
 
 const MoneyInfoBox = styled.div`
@@ -206,7 +237,74 @@ const MoneyInfoBox = styled.div`
   }
 `;
 // Desc
-const DescBox = styled.div``;
+const DescBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+  padding: 2rem 0;
+  gap: 2rem;
+  @media only screen and (max-width: 949px) {
+  }
+`;
+
+const ImgAndTextbox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  @media only screen and (max-width: 949px) {
+    display: none;
+  }
+`;
+const ImgAndTextBoxMobile = styled.div`
+  overflow-x: hidden;
+  display: none;
+  @media only screen and (max-width: 949px) {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+`;
+
+const ImgBox = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: #f7f7f7;
+  img {
+    width: 45%;
+  }
+`;
+
+const TextBox = styled.div`
+  display: flex;
+
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0 2rem;
+  h5 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    text-transform: capitalize;
+    text-align: center;
+    @media only screen and (max-width: 949px) {
+      font-size: 2rem;
+    }
+  }
+  p {
+    text-align: center;
+    color: #797979;
+    font-size: 1.3rem;
+    letter-spacing: 0.1rem;
+    @media only screen and (max-width: 949px) {
+      font-size: 1.1rem;
+    }
+  }
+  @media only screen and (max-width: 949px) {
+    gap: 0;
+  }
+`;
 
 const ReviewsBox = styled.div``;
 
@@ -222,7 +320,27 @@ const ProductPage = (props) => {
   const productId = state.productId;
   const dispatch = useDispatch();
 
+  const descData = [
+    {
+      heading: "quality",
+      des: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio sapiente illo odio aut dolorem? Tempore maxime animi perspiciatis ex atque est vitae. Velit voluptate similique aliquam fuga optio enim ad magni. Aspernatur minus necessitatibus molestias aperiam accusantium eius distinctio suscipit?",
+    },
+    {
+      heading: "Customer Satisfaction",
+      des: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio sapiente illo odio aut dolorem? Tempore maxime animi perspiciatis ex atque est vitae. Velit voluptate similique aliquam fuga optio enim ad magni. Aspernatur minus necessitatibus molestias aperiam accusantium eius distinctio suscipit?",
+    },
+    {
+      heading: "Demo test",
+      des: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio sapiente illo odio aut dolorem? Tempore maxime animi perspiciatis ex atque est vitae. Velit voluptate similique aliquam fuga optio enim ad magni. Aspernatur minus necessitatibus molestias aperiam accusantium eius distinctio suscipit?",
+    },
+    {
+      heading: "Dummy test",
+      des: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio sapiente illo odio aut dolorem? Tempore maxime animi perspiciatis ex atque est vitae. Velit voluptate similique aliquam fuga optio enim ad magni. Aspernatur minus necessitatibus molestias aperiam accusantium eius distinctio suscipit?",
+    },
+  ];
+  let swicther = true;
   useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
@@ -294,9 +412,16 @@ const ProductPage = (props) => {
               <>
                 <SliderAndProductInfoBox>
                   <ImagesSLider product={product} />
-                  <ProductInfoBox data-aos="fade-left">
+                  {/* data-aos="fade-left" */}
+                  <ProductInfoBox>
                     <h1>{product.title}</h1>
-                    <h3>₹ {Number(product.price).toLocaleString("en-IN")}</h3>
+                    <h3>
+                      ₹ {Number(product.price).toLocaleString("en-IN")}
+                      <i>
+                        {(Number(product.price) * 100) /
+                          (100 - Number(product.discount))}
+                      </i>
+                    </h3>
                     <p>
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       Magni ab ut magnam commodi voluptates. Enim nisi quos in
@@ -334,7 +459,7 @@ const ProductPage = (props) => {
                       </SelectedColorBox>
                     )}
 
-                    <AddToCartDiv>
+                    <AddToCartDiv data-aos="fade-up">
                       <InpBox>
                         <button onClick={quantityAdder}>
                           <Add onClick={quantityAdder} />
@@ -350,7 +475,7 @@ const ProductPage = (props) => {
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />
                     </CheckOutBox>
-                    <MoneyInfoBox>
+                    <MoneyInfoBox data-aos="fade-up">
                       <h5>free shipping on orders over ₹999</h5>
                       <span>
                         <p>
@@ -367,12 +492,103 @@ const ProductPage = (props) => {
                         </p>
                       </span>
                     </MoneyInfoBox>
-
-                    {/*  */}
+                    <CheckOutBox data-aos="fade-up">
+                      <h4>Details</h4>
+                      <ul>
+                        <li>
+                          <span>
+                            <span>Category</span>
+                            <span> {`${product.category}`}</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            <span>Fabric </span>
+                            <span>{`${product.fabric}`}</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            <span>Country Of Origin </span>
+                            <span>INDIA</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            <span>Discount </span>
+                            <span>{`${product.discount}%`}</span>
+                          </span>
+                        </li>
+                      </ul>
+                    </CheckOutBox>
                   </ProductInfoBox>
                 </SliderAndProductInfoBox>
 
-                <DescBox></DescBox>
+                <DescBox>
+                  <CheckOutBox data-aos="fade-up">
+                    <h4>About</h4>
+                  </CheckOutBox>
+                  <ImgAndTextbox>
+                    {product.images.split(" ").map((img, ind) => {
+                      if (img !== "") {
+                        if (swicther) {
+                          swicther = false;
+                          return (
+                            <>
+                              <ImgBox data-aos="fade-left">
+                                <img
+                                  src={`${EnvVariables.BASE_URL}/${img}`}
+                                  alt=""
+                                />
+                              </ImgBox>
+                              <TextBox data-aos="fade-right">
+                                <h5>{descData[ind].heading}</h5>
+                                <p>{descData[ind].des}</p>
+                              </TextBox>
+                            </>
+                          );
+                        } else {
+                          swicther = true;
+                          return (
+                            <>
+                              <TextBox data-aos="fade-left">
+                                <h5>{descData[ind].heading}</h5>
+                                <p>{descData[ind].des}</p>
+                              </TextBox>
+                              <ImgBox data-aos="fade-right">
+                                <img
+                                  src={`${EnvVariables.BASE_URL}/${img}`}
+                                  alt=""
+                                />
+                              </ImgBox>
+                            </>
+                          );
+                        }
+                      }
+                    })}
+                  </ImgAndTextbox>
+                  <ImgAndTextBoxMobile>
+                    {product.images.split(" ").map((img, ind) => {
+                      if (img !== "") {
+                        swicther = false;
+                        return (
+                          <>
+                            <ImgBox data-aos="fade-right">
+                              <img
+                                src={`${EnvVariables.BASE_URL}/${img}`}
+                                alt=""
+                              />
+                            </ImgBox>
+                            <TextBox data-aos="fade-left">
+                              <h5>{descData[ind].heading}</h5>
+                              <p>{descData[ind].des}</p>
+                            </TextBox>
+                          </>
+                        );
+                      }
+                    })}
+                  </ImgAndTextBoxMobile>
+                </DescBox>
 
                 <ReviewsBox></ReviewsBox>
 
@@ -380,6 +596,7 @@ const ProductPage = (props) => {
               </>
             )}
           </MainBox>
+          <Footer />
         </>
       )}
     </>

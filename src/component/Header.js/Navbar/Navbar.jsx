@@ -317,7 +317,9 @@ const Navbar = () => {
         {linksActive && <Link to="/">Account</Link>}
       </HiddenMobileDiv>
       <PcNav data-aos="fade-down">
-        <LogoDiv logo={Logo}></LogoDiv>
+        <LogoDiv logo={Logo}>
+          <Link to="/"></Link>
+        </LogoDiv>
         <PageLinksDiv>
           <Link to="/">Home</Link>
           <Link to="/">Saree</Link>
@@ -342,6 +344,7 @@ const Navbar = () => {
         </button>
 
         <LogoDiv logo={Logo}></LogoDiv>
+
         <div>
           <Badge badgeContent={cartTotalItems} color="primary">
             <LocalMall color="action" />
