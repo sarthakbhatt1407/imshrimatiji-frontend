@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
 import { EnvVariables } from "../data";
@@ -9,6 +9,8 @@ import card from "../assets/images/cards/card.jpg";
 import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
 import Footer from "../component/Footer/Footer";
 import { useDispatch } from "react-redux";
+import StarRatings from "react-star-ratings";
+import FeatureProductBox from "../component/UI/FeatureProductBox";
 
 const MainBox = styled.div`
   display: flex;
@@ -325,18 +327,66 @@ const TextBox = styled.div`
 
 const ReviewsBox = styled.div``;
 
-const RelatedProductBox = styled.div``;
+const RelatedProductBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 0;
+
+  /* align-items: center; */
+`;
+const RelatedProductDiv = styled.div`
+  margin-top: 2rem;
+  padding: 2rem 0;
+  overflow: scroll;
+  transform: scale(1.05);
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  @media only screen and (max-width: 949px) {
+    /* width: 70%; */
+    margin: 0 auto;
+    justify-content: space-between;
+  }
+`;
 
 const ProductPage = (props) => {
   const { state } = useLocation();
   const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState([]);
   const [colors, setColors] = useState(null);
   const [selectedClr, setSelectedClr] = useState(null);
   const [err, setErr] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const productId = state.productId;
   const dispatch = useDispatch();
+  let counter = 0;
+  function shuffle(array) {
+    let currentIndex = array.length,
+      randomIndex;
 
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
   const descData = [
     {
       heading: "quality",
@@ -357,7 +407,6 @@ const ProductPage = (props) => {
   ];
   let swicther = true;
   useEffect(() => {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
@@ -365,11 +414,17 @@ const ProductPage = (props) => {
     const fetcher = async () => {
       const res = await fetch(`${EnvVariables.BASE_URL}/product/${productId}`);
       const data = await res.json();
-      console.log(data.product);
+      // console.log(data.product);
       setProduct(data.product);
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
       const clrArr = data.product.color.split(",");
-
       setColors(clrArr);
+
+      const resProducts = await fetch(
+        `${EnvVariables.BASE_URL}/product/all-items`
+      );
+      const dataProducts = await resProducts.json();
+      setProducts(shuffle(dataProducts.products));
     };
     fetcher();
   }, [productId]);
@@ -416,6 +471,10 @@ const ProductPage = (props) => {
     };
     dispatch({ type: "addToCart", product: { ...obj } });
   };
+  // const [rating, setRating] = useState(0);
+  // const ratingsChanger = (newRating, name) => {
+  //   setRating(newRating);
+  // };
 
   return (
     <>
@@ -625,9 +684,52 @@ const ProductPage = (props) => {
                   </ImgAndTextBoxMobile>
                 </DescBox>
 
-                <ReviewsBox></ReviewsBox>
+                {/* <ReviewsBox>
+                  <StarRatings
+                    starRatedColor="gold"
+                    numberOfStars={5}
+                    name="rating"
+                    rating={rating}
+                    changeRating={ratingsChanger}
+                  />
+                </ReviewsBox> */}
 
-                <RelatedProductBox></RelatedProductBox>
+                <RelatedProductBox>
+                  <CheckOutBox>
+                    <h4>Related Products</h4>
+                    <RelatedProductDiv>
+                      {products.length > 0 &&
+                        products.map((item) => {
+                          if (
+                            product.id !== item.id &&
+                            item.category === product.category &&
+                            counter < 5
+                          ) {
+                            counter++;
+                            const colors = item.color.split(",");
+                            const image = item.images.split(" ")[0];
+                            return (
+                              <Link
+                                to={`/product/${item.slug}`}
+                                key={item.id + item.title}
+                                state={{ productId: `${item.id}` }}
+                              >
+                                <FeatureProductBox
+                                  data={{
+                                    ...item,
+                                    colors: colors,
+                                    img: image,
+                                  }}
+                                />
+                              </Link>
+                            );
+                          }
+
+                          return <></>;
+                        })}
+                    </RelatedProductDiv>
+                  </CheckOutBox>
+                </RelatedProductBox>
               </>
             )}
           </MainBox>

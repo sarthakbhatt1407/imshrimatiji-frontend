@@ -41,8 +41,9 @@ const TextBox = styled.div`
   color: black;
   text-transform: capitalize;
 
-  h4 {
+  h5 {
     display: flex;
+    font-size: 1.8rem;
     justify-content: center;
     align-items: center;
   }
@@ -118,7 +119,7 @@ const FeatureProductBox = (props) => {
           {titleArr[0] || ""} {}
           {titleArr[1] || ""}
         </h3>
-        <h4>₹ {price}</h4>
+        <h5>₹ {price}</h5>
         <span>
           {colors.map((clr) => {
             if (counter <= 2) {
