@@ -31,10 +31,12 @@ const storeReducer = (state = defaultState, action) => {
       userName: user.name,
     };
   }
+
   if (action.type === "logout") {
     localStorage.clear();
     return { ...defaultState };
   }
+
   if (action.type === "addToCart") {
     const product = action.product;
     let updatedCartItems = state.cartItems;
@@ -48,11 +50,22 @@ const storeReducer = (state = defaultState, action) => {
       ...obj,
     };
   }
+
   if (action.type === "reload") {
     return {
       ...action.data,
     };
   }
+
+  if (action.type === "itemRemover") {
+    const id = action.id;
+    console.log(id);
+    const updatedCartItems = state.cartItems.filter((item) => {
+      return item.productId !== id;
+    });
+    console.log(updatedCartItems);
+  }
+
   return state;
 };
 const store = createStore(storeReducer);

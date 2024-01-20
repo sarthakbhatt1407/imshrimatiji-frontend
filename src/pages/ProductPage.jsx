@@ -9,7 +9,6 @@ import card from "../assets/images/cards/card.jpg";
 import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
 import Footer from "../component/Footer/Footer";
 import { useDispatch } from "react-redux";
-import StarRatings from "react-star-ratings";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
 
 const MainBox = styled.div`
@@ -462,7 +461,15 @@ const ProductPage = (props) => {
       setErr(true);
       return;
     }
+    const titleArr = product.title.split(" ");
+    let title;
+    if (titleArr[1]) {
+      title = titleArr[0] + " " + titleArr[1];
+    } else {
+      title = titleArr[0];
+    }
     const obj = {
+      title: title,
       productId: productId,
       price: product.price,
       image: product.images.split(" ")[0],

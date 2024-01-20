@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 
 // Logo
 import Logo from "../../../assets/images/logo/logo-white.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AccountCircle,
   CloseOutlined,
@@ -13,7 +13,7 @@ import {
 } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import { colors } from "../../../data";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // css
 
@@ -72,7 +72,7 @@ const UserControlsDiv = styled.div`
   height: 3rem;
   display: flex;
   justify-content: end;
-  gap: 1.7rem;
+  gap: 1.8rem;
   align-items: center;
   font-size: 1.3rem;
   padding-right: 1.5rem;
@@ -85,6 +85,9 @@ const UserControlsDiv = styled.div`
     &:hover {
       color: ${colors.mainColor};
       transform: scale(1.15) translateZ(0);
+    }
+    svg {
+      transform: scale(1.2);
     }
   }
 `;
@@ -252,7 +255,8 @@ const CollapsibleDiv = styled.div`
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const cartTotalItems = useSelector((state) => state.cartItems.length);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [arrowDown, setArrowDown] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
   const [linksActive, setLinksActive] = useState(false);
@@ -341,6 +345,18 @@ const Navbar = () => {
             Account
           </Link>
         )}
+        {linksActive && (
+          <Link
+            onClick={() => {
+              dispatch({ type: "logout" });
+              menuButtonHandler();
+              navigate("/");
+            }}
+            to="/"
+          >
+            Log out
+          </Link>
+        )}
       </HiddenMobileDiv>
       <PcNav data-aos="fade-down">
         <LogoDiv logo={Logo}>
@@ -357,9 +373,11 @@ const Navbar = () => {
           <Link to="/">Story</Link>
           {isLoggedIn && <Link to="/">Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
-          <Badge badgeContent={cartTotalItems} color="primary">
-            <LocalMall color="action" />
-          </Badge>
+          <Link to="/cart">
+            <Badge badgeContent={cartTotalItems} color="primary">
+              <LocalMall color="action" />
+            </Badge>
+          </Link>
         </UserControlsDiv>
       </PcNav>
       <MobileNav>
@@ -372,9 +390,11 @@ const Navbar = () => {
         <LogoDiv logo={Logo}></LogoDiv>
 
         <div>
-          <Badge badgeContent={cartTotalItems} color="primary">
-            <LocalMall color="action" />
-          </Badge>
+          <Link to="/cart">
+            <Badge badgeContent={cartTotalItems} color="primary">
+              <LocalMall color="action" />
+            </Badge>
+          </Link>
         </div>
       </MobileNav>
     </MainNav>
