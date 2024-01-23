@@ -8,13 +8,16 @@ import { Add, CheckCircle, Remove } from "@mui/icons-material";
 import card from "../assets/images/cards/card.jpg";
 import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
 import Footer from "../component/Footer/Footer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
+import FloatingBox from "../component/Login/FloatingBox";
+import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
 
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem 10rem;
+  position: relative;
   @media only screen and (max-width: 949px) {
     padding: 1rem 2rem;
   }
@@ -40,8 +43,7 @@ const ProductInfoBox = styled.div`
   display: flex;
   gap: 1rem;
   flex-direction: column;
-  @media only screen and (max-width: 949px) {
-  }
+
   h1 {
     margin-bottom: -1.5rem;
     text-transform: capitalize;
@@ -65,6 +67,11 @@ const ProductInfoBox = styled.div`
   p {
     color: #a0a0a0;
     font-size: 1.3rem;
+  }
+  @media only screen and (max-width: 949px) {
+    h1 {
+      font-size: 2rem;
+    }
   }
 `;
 
@@ -139,6 +146,9 @@ const SelectedColorBox = styled.div`
 const AddToCartDiv = styled.div`
   display: flex;
   gap: 2rem;
+  height: 5rem;
+  position: relative;
+  width: 30rem;
   button {
     text-transform: uppercase;
     background-color: black;
@@ -364,9 +374,12 @@ const ProductPage = (props) => {
   const [selectedClr, setSelectedClr] = useState(null);
   const [err, setErr] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [productAdded, setProductAdded] = useState(false);
   const productId = state.productId;
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   let counter = 0;
+  const cartMsg = useSelector((state) => state.cartMsg);
   function shuffle(array) {
     let currentIndex = array.length,
       randomIndex;
@@ -461,6 +474,7 @@ const ProductPage = (props) => {
       setErr(true);
       return;
     }
+    setIsLoading(true);
     const titleArr = product.title.split(" ");
     let title;
     if (titleArr[1]) {
@@ -477,6 +491,14 @@ const ProductPage = (props) => {
       color: selectedClr,
     };
     dispatch({ type: "addToCart", product: { ...obj } });
+    setProductAdded(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    setTimeout(() => {
+      setProductAdded(false);
+    }, 2000);
   };
   // const [rating, setRating] = useState(0);
   // const ratingsChanger = (newRating, name) => {
@@ -491,6 +513,7 @@ const ProductPage = (props) => {
         <>
           <Navbar />
           <MainBox>
+            {productAdded && <FloatingBox data={cartMsg} />}
             {product && (
               <>
                 <SliderAndProductInfoBox>
@@ -543,7 +566,9 @@ const ProductPage = (props) => {
                     )}
 
                     <AddToCartDiv>
-                      {product.stock > 0 && (
+                      {isLoading && <BtnLoader />}
+
+                      {product.stock > 0 && !isLoading && (
                         <>
                           <InpBox>
                             <button onClick={quantityAdder}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
@@ -154,7 +154,7 @@ const NoItemsFoundBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f7f5f5;
+  /* background-color: #f7f5f5; */
   height: 30vh;
   p {
     color: #7a7979b7;
@@ -164,11 +164,127 @@ const NoItemsFoundBox = styled.div`
 `;
 
 const Cart = () => {
+  const userName = useSelector((state) => state.userName);
+  const userEmail = useSelector((state) => state.userEmail);
+  console.log(userEmail);
+  const userContact = useSelector((state) => state.userContact);
+  const userId = useSelector((state) => state.userId);
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+
   const cartItems = useSelector((state) => state.cartItems.reverse());
+  const cartTotalAmount = useSelector((state) => state.cartTotalAmount);
   const dispatch = useDispatch();
   const itemRemover = (e) => {
-    const id = e.target.parentNode.id;
+    const id = e.target.id;
     dispatch({ type: "itemRemover", id: { id } });
+  };
+
+  const loadRazorpayScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  //function will get called when clicked on the pay button.
+  const displayRazorpayPaymentSdk = async () => {
+    const res = await loadRazorpayScript(
+      "https://checkout.razorpay.com/v2/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. please check are you online?");
+      return;
+    }
+
+    const orderRes = await fetch(
+      `${EnvVariables.BASE_URL}/payment/create-order`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: cartTotalAmount.toString(),
+          userEmail,
+          userContact,
+          userName,
+        }),
+      }
+    );
+    const data = await orderRes.json();
+    console.log(data);
+    var options = {
+      key: data.key_id,
+      amount: data.amount,
+      currency: "INR",
+      name: data.product_name,
+      description: data.description,
+      order_id: data.order_id,
+      email: userEmail,
+      contact: userContact,
+      handler: async function (response) {
+        console.log(response);
+        cartItems.map(async (item) => {
+          const obj = {
+            userId: userId,
+            address: "dehradun uk",
+            quantity: item.quantity,
+            price: item.price,
+            productId: item.productId,
+            paymentMethod: "online",
+            paymentStatus: "done",
+            shippingCharges: 99,
+          };
+          const orderCreator = await fetch(
+            `${EnvVariables.BASE_URL}/order/new-order`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ ...obj }),
+            }
+          );
+          const d = await orderCreator.json;
+          console.log(data);
+        });
+        const orderCreator = await fetch(
+          `${EnvVariables.BASE_URL}/order/new-order`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // body: JSON.stringify({ ...obj }),
+          }
+        );
+        const d = await orderCreator.json;
+        console.log(data);
+      },
+      theme: {
+        color: "#32a86d",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
   };
 
   return (
@@ -221,9 +337,12 @@ const Cart = () => {
                           ).toLocaleString("en-IN")}
                         </td>
                         <td>
-                          <div id={item.productId}>
-                            <CancelOutlined onClick={itemRemover} />
-                          </div>
+                          <button
+                            onClick={itemRemover}
+                            id={item.productId + " " + item.color}
+                          >
+                            x
+                          </button>
                         </td>
                       </tr>
                     );
@@ -242,7 +361,7 @@ const Cart = () => {
                     <td>
                       <div>
                         <span>Subtotal</span>
-                        <span>₹ 1300</span>
+                        <span>₹ {cartTotalAmount.toLocaleString("en-IN")}</span>
                       </div>
                     </td>
                   </tr>
@@ -250,13 +369,15 @@ const Cart = () => {
                     <td>
                       <div>
                         <span>Subtotal</span>
-                        <span>₹ 1300</span>
+                        <span>₹ {cartTotalAmount.toLocaleString("en-IN")}</span>
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <button>proceed to checkout</button>
+                      <button onClick={displayRazorpayPaymentSdk}>
+                        proceed to checkout
+                      </button>
                     </td>
                   </tr>
                 </tbody>
