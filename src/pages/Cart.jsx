@@ -63,10 +63,17 @@ const ProductsTable = styled.table`
           color: black;
           text-decoration: none;
         }
+        button {
+          border: none;
+          padding: 0.2rem 1rem;
+        }
       }
       @media only screen and (max-width: 1220px) {
         td {
-          font-size: 1.4rem;
+          font-size: 1.6rem;
+          color: #000000;
+          span {
+          }
         }
       }
     }
@@ -166,7 +173,6 @@ const NoItemsFoundBox = styled.div`
 const Cart = () => {
   const userName = useSelector((state) => state.userName);
   const userEmail = useSelector((state) => state.userEmail);
-  console.log(userEmail);
   const userContact = useSelector((state) => state.userContact);
   const userId = useSelector((state) => state.userId);
   useEffect(() => {

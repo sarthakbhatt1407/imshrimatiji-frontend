@@ -504,7 +504,6 @@ const ProductPage = (props) => {
   // const ratingsChanger = (newRating, name) => {
   //   setRating(newRating);
   // };
-
   return (
     <>
       {!product && <FullPageLoader />}
@@ -650,42 +649,48 @@ const ProductPage = (props) => {
                       if (img !== "") {
                         if (swicther) {
                           swicther = false;
-                          return (
-                            <>
-                              <ImgBox key={ind + img} data-aos="fade-left">
-                                <img
-                                  src={`${EnvVariables.BASE_URL}/${img}`}
-                                  alt=""
-                                />
-                              </ImgBox>
-                              <TextBox
-                                key={ind + descData[ind].heading}
-                                data-aos="fade-right"
-                              >
-                                <h5>{descData[ind].heading}</h5>
-                                <p>{descData[ind].des}</p>
-                              </TextBox>
-                            </>
-                          );
+
+                          if (descData[ind]) {
+                            return (
+                              <>
+                                <ImgBox key={ind + img} data-aos="fade-left">
+                                  <img
+                                    src={`${EnvVariables.BASE_URL}/${img}`}
+                                    alt=""
+                                  />
+                                </ImgBox>
+                                <TextBox
+                                  key={ind + descData[ind].heading}
+                                  data-aos="fade-right"
+                                >
+                                  <h5>{descData[ind].heading}</h5>
+                                  <p>{descData[ind].des}</p>
+                                </TextBox>
+                              </>
+                            );
+                          }
                         } else {
                           swicther = true;
-                          return (
-                            <>
-                              <TextBox
-                                key={ind + descData[ind].heading}
-                                data-aos="fade-left"
-                              >
-                                <h5>{descData[ind].heading}</h5>
-                                <p>{descData[ind].des}</p>
-                              </TextBox>
-                              <ImgBox key={ind + img} data-aos="fade-right">
-                                <img
-                                  src={`${EnvVariables.BASE_URL}/${img}`}
-                                  alt=""
-                                />
-                              </ImgBox>
-                            </>
-                          );
+
+                          if (descData[ind]) {
+                            return (
+                              <>
+                                <TextBox
+                                  key={ind + descData[ind].heading}
+                                  data-aos="fade-left"
+                                >
+                                  <h5>{descData[ind].heading}</h5>
+                                  <p>{descData[ind].des}</p>
+                                </TextBox>
+                                <ImgBox key={ind + img} data-aos="fade-right">
+                                  <img
+                                    src={`${EnvVariables.BASE_URL}/${img}`}
+                                    alt=""
+                                  />
+                                </ImgBox>
+                              </>
+                            );
+                          }
                         }
                       }
                     })}
@@ -694,23 +699,26 @@ const ProductPage = (props) => {
                     {product.images.split(" ").map((img, ind) => {
                       if (img !== "") {
                         swicther = false;
-                        return (
-                          <>
-                            <ImgBox key={ind + img} data-aos="fade-right">
-                              <img
-                                src={`${EnvVariables.BASE_URL}/${img}`}
-                                alt=""
-                              />
-                            </ImgBox>
-                            <TextBox
-                              key={ind + descData[ind].heading}
-                              data-aos="fade-left"
-                            >
-                              <h5>{descData[ind].heading}</h5>
-                              <p>{descData[ind].des}</p>
-                            </TextBox>
-                          </>
-                        );
+
+                        if (descData[ind]) {
+                          return (
+                            <>
+                              <ImgBox key={ind + img} data-aos="fade-right">
+                                <img
+                                  src={`${EnvVariables.BASE_URL}/${img}`}
+                                  alt=""
+                                />
+                              </ImgBox>
+                              <TextBox
+                                key={ind + descData[ind].heading}
+                                data-aos="fade-left"
+                              >
+                                <h5>{descData[ind].heading}</h5>
+                                <p>{descData[ind].des}</p>
+                              </TextBox>
+                            </>
+                          );
+                        }
                       }
                     })}
                   </ImgAndTextBoxMobile>

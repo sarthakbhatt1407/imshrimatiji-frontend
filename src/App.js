@@ -18,7 +18,9 @@ const App = () => {
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
     }
-    AOS.init({});
+    AOS.init({
+      once: true,
+    });
     const aosRefresh = setInterval(() => {
       AOS.refresh();
     }, 500);

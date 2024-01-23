@@ -15,9 +15,11 @@ import { EnvVariables } from "../../../data";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FullPageLoader from "../../Loaders/CategoryLoader/FullPageLoader";
+import BtnLoader from "../../Loaders/CategoryLoader/BtnLoader";
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
+  const [isLogging, setIsLogging] = useState(false);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [allFieldsValid, setAllFieldsValid] = useState(false);
@@ -75,6 +77,7 @@ export function LoginForm(props) {
   };
   const history = useNavigate();
   const onClickHandler = async () => {
+    setIsLogging(true);
     setIsLoading(true);
     const res = await fetch(`${EnvVariables.BASE_URL}/user/login`, {
       method: "POST",
@@ -90,9 +93,11 @@ export function LoginForm(props) {
     console.log(data);
     if (res.ok) {
       dispatch({ type: "log in", data: { ...data } });
-      setInpField(defaultField);
+
       history("/");
     }
+    setInpField(defaultField);
+    setIsLogging(false);
     setIsLoading(false);
   };
 
@@ -128,6 +133,7 @@ export function LoginForm(props) {
         {allFieldsValid && (
           <SubmitButton type="submit" onClick={onClickHandler}>
             Signin
+            {isLogging && <BtnLoader />}
           </SubmitButton>
         )}
         <Marginer direction="vertical" margin="5px" />
