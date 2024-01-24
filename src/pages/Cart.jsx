@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import { EnvVariables } from "../data";
 import { CancelOutlined, Close } from "@mui/icons-material";
 
+import "react-alert-confirm/lib/style.css";
+import confirm, { Button, alert } from "react-alert-confirm";
+
 const MainBox = styled.div`
   border-top: 1px solid #dadada;
   height: fit-content;
@@ -16,6 +19,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
   @media only screen and (max-width: 1220px) {
     width: 100%;
     padding: 1rem;
@@ -35,11 +39,12 @@ const PcCartBox = styled.div`
 
 const ProductsTable = styled.table`
   border: 1px solid #dadada;
+  height: fit-content;
   thead {
     background-color: #f1f2f2;
     tr {
       td {
-        padding: 1rem 0;
+        padding: 0.9rem;
         color: #5e5e5e;
         text-transform: capitalize;
         font-size: 1.5rem;
@@ -57,6 +62,7 @@ const ProductsTable = styled.table`
     tr {
       border-bottom: 1px solid #e5e5e5;
       td {
+        padding: 1.4rem;
         font-size: 1.5rem;
         color: black;
         a {
@@ -66,12 +72,26 @@ const ProductsTable = styled.table`
         button {
           border: none;
           padding: 0.2rem 1rem;
+          margin: 0 1rem;
+          border-radius: 50%;
+        }
+        svg {
+          color: #b5b5b5;
+          margin: 0 0.5rem;
+          transform: scale(1.4);
+          transform: all 0.5s;
+          &:hover {
+            color: black;
+            cursor: pointer;
+          }
         }
       }
       @media only screen and (max-width: 1220px) {
         td {
           font-size: 1.6rem;
           color: #000000;
+          text-align: center;
+          padding: 1.4rem 0;
           span {
           }
         }
@@ -89,7 +109,7 @@ const PriceTotalTable = styled.table`
   thead {
     background-color: #f1f2f2;
     color: black;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: bold;
 
     tr {
@@ -127,32 +147,34 @@ const PriceTotalTable = styled.table`
 `;
 
 const ProductImgTextBox = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  gap: 2rem;
-  width: 70%;
   margin: auto;
-  /* background-color: red; */
+  width: 80%;
   img {
     width: 8rem;
     border-radius: 0.4rem;
+    display: inline;
+    margin-right: 1rem;
   }
   p {
     text-transform: capitalize;
+    display: inline;
     font-size: 1.5rem;
     color: #424242;
     font-weight: bold;
   }
   @media only screen and (max-width: 1220px) {
-    gap: 1rem;
+    width: 90%;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
     p {
+      font-size: 1.25rem;
     }
     img {
-      width: 6rem;
+      width: 7rem;
+      margin-right: 0;
     }
   }
 `;
@@ -175,23 +197,31 @@ const Cart = () => {
   const userEmail = useSelector((state) => state.userEmail);
   const userContact = useSelector((state) => state.userContact);
   const userId = useSelector((state) => state.userId);
-  useEffect(() => {
-    const unloadCallback = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-      return "";
-    };
-
-    window.addEventListener("beforeunload", unloadCallback);
-    return () => window.removeEventListener("beforeunload", unloadCallback);
-  }, []);
-
   const cartItems = useSelector((state) => state.cartItems.reverse());
   const cartTotalAmount = useSelector((state) => state.cartTotalAmount);
   const dispatch = useDispatch();
+  useEffect(() => {
+    // const unloadCallback = (event) => {
+    //   event.preventDefault();
+    //   event.returnValue = "";
+    //   return "";
+    // };
+    // window.addEventListener("beforeunload", unloadCallback);
+    // return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+
+  function handleClickBasic(id) {
+    confirm({
+      title: "This is title",
+      language: "en",
+      content: <h2>This is content !</h2>,
+      onOk: () => dispatch({ type: "itemRemover", id: { id } }),
+    });
+  }
   const itemRemover = (e) => {
     const id = e.target.id;
-    dispatch({ type: "itemRemover", id: { id } });
+    handleClickBasic(id);
+    // dispatch({ type: "itemRemover", id: { id } });
   };
 
   const loadRazorpayScript = (src) => {
@@ -248,7 +278,7 @@ const Cart = () => {
       handler: async function (response) {
         console.log(response);
         cartItems.map(async (item) => {
-          const obj = {
+          let obj = {
             userId: userId,
             address: "dehradun uk",
             quantity: item.quantity,
@@ -268,21 +298,9 @@ const Cart = () => {
               body: JSON.stringify({ ...obj }),
             }
           );
-          const d = await orderCreator.json;
-          console.log(data);
+          const d = await orderCreator.json();
+          console.log(d);
         });
-        const orderCreator = await fetch(
-          `${EnvVariables.BASE_URL}/order/new-order`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            // body: JSON.stringify({ ...obj }),
-          }
-        );
-        const d = await orderCreator.json;
-        console.log(data);
       },
       theme: {
         color: "#32a86d",
@@ -297,11 +315,11 @@ const Cart = () => {
     <div>
       <Navbar />
       <MainBox>
-        <h1>Cart</h1>
+        <h1 data-aos="fade-right">Cart</h1>
         {cartItems.length > 0 && (
           <>
             <PcCartBox>
-              <ProductsTable>
+              <ProductsTable data-aos="fade-left">
                 <thead>
                   <tr>
                     <td>Product</td>
@@ -325,11 +343,10 @@ const Cart = () => {
                                 src={`${EnvVariables.BASE_URL}/${item.image}`}
                                 alt=""
                               />
+
                               <p>
-                                <span>
-                                  {item.title} - {}
-                                </span>
-                                <span>{item.color}</span>
+                                <span>{item.title} </span>
+                                <span>({item.color})</span>
                               </p>
                             </ProductImgTextBox>
                           </Link>
@@ -356,7 +373,7 @@ const Cart = () => {
                 </tbody>
               </ProductsTable>
 
-              <PriceTotalTable>
+              <PriceTotalTable data-aos="fade-right">
                 <thead>
                   <tr>
                     <td colSpan={2}>Cart Total</td>

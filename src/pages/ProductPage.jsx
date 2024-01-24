@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
 import FloatingBox from "../component/Login/FloatingBox";
 import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
+import FeatureProducts from "../component/FeaturedProducts/FeatureProducts";
 
 const MainBox = styled.div`
   display: flex;
@@ -341,28 +342,75 @@ const RelatedProductBox = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 2rem 0;
-
-  /* align-items: center; */
 `;
 const RelatedProductDiv = styled.div`
-  margin-top: 2rem;
-  padding: 2rem 0;
-  overflow: scroll;
-  transform: scale(1.05);
+  height: fit-content;
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
+  padding: 1rem 0;
+  align-items: center;
   justify-content: center;
+  padding: 0 1rem;
+  width: fit-content;
+  height: 30vh;
+  max-width: 73%;
+  justify-content: start;
+  position: relative;
+
+  /* overflow-x: scroll; */
+  @media only screen and (max-width: 949px) {
+    width: 90%;
+    max-width: 90%;
+    justify-content: start;
+  }
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   a {
     text-decoration: none;
     color: black;
   }
+`;
+
+const MainBoxProducts = styled.section`
+  padding: 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  overflow-x: hidden;
+  position: relative;
+`;
+
+const ProductsBox = styled.div`
+  height: fit-content;
+  display: flex;
+  gap: 3rem;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  width: fit-content;
+  max-width: 100%;
+  justify-content: start;
+  position: relative;
+  height: fit-content;
+  overflow-x: scroll;
+  @media only screen and (max-width: 949px) {
+    width: 90%;
+    max-width: 90%;
+    justify-content: start;
+  }
+  scroll-behavior: smooth;
   &::-webkit-scrollbar {
     display: none;
   }
-  @media only screen and (max-width: 949px) {
-    /* width: 70%; */
-    margin: 0 auto;
-    justify-content: space-between;
+  a {
+    text-decoration: none;
+    color: black;
   }
 `;
 
@@ -380,6 +428,7 @@ const ProductPage = (props) => {
   const dispatch = useDispatch();
   let counter = 0;
   const cartMsg = useSelector((state) => state.cartMsg);
+
   function shuffle(array) {
     let currentIndex = array.length,
       randomIndex;
@@ -419,6 +468,7 @@ const ProductPage = (props) => {
   ];
   let swicther = true;
   useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
@@ -428,7 +478,7 @@ const ProductPage = (props) => {
       const data = await res.json();
       // console.log(data.product);
       setProduct(data.product);
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
+
       const clrArr = data.product.color.split(",");
       setColors(clrArr);
 
@@ -735,7 +785,7 @@ const ProductPage = (props) => {
                 </ReviewsBox> */}
 
                 <RelatedProductBox>
-                  <CheckOutBox>
+                  {/* <CheckOutBox>
                     <h4>Related Products</h4>
                     <RelatedProductDiv>
                       {products.length > 0 &&
@@ -768,7 +818,41 @@ const ProductPage = (props) => {
                           return <></>;
                         })}
                     </RelatedProductDiv>
+                  </CheckOutBox> */}
+
+                  <CheckOutBox>
+                    <h4>Related Products</h4>
                   </CheckOutBox>
+                  <MainBoxProducts>
+                    <ProductsBox id="productBox">
+                      {!isLoading &&
+                        products.length > 0 &&
+                        products.map((item) => {
+                          if (
+                            product.id !== item.id &&
+                            item.category === product.category &&
+                            counter < 4
+                          ) {
+                            counter++;
+                            const colors = item.color.split(",");
+                            const image = item.images.split(" ")[0];
+                            return (
+                              <Link
+                                to={`/product/${item.slug}`}
+                                key={item.id + item.title}
+                                state={{ productId: `${item.id}` }}
+                              >
+                                <FeatureProductBox
+                                  key={item.title}
+                                  data={{ ...item, colors: colors, img: image }}
+                                />
+                              </Link>
+                            );
+                          }
+                          return <></>;
+                        })}
+                    </ProductsBox>
+                  </MainBoxProducts>
                 </RelatedProductBox>
               </>
             )}

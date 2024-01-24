@@ -43,6 +43,7 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "addToCart") {
+    let amount = 0;
     const product = action.product;
     let cartAmount = state.cartTotalAmount;
     const cartItems = state.cartItems;
@@ -74,19 +75,22 @@ const storeReducer = (state = defaultState, action) => {
           obj.quantity = alreadyFound.quantity + product.quantity;
           let updatedCartItems = cartItems;
           cartItems[alreadyFoundIndex] = obj;
-          cartAmount += Number(product.price);
+          for (const item of updatedCartItems) {
+            amount += Number(item.quantity) * Number(item.price);
+          }
           const localObj = {
             ...state,
             cartItems: updatedCartItems,
             cartMsg: "Added to cart",
-            cartTotalAmount: cartAmount,
+            cartTotalAmount: amount,
           };
+
           localStorage.setItem("state", JSON.stringify(localObj));
           return {
             ...state,
             cartItems: updatedCartItems,
             cartMsg: "Added to cart",
-            cartTotalAmount: cartAmount,
+            cartTotalAmount: amount,
           };
         }
       }
@@ -94,19 +98,21 @@ const storeReducer = (state = defaultState, action) => {
 
     let updatedCartItems = state.cartItems;
     updatedCartItems.push(product);
-    cartAmount += Number(product.price) * Number(product.quantity);
+    for (const item of updatedCartItems) {
+      amount += Number(item.quantity) * Number(item.price);
+    }
     const obj = {
       ...state,
       cartItems: updatedCartItems,
       cartMsg: "Added to cart",
-      cartTotalAmount: cartAmount,
+      cartTotalAmount: amount,
     };
     localStorage.setItem("state", JSON.stringify(obj));
     return {
       ...state,
       cartItems: updatedCartItems,
       cartMsg: "Added to cart",
-      cartTotalAmount: cartAmount,
+      cartTotalAmount: amount,
     };
   }
 
@@ -120,12 +126,11 @@ const storeReducer = (state = defaultState, action) => {
     const idAndColor = action.id.id;
     const idAndColorArr = idAndColor.split(" ");
     const cartItems = state.cartItems;
-    let cartAmount = state.cartTotalAmount;
-
+    let amount = state.cartTotalAmount;
     const updatedCartItems = cartItems.filter((item) => {
       if (item.productId === idAndColorArr[0]) {
         if (item.color === idAndColorArr[1]) {
-          cartAmount -= Number(item.price) * Number(item.quantity);
+          amount -= Number(item.quantity) * Number(item.price);
         }
         return item.color !== idAndColorArr[1];
       }
@@ -134,16 +139,15 @@ const storeReducer = (state = defaultState, action) => {
     const obj = {
       ...state,
       cartItems: updatedCartItems,
-      cartTotalAmount: cartAmount,
       cartMsg: "Removed",
+      cartTotalAmount: amount,
     };
-    console.log(updatedCartItems);
     localStorage.setItem("state", JSON.stringify(obj));
     return {
       ...state,
       cartItems: updatedCartItems,
-      cartTotalAmount: cartAmount,
       cartMsg: "Removed",
+      cartTotalAmount: amount,
     };
   }
 

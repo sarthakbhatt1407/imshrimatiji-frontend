@@ -58,7 +58,8 @@ const ProductsBox = styled.div`
   height: fit-content;
   overflow-x: scroll;
   @media only screen and (max-width: 949px) {
-    width: 80%;
+    width: 90%;
+    max-width: 90%;
     justify-content: start;
   }
   scroll-behavior: smooth;
@@ -82,7 +83,7 @@ const LeftBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: #eeeeee;
   color: black;
   z-index: 2;
   font-size: 1.7rem;
@@ -93,7 +94,7 @@ const LeftBtn = styled.button`
   }
   @media only screen and (max-width: 949px) {
     width: 5rem;
-    left: 14%;
+    left: 8%;
     height: 5rem;
   }
 `;
@@ -109,7 +110,7 @@ const RightBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: #eeeeee;
   color: black;
   svg {
     transform: scale(1.8);

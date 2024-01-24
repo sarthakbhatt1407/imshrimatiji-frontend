@@ -29,10 +29,12 @@ const MainBox = styled.div`
 
 const ImgBox = styled.div`
   img {
-    width: 30rem;
-
+    width: 32rem;
+    height: 38rem;
+    border-radius: 0.5rem;
     @media only screen and (max-width: 949px) {
       width: 26rem;
+      height: 33rem;
     }
   }
 `;
@@ -110,7 +112,7 @@ const FeatureProductBox = (props) => {
   let fireCounter = false;
 
   return (
-    <MainBox data-aos="fade-down">
+    <MainBox data-aos="fade-up">
       <ImgBox>
         <img src={`${EnvVariables.BASE_URL}/${img}`} alt="" />
       </ImgBox>
