@@ -133,6 +133,21 @@ const storeReducer = (state = defaultState, action) => {
   if (action.type === "itemRemover") {
     const { id } = action;
     const cartItems = state.cartItems;
+    if (cartItems.length === 1) {
+      const obj = {
+        ...state,
+        cartItems: [],
+        cartMsg: "Removed",
+        cartTotalAmount: 0,
+      };
+      localStorage.setItem("state", JSON.stringify(obj));
+      return {
+        ...state,
+        cartItems: [],
+        cartMsg: "Removed",
+        cartTotalAmount: 0,
+      };
+    }
     let amount = state.cartTotalAmount;
     const updatedCartItems = [];
     for (const item of cartItems) {

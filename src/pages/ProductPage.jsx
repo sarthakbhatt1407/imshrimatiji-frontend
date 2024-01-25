@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
-import { EnvVariables } from "../data";
 import ImagesSLider from "../component/UI/ImagesSlider";
 import { Add, CheckCircle, Remove } from "@mui/icons-material";
 import card from "../assets/images/cards/card.jpg";
@@ -12,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
 import FloatingBox from "../component/Login/FloatingBox";
 import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
-import FeatureProducts from "../component/FeaturedProducts/FeatureProducts";
 
 const MainBox = styled.div`
   display: flex;
@@ -56,7 +54,6 @@ const ProductInfoBox = styled.div`
     display: flex;
     gap: 1rem;
     align-items: end;
-    /* background-color: red; */
     i {
       text-decoration: line-through;
 
@@ -130,18 +127,6 @@ const ColorBox = styled.div`
     span {
       visibility: visible;
     }
-  }
-`;
-
-const SelectedColorBox = styled.div`
-  text-transform: capitalize;
-  span {
-    color: black;
-    font-weight: bold;
-  }
-  p {
-    text-transform: capitalize;
-    color: red;
   }
 `;
 
@@ -336,42 +321,11 @@ const TextBox = styled.div`
   }
 `;
 
-const ReviewsBox = styled.div``;
-
 const RelatedProductBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 2rem 0;
-`;
-const RelatedProductDiv = styled.div`
-  height: fit-content;
-  display: flex;
-  gap: 3rem;
-  padding: 1rem 0;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1rem;
-  width: fit-content;
-  height: 30vh;
-  max-width: 73%;
-  justify-content: start;
-  position: relative;
-
-  /* overflow-x: scroll; */
-  @media only screen and (max-width: 949px) {
-    width: 90%;
-    max-width: 90%;
-    justify-content: start;
-  }
-  scroll-behavior: smooth;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  a {
-    text-decoration: none;
-    color: black;
-  }
 `;
 
 const MainBoxProducts = styled.section`
@@ -421,7 +375,6 @@ const ProductPage = (props) => {
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState(null);
   const [selectedClr, setSelectedClr] = useState(null);
-  const [err, setErr] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [productAdded, setProductAdded] = useState(false);
   const productId = state.productId;
@@ -736,6 +689,7 @@ const ProductPage = (props) => {
                           }
                         }
                       }
+                      return <></>;
                     })}
                   </ImgAndTextbox>
                   <ImgAndTextBoxMobile>
@@ -763,6 +717,7 @@ const ProductPage = (props) => {
                           );
                         }
                       }
+                      return <></>;
                     })}
                   </ImgAndTextBoxMobile>
                 </DescBox>

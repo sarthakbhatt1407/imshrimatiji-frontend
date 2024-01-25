@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const MainNav = styled.nav`
   padding: 1rem;
+  border-bottom: 1px solid #f3f0ef;
   @media only screen and (max-width: 949px) {
   }
 `;
@@ -28,6 +29,7 @@ const MainNav = styled.nav`
 const PcNav = styled.div`
   display: grid;
   gap: 2rem;
+
   grid-template-columns: 0.6fr 4fr 1fr;
   @media only screen and (max-width: 949px) {
     display: none;

@@ -55,60 +55,10 @@ const TextBox = styled.div`
     justify-content: center;
   }
 `;
-const ColorDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 1rem 0;
-  gap: 1rem;
-  align-items: center;
-  position: relative;
-  i {
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 50%;
-    cursor: pointer;
-    opacity: 0.7;
-    display: flex;
-
-    &:hover {
-      outline: 1px solid black;
-      outline-offset: 2px;
-      opacity: 1;
-    }
-  }
-  span {
-    visibility: hidden;
-    position: absolute;
-    top: -2rem;
-    z-index: 2;
-    background-color: black;
-    padding: 0.3rem 0.5rem 0.7rem 0.5rem;
-    border-radius: 0.5rem;
-    text-transform: capitalize;
-    color: white;
-    transition: all 0.1s;
-    clip-path: polygon(
-      0% 0%,
-      100% 0%,
-      100% 75%,
-      75% 75%,
-      53% 92%,
-      32% 75%,
-      0% 75%
-    );
-  }
-  &:hover {
-    span {
-      visibility: visible;
-    }
-  }
-`;
 
 const FeatureProductBox = (props) => {
-  const { title, img, price, colors, id } = props.data;
+  const { title, img, price } = props.data;
   const titleArr = title.split(" ");
-  let counter = 0;
-  let fireCounter = false;
 
   return (
     <MainBox>

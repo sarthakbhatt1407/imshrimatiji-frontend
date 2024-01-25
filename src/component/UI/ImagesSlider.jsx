@@ -70,7 +70,7 @@ const ImagesSlider = (props) => {
   useEffect(() => {
     setImgSlides(ImgArr);
     return () => {};
-  }, [images]);
+  }, []);
 
   const imageLeft = () => {
     const images = document.querySelectorAll(".image");

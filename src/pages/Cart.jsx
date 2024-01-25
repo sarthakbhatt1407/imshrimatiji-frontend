@@ -4,13 +4,11 @@ import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { CancelOutlined, Close } from "@mui/icons-material";
 
 import "react-alert-confirm/lib/style.css";
-import confirm, { Button, alert } from "react-alert-confirm";
+import confirm from "react-alert-confirm";
 
 const MainBox = styled.div`
-  border-top: 1px solid #dadada;
   height: fit-content;
   padding: 4rem 4rem;
   width: 80%;
@@ -211,18 +209,17 @@ const Cart = () => {
 
   function handleClickBasic(id) {
     confirm({
-      title: "This is title",
+      title: "Do you wnt to delete ?",
       language: "en",
-      content: <h2>This is content !</h2>,
-      onOk: () => dispatch({ type: "itemRemover", id: { id } }),
+      content: <h2></h2>,
+      onOk: () => dispatch({ type: "itemRemover", id: id }),
     });
   }
   const itemRemover = (e) => {
     const id = e.target.id;
-    const eleClass = e.target.classList.value;
 
-    // handleClickBasic(id);
-    dispatch({ type: "itemRemover", id: id, clr: eleClass });
+    handleClickBasic(id);
+    // dispatch({ type: "itemRemover", id: id });
   };
 
   const loadRazorpayScript = (src) => {
