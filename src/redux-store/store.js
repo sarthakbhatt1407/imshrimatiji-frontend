@@ -161,6 +161,16 @@ const storeReducer = (state = defaultState, action) => {
     };
   }
 
+  if (action.type === "clearCart") {
+    return {
+      ...state,
+      ...state,
+      cartItems: [],
+      cartMsg: "",
+      cartTotalAmount: 0,
+    };
+  }
+
   return state;
 };
 const store = createStore(storeReducer);

@@ -277,7 +277,6 @@ const Cart = () => {
       email: userEmail,
       contact: userContact,
       handler: async function (response) {
-        console.log(response);
         cartItems.map(async (item) => {
           let obj = {
             userId: userId,
@@ -302,6 +301,7 @@ const Cart = () => {
           const d = await orderCreator.json();
           console.log(d);
         });
+        dispatch({ type: "clearCart" });
       },
       theme: {
         color: "#32a86d",
