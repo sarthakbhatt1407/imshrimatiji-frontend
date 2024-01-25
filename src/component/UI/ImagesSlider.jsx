@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { EnvVariables } from "../../data";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 const MainBox = styled.div`
@@ -21,7 +20,8 @@ const MainBox = styled.div`
 `;
 
 const ImgBox = styled.div`
-  background-image: url(${(props) => `${EnvVariables.BASE_URL}/${props.img}`});
+  background-image: url(${(props) =>
+    `${process.env.REACT_APP_BASE_URL}/${props.img}`});
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

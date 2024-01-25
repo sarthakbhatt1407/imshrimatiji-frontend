@@ -80,6 +80,7 @@ const ColorAndInfoBox = styled.div`
   display: flex;
   height: fit-content;
   align-items: center;
+  gap: 1rem;
   position: relative;
 `;
 const ColorBox = styled.div`
@@ -112,8 +113,8 @@ const ColorBox = styled.div`
     );
   }
   i {
-    width: 2rem;
-    height: 2rem;
+    width: 1.7rem;
+    height: 1.7rem;
     border-radius: 50%;
     cursor: pointer;
     opacity: 0.7;
@@ -474,16 +475,18 @@ const ProductPage = (props) => {
       dispatch({ type: "reload", data: { ...localStr } });
     }
     const fetcher = async () => {
-      const res = await fetch(`${EnvVariables.BASE_URL}/product/${productId}`);
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/${productId}`
+      );
       const data = await res.json();
       // console.log(data.product);
       setProduct(data.product);
-
+      setSelectedClr(data.product.color);
       const clrArr = data.product.color.split(",");
       setColors(clrArr);
 
       const resProducts = await fetch(
-        `${EnvVariables.BASE_URL}/product/all-items`
+        `${process.env.REACT_APP_BASE_URL}/product/all-items`
       );
       const dataProducts = await resProducts.json();
       setProducts(shuffle(dataProducts.products));
@@ -502,28 +505,28 @@ const ProductPage = (props) => {
     }
   };
 
-  const colorSelecter = (e) => {
-    const id = e.target.id;
-    setSelectedClr(id);
-    setErr(false);
+  // const colorSelecter = (e) => {
+  //   const id = e.target.id;
+  //   setSelectedClr(id);
+  //   setErr(false);
 
-    const allELe = document.querySelectorAll(".clrBox");
-    for (const el of allELe) {
-      el.style.outline = "";
-      el.style.outlineOffset = "";
-      el.style.opacity = ".7";
-    }
-    const ele = document.querySelector(`#${id}`);
-    ele.style.outline = "1px solid black";
-    ele.style.outlineOffset = "2px";
-    ele.style.opacity = "1";
-  };
+  //   const allELe = document.querySelectorAll(".clrBox");
+  //   for (const el of allELe) {
+  //     el.style.outline = "";
+  //     el.style.outlineOffset = "";
+  //     el.style.opacity = ".7";
+  //   }
+  //   const ele = document.querySelector(`#${id}`);
+  //   ele.style.outline = "1px solid black";
+  //   ele.style.outlineOffset = "2px";
+  //   ele.style.opacity = "1";
+  // };
 
   const addToCartHandler = () => {
-    if (!selectedClr) {
-      setErr(true);
-      return;
-    }
+    // if (!selectedClr) {
+    //   setErr(true);
+    //   return;
+    // }
     setIsLoading(true);
     const titleArr = product.title.split(" ");
     let title;
@@ -539,6 +542,7 @@ const ProductPage = (props) => {
       image: product.images.split(" ")[0],
       quantity: quantity,
       color: selectedClr,
+      stockAvailable: Number(product.stock),
     };
     dispatch({ type: "addToCart", product: { ...obj } });
     setProductAdded(true);
@@ -588,13 +592,13 @@ const ProductPage = (props) => {
                     </p>
 
                     <ColorAndInfoBox>
+                      Color :
                       {colors.map((clr) => {
                         return (
                           <ColorBox key={product.id + clr}>
                             <span>{clr}</span>
                             <i
                               className="clrBox"
-                              onClick={colorSelecter}
                               id={clr.trim()}
                               style={{ backgroundColor: `${clr}` }}
                             ></i>
@@ -602,17 +606,6 @@ const ProductPage = (props) => {
                         );
                       })}
                     </ColorAndInfoBox>
-
-                    {selectedClr && (
-                      <SelectedColorBox id="slctedBox">
-                        {selectedClr && `Color:`} <span>{selectedClr}</span>
-                      </SelectedColorBox>
-                    )}
-                    {err && (
-                      <SelectedColorBox>
-                        <p>select color</p>
-                      </SelectedColorBox>
-                    )}
 
                     <AddToCartDiv>
                       {isLoading && <BtnLoader />}
@@ -705,7 +698,7 @@ const ProductPage = (props) => {
                               <>
                                 <ImgBox key={ind + img} data-aos="fade-left">
                                   <img
-                                    src={`${EnvVariables.BASE_URL}/${img}`}
+                                    src={`${process.env.REACT_APP_BASE_URL}/${img}`}
                                     alt=""
                                   />
                                 </ImgBox>
@@ -734,7 +727,7 @@ const ProductPage = (props) => {
                                 </TextBox>
                                 <ImgBox key={ind + img} data-aos="fade-right">
                                   <img
-                                    src={`${EnvVariables.BASE_URL}/${img}`}
+                                    src={`${process.env.REACT_APP_BASE_URL}/${img}`}
                                     alt=""
                                   />
                                 </ImgBox>
@@ -755,7 +748,7 @@ const ProductPage = (props) => {
                             <>
                               <ImgBox key={ind + img} data-aos="fade-right">
                                 <img
-                                  src={`${EnvVariables.BASE_URL}/${img}`}
+                                  src={`${process.env.REACT_APP_BASE_URL}/${img}`}
                                   alt=""
                                 />
                               </ImgBox>

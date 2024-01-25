@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { EnvVariables } from "../../data";
 
 const MainBox = styled.div`
   display: flex;
@@ -58,14 +57,14 @@ const TextBox = styled.div`
 `;
 const ColorDiv = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   padding: 1rem 0;
+  gap: 1rem;
   align-items: center;
   position: relative;
   i {
-    width: 2rem;
-    height: 2rem;
+    width: 1.6rem;
+    height: 1.6rem;
     border-radius: 50%;
     cursor: pointer;
     opacity: 0.7;
@@ -112,17 +111,17 @@ const FeatureProductBox = (props) => {
   let fireCounter = false;
 
   return (
-    <MainBox data-aos="fade-up">
+    <MainBox>
       <ImgBox>
-        <img src={`${EnvVariables.BASE_URL}/${img}`} alt="" />
+        <img src={`${process.env.REACT_APP_BASE_URL}/${img}`} alt="" />
       </ImgBox>
       <TextBox>
         <h3>
           {titleArr[0] || ""} {}
           {titleArr[1] || ""}
         </h3>
-        <h5>₹ {price}</h5>
-        <span>
+        <h5>₹ {Number(price).toLocaleString("en-IN")}</h5>
+        {/* <span>
           {colors.map((clr) => {
             if (counter <= 2) {
               counter++;
@@ -132,6 +131,7 @@ const FeatureProductBox = (props) => {
               return (
                 <ColorDiv key={id + clr}>
                   <span>{clr}</span>
+
                   <i clr={clr} key={clr} style={{ backgroundColor: clr }}></i>
                 </ColorDiv>
               );
@@ -151,7 +151,7 @@ const FeatureProductBox = (props) => {
             }
             return <></>;
           })}
-        </span>
+        </span> */}
       </TextBox>
     </MainBox>
   );

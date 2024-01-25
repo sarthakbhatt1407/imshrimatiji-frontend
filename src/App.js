@@ -28,7 +28,7 @@ const App = () => {
       clearInterval(aosRefresh);
     };
   }, []);
-
+  console.log(process.env.REACT_APP_BASE_URL);
   return (
     <>
       <Routes>

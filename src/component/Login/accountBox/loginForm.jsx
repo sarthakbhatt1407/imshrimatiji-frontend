@@ -11,7 +11,6 @@ import {
 } from "./common";
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
-import { EnvVariables } from "../../../data";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FullPageLoader from "../../Loaders/CategoryLoader/FullPageLoader";
@@ -79,7 +78,7 @@ export function LoginForm(props) {
   const onClickHandler = async () => {
     setIsLogging(true);
     setIsLoading(true);
-    const res = await fetch(`${EnvVariables.BASE_URL}/user/login`, {
+    const res = await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

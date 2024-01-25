@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 // images
 import SectionHeading from "../UI/SectionHeading";
-import { EnvVariables } from "../../data";
 import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 import CategoryBox from "../UI/CategoryBox";
 
@@ -46,7 +45,9 @@ const Categories = () => {
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`${EnvVariables.BASE_URL}/category/all-category`);
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/category/all-category`
+      );
       const data = await res.json();
       setCategoryItems(data.categories);
     };

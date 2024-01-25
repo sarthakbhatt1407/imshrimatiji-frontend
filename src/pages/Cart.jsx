@@ -4,7 +4,6 @@ import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { EnvVariables } from "../data";
 import { CancelOutlined, Close } from "@mui/icons-material";
 
 import "react-alert-confirm/lib/style.css";
@@ -220,8 +219,10 @@ const Cart = () => {
   }
   const itemRemover = (e) => {
     const id = e.target.id;
-    handleClickBasic(id);
-    // dispatch({ type: "itemRemover", id: { id } });
+    const eleClass = e.target.classList.value;
+
+    // handleClickBasic(id);
+    dispatch({ type: "itemRemover", id: id, clr: eleClass });
   };
 
   const loadRazorpayScript = (src) => {
@@ -250,7 +251,7 @@ const Cart = () => {
     }
 
     const orderRes = await fetch(
-      `${EnvVariables.BASE_URL}/payment/create-order`,
+      `${process.env.REACT_APP_BASE_URL}/payment/create-order`,
       {
         method: "POST",
         headers: {
@@ -289,7 +290,7 @@ const Cart = () => {
             shippingCharges: 99,
           };
           const orderCreator = await fetch(
-            `${EnvVariables.BASE_URL}/order/new-order`,
+            `${process.env.REACT_APP_BASE_URL}/order/new-order`,
             {
               method: "POST",
               headers: {
@@ -340,7 +341,7 @@ const Cart = () => {
                           >
                             <ProductImgTextBox>
                               <img
-                                src={`${EnvVariables.BASE_URL}/${item.image}`}
+                                src={`${process.env.REACT_APP_BASE_URL}/${item.image}`}
                                 alt=""
                               />
 
@@ -360,10 +361,7 @@ const Cart = () => {
                           ).toLocaleString("en-IN")}
                         </td>
                         <td>
-                          <button
-                            onClick={itemRemover}
-                            id={item.productId + " " + item.color}
-                          >
+                          <button onClick={itemRemover} id={item.productId}>
                             x
                           </button>
                         </td>

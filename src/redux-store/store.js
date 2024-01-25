@@ -10,6 +10,7 @@ const defaultState = {
   cartTotalAmount: 0,
   userContact: null,
 };
+
 const storeReducer = (state = defaultState, action) => {
   if (action.type === "log in") {
     const data = action.data;
@@ -45,7 +46,7 @@ const storeReducer = (state = defaultState, action) => {
   if (action.type === "addToCart") {
     let amount = 0;
     const product = action.product;
-    let cartAmount = state.cartTotalAmount;
+    const stockAvailable = action.stockAvailable;
     const cartItems = state.cartItems;
     let alreadyFound = cartItems.find((item) => {
       return (
@@ -73,8 +74,15 @@ const storeReducer = (state = defaultState, action) => {
         } else {
           let obj = alreadyFound;
           obj.quantity = alreadyFound.quantity + product.quantity;
+          if (stockAvailable < obj.quantity) {
+            return {
+              ...state,
+              cartMsg: "Stock not available",
+            };
+          }
           let updatedCartItems = cartItems;
           cartItems[alreadyFoundIndex] = obj;
+
           for (const item of updatedCartItems) {
             amount += Number(item.quantity) * Number(item.price);
           }
@@ -123,31 +131,33 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "itemRemover") {
-    const idAndColor = action.id.id;
-    const idAndColorArr = idAndColor.split(" ");
+    const { id } = action;
     const cartItems = state.cartItems;
     let amount = state.cartTotalAmount;
-    const updatedCartItems = cartItems.filter((item) => {
-      if (item.productId === idAndColorArr[0]) {
-        if (item.color === idAndColorArr[1]) {
-          amount -= Number(item.quantity) * Number(item.price);
-        }
-        return item.color !== idAndColorArr[1];
+    const updatedCartItems = [];
+    for (const item of cartItems) {
+      if (item.productId !== id) {
+        amount -= Number(item.quantity) * Number(item.price);
+        updatedCartItems.push(item);
       }
-    });
-
-    const obj = {
-      ...state,
-      cartItems: updatedCartItems,
-      cartMsg: "Removed",
-      cartTotalAmount: amount,
-    };
-    localStorage.setItem("state", JSON.stringify(obj));
+    }
+    if (updatedCartItems.length > 0) {
+      const obj = {
+        ...state,
+        cartItems: updatedCartItems,
+        cartMsg: "Removed",
+        cartTotalAmount: amount,
+      };
+      localStorage.setItem("state", JSON.stringify(obj));
+      return {
+        ...state,
+        cartItems: updatedCartItems,
+        cartMsg: "Removed",
+        cartTotalAmount: amount,
+      };
+    }
     return {
       ...state,
-      cartItems: updatedCartItems,
-      cartMsg: "Removed",
-      cartTotalAmount: amount,
     };
   }
 

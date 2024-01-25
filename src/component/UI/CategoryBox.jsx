@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { EnvVariables } from "../../data";
 import AOS from "aos";
 
 const CategoryBoxDiv = styled.div`
@@ -60,7 +59,7 @@ const CategoryBox = (props) => {
 
   return (
     <CategoryBoxDiv data-aos={`${data}`}>
-      <img src={`${EnvVariables.BASE_URL}/${image}`} alt="" />
+      <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" />
       <span>
         <b>{title}</b>
         <i>6 Products</i>

@@ -4,7 +4,6 @@ import SectionHeading from "../UI/SectionHeading";
 import "./FeatureProducts.css";
 import FeatureProductBox from "../UI/FeatureProductBox";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { EnvVariables } from "../../data";
 import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 import { Link } from "react-router-dom";
 
@@ -142,7 +141,9 @@ const FeatureProducts = () => {
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`${EnvVariables.BASE_URL}/product/all-items`);
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/all-items`
+      );
       const data = await res.json();
       setProducts(data.products.reverse());
       setIsLoading(false);
@@ -269,11 +270,9 @@ const FeatureProducts = () => {
 
               return (
                 <Link
+                  to={`/product/${item.slug}`}
                   key={item.id + item.title}
-                  to={{
-                    pathname: `/prdouct/${item.slug}`,
-                    state: `${item.id}`,
-                  }}
+                  state={{ productId: `${item.id}` }}
                 >
                   <FeatureProductBox
                     key={item.title}
@@ -294,7 +293,11 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               console.log(image);
               return (
-                <Link key={item.id + item.title} to="">
+                <Link
+                  to={`/product/${item.slug}`}
+                  key={item.id + item.title}
+                  state={{ productId: `${item.id}` }}
+                >
                   <FeatureProductBox
                     data={{ ...item, colors: colors, img: image }}
                   />
@@ -312,7 +315,11 @@ const FeatureProducts = () => {
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
               return (
-                <Link to="" key={item.id + item.title}>
+                <Link
+                  to={`/product/${item.slug}`}
+                  key={item.id + item.title}
+                  state={{ productId: `${item.id}` }}
+                >
                   <FeatureProductBox
                     key={item.title}
                     data={{ ...item, colors: colors, img: image }}
