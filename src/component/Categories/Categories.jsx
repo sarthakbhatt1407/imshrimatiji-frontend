@@ -5,6 +5,7 @@ import styled from "styled-components";
 import SectionHeading from "../UI/SectionHeading";
 import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 import CategoryBox from "../UI/CategoryBox";
+import { Link } from "react-router-dom";
 
 //
 
@@ -30,6 +31,9 @@ const ItemsBox = styled.div`
   justify-items: center;
   padding: 0 2rem;
   gap: 2rem;
+  a {
+    color: black;
+  }
 
   @media only screen and (max-width: 649px) {
     grid-template-columns: 1fr;
@@ -69,25 +73,31 @@ const Categories = () => {
               if (counter === 0) {
                 counter++;
                 return (
-                  <CategoryBox
-                    key={item.id}
-                    item={item}
-                    data={
-                      window.screen.availWidth > 949 ? "fade-up" : "fade-right"
-                    }
-                  />
+                  <Link to={`product-category/${item.title}`}>
+                    <CategoryBox
+                      key={item.id}
+                      item={item}
+                      data={
+                        window.screen.availWidth > 949
+                          ? "fade-up"
+                          : "fade-right"
+                      }
+                    />
+                  </Link>
                 );
               } else {
                 counter--;
 
                 return (
-                  <CategoryBox
-                    item={item}
-                    key={item.id}
-                    data={
-                      window.screen.availWidth > 949 ? "fade-up" : "fade-left"
-                    }
-                  />
+                  <Link to={`product-category/${item.title}`}>
+                    <CategoryBox
+                      item={item}
+                      key={item.id}
+                      data={
+                        window.screen.availWidth > 949 ? "fade-up" : "fade-left"
+                      }
+                    />{" "}
+                  </Link>
                 );
               }
             })}

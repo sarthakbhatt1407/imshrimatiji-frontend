@@ -61,7 +61,7 @@ const FeatureProductBox = (props) => {
   const titleArr = title.split(" ");
 
   return (
-    <MainBox data-aos="fade-up">
+    <MainBox>
       <ImgBox>
         <img src={`${process.env.REACT_APP_BASE_URL}/${img}`} alt="" />
       </ImgBox>

@@ -291,7 +291,7 @@ const FeatureProducts = () => {
               suitCounter++;
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
-              console.log(image);
+
               return (
                 <Link
                   to={`/product/${item.slug}`}

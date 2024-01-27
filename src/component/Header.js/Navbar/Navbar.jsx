@@ -291,7 +291,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link to="/">
+          <Link>
             <p
               onClick={() => {
                 setArrowDown(!arrowDown);
@@ -314,16 +314,16 @@ const Navbar = () => {
             </p>
             <div id="demo" className="collapse">
               <CollapsibleDiv>
-                <Link onClick={menuButtonHandler} to="/">
+                <Link to="/product-category/saree" onClick={menuButtonHandler}>
                   Saree
                 </Link>
-                <Link onClick={menuButtonHandler} to="/">
+                <Link to="/product-category/kurti" onClick={menuButtonHandler}>
                   Kurti
                 </Link>
-                <Link onClick={menuButtonHandler} to="/">
+                <Link to="/product-category/frock" onClick={menuButtonHandler}>
                   Frock
                 </Link>
-                <Link onClick={menuButtonHandler} to="/">
+                <Link to="/product-category/suit" onClick={menuButtonHandler}>
                   Suit
                 </Link>
               </CollapsibleDiv>
@@ -365,10 +365,10 @@ const Navbar = () => {
         </LogoDiv>
         <PageLinksDiv>
           <Link to="/">Home</Link>
-          <Link to="/">Saree</Link>
-          <Link to="/">Kurti</Link>
-          <Link to="/">Frock</Link>
-          <Link to="/">Suit</Link>
+          <Link to="/product-category/saree">Saree</Link>
+          <Link to="/product-category/kurti">Kurti</Link>
+          <Link to="/product-category/frock">Frock</Link>
+          <Link to="/product-category/suit">Suit</Link>
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>

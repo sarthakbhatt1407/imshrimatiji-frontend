@@ -8,6 +8,7 @@ import ProductPage from "./pages/ProductPage";
 import { useDispatch, useSelector } from "react-redux";
 import Cart from "./pages/Cart";
 import SuccesPage from "./pages/SuccesPage";
+import Products from "./pages/Products";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -37,6 +38,11 @@ const App = () => {
         <Route path="/product/:product" exact element={<ProductPage />} />
         <Route path="/cart" exact element={<Cart />} />
         <Route path="/succes" exact element={<SuccesPage />} />
+        <Route
+          path="/product-category/:category"
+          exact
+          element={<Products />}
+        />
       </Routes>
     </>
   );
