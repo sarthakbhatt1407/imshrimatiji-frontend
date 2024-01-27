@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 import ProductPage from "./pages/ProductPage";
 import { useDispatch, useSelector } from "react-redux";
 import Cart from "./pages/Cart";
+import SuccesPage from "./pages/SuccesPage";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -18,9 +19,7 @@ const App = () => {
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
     }
-    AOS.init({
-      once: true,
-    });
+    AOS.init({});
     const aosRefresh = setInterval(() => {
       AOS.refresh();
     }, 500);
@@ -37,6 +36,7 @@ const App = () => {
         {isLoggedIn && <Route path="/login" element={<Login />} />}
         <Route path="/product/:product" exact element={<ProductPage />} />
         <Route path="/cart" exact element={<Cart />} />
+        <Route path="/succes" exact element={<SuccesPage />} />
       </Routes>
     </>
   );

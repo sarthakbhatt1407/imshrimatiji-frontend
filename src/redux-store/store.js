@@ -177,6 +177,14 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "clearCart") {
+    const localStr = JSON.parse(localStorage.getItem("state"));
+    const obj = {
+      ...localStr,
+      cartItems: [],
+      cartMsg: "",
+      cartTotalAmount: 0,
+    };
+    localStorage.setItem("state", JSON.stringify(obj));
     return {
       ...state,
       ...state,

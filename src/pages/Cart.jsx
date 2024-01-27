@@ -3,7 +3,7 @@ import Navbar from "../component/Header.js/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "react-alert-confirm/lib/style.css";
 import confirm from "react-alert-confirm";
@@ -197,6 +197,8 @@ const Cart = () => {
   const cartItems = useSelector((state) => state.cartItems.reverse());
   const cartTotalAmount = useSelector((state) => state.cartTotalAmount);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     // const unloadCallback = (event) => {
     //   event.preventDefault();
@@ -239,7 +241,7 @@ const Cart = () => {
   //function will get called when clicked on the pay button.
   const displayRazorpayPaymentSdk = async () => {
     const res = await loadRazorpayScript(
-      "https://checkout.razorpay.com/v2/checkout.js"
+      "https://checkout.razorpay.com/v1/checkout.js"
     );
 
     if (!res) {
@@ -255,7 +257,10 @@ const Cart = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: cartTotalAmount.toString(),
+          amount:
+            cartTotalAmount < 999
+              ? Number(cartTotalAmount + 99).toString()
+              : cartTotalAmount.toString(),
           userEmail,
           userContact,
           userName,
@@ -264,6 +269,36 @@ const Cart = () => {
     );
     const data = await orderRes.json();
     console.log(data);
+    const createdOrders = [];
+    cartItems.map(async (item) => {
+      let obj = {
+        userId: userId,
+        address: "dehradun uk",
+        quantity: item.quantity,
+        price: item.price,
+        orderPrice: Number(item.quantity) * Number(item.price),
+        productId: item.productId,
+        paymentMethod: "online",
+        shippingCharges: 99,
+        secretKey: process.env.REACT_APP_SECRET_KEY,
+        paymentOrderId: data.order_id,
+      };
+      const orderCreator = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/order/new-order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...obj }),
+        }
+      );
+      const d = await orderCreator.json();
+
+      createdOrders.push(d.createdOrder);
+      console.log(createdOrders);
+    });
+
     var options = {
       key: data.key_id,
       amount: data.amount,
@@ -274,31 +309,37 @@ const Cart = () => {
       email: userEmail,
       contact: userContact,
       handler: async function (response) {
-        cartItems.map(async (item) => {
-          let obj = {
-            userId: userId,
-            address: "dehradun uk",
-            quantity: item.quantity,
-            price: item.price,
-            productId: item.productId,
-            paymentMethod: "online",
-            paymentStatus: "done",
-            shippingCharges: 99,
-          };
-          const orderCreator = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/order/new-order`,
+        createdOrders.map(async (item) => {
+          const paymentVerifier = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ ...obj }),
+              body: JSON.stringify({ id: item.paymentOrderId }),
             }
           );
-          const d = await orderCreator.json();
-          console.log(d);
+          const data = await paymentVerifier.json();
+          console.log(data);
+          const orderPaymentUpdater = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                orderId: item._id,
+                orderPaymentStatus: data.captured,
+              }),
+            }
+          );
+          const updaterData = await orderPaymentUpdater.json();
+          console.log(updaterData);
         });
         dispatch({ type: "clearCart" });
+        navigate("/succes");
       },
       theme: {
         color: "#32a86d",

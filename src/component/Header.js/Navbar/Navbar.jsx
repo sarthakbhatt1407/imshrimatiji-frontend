@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const MainNav = styled.nav`
   padding: 1rem;
-  border-bottom: 1px solid #f3f0ef;
   @media only screen and (max-width: 949px) {
   }
 `;
