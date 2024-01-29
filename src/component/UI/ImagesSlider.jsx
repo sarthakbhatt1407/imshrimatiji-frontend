@@ -15,7 +15,7 @@ const MainBox = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  /* background-color: #f7f7f7; */
+  background-color: #f7f7f7;
   @media (max-width: 450px) {
     width: 100%;
     height: 40vh;
@@ -39,13 +39,13 @@ const ImgBox = styled.div`
 const ArrowLeft = styled.button`
   text-align: center;
   border: none;
-  background-color: white;
+  background-color: #62626225;
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  top: 50%;
-  left: 1%;
+  top: 45%;
+  left: 0%;
   font-size: 1.5rem;
   svg {
     transform: scale(1.5);
@@ -54,14 +54,14 @@ const ArrowLeft = styled.button`
 const ArrowRight = styled.button`
   text-align: center;
   border: none;
-  background-color: white;
+  background-color: #62626225;
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  right: 1%;
+  right: 0%;
   font-size: 1.5rem;
-  top: 50%;
+  top: 45%;
   svg {
     transform: scale(1.5);
   }
