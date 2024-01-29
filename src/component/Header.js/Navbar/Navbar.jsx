@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 
 // Logo
 import Logo from "../../../assets/images/logo/logo-white.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AccountCircle,
   CloseOutlined,
@@ -14,11 +14,17 @@ import {
 import { Badge } from "@mui/material";
 import { colors } from "../../../data";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 // css
 
 const MainNav = styled.nav`
   padding: 1rem;
+  position: sticky;
+  top: 0;
+  background-color: #f7f7f7;
+  padding: 1rem 0;
+  z-index: 100;
   @media only screen and (max-width: 949px) {
   }
 `;
@@ -58,10 +64,10 @@ const PageLinksDiv = styled.div`
     text-decoration: none;
     transition: all 0.2s;
     backface-visibility: hidden;
-    color: black;
+
     font-size: 1.5rem;
     letter-spacing: 0.12rem;
-    font-weight: 600;
+    font-weight: 500;
     &:hover {
       color: ${colors.mainColor};
       transform: scale(1.15) translateZ(0);
@@ -254,6 +260,7 @@ const CollapsibleDiv = styled.div`
 
 // Component
 const Navbar = () => {
+  const path = useLocation().pathname;
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const cartTotalItems = useSelector((state) => state.cartItems.length);
   const dispatch = useDispatch();
@@ -268,6 +275,9 @@ const Navbar = () => {
       setLinksActive(!linksActive);
     }, 50);
   };
+  useEffect(() => {
+    return () => {};
+  }, [path]);
 
   return (
     <MainNav>
@@ -364,16 +374,67 @@ const Navbar = () => {
           <Link to="/"></Link>
         </LogoDiv>
         <PageLinksDiv>
-          <Link to="/">Home</Link>
-          <Link to="/product-category/saree">Saree</Link>
-          <Link to="/product-category/kurti">Kurti</Link>
-          <Link to="/product-category/frock">Frock</Link>
-          <Link to="/product-category/suit">Suit</Link>
+          <Link
+            className={path === "/" ? "activeLink" : "nonActiveLink"}
+            to="/"
+          >
+            Home
+          </Link>
+          <Link
+            className={
+              path === "/product-category/saree"
+                ? "activeLink"
+                : "nonActiveLink"
+            }
+            to="/product-category/saree"
+          >
+            Saree
+          </Link>
+          <Link
+            className={
+              path === "/product-category/kurti"
+                ? "activeLink"
+                : "nonActiveLink"
+            }
+            to="/product-category/kurti"
+          >
+            Kurti
+          </Link>
+          <Link
+            className={
+              path === "/product-category/frock"
+                ? "activeLink"
+                : "nonActiveLink"
+            }
+            to="/product-category/frock"
+          >
+            Frock
+          </Link>
+          <Link
+            className={
+              path === "/product-category/suit" ? "activeLink" : "nonActiveLink"
+            }
+            to="/product-category/suit"
+          >
+            Suit
+          </Link>
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>
           {isLoggedIn && <Link to="/">Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
+          {isLoggedIn && (
+            <Link
+              onClick={() => {
+                dispatch({ type: "logout" });
+                menuButtonHandler();
+                navigate("/");
+              }}
+              to="/"
+            >
+              Log out
+            </Link>
+          )}
           <Link to="/cart">
             <Badge badgeContent={cartTotalItems} color="primary">
               <LocalMall color="action" />

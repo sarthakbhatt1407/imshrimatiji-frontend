@@ -35,9 +35,13 @@ const App = () => {
         {isLoggedIn && <Route path="/login" element={<Navigate to="/" />} />}
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         {isLoggedIn && <Route path="/login" element={<Login />} />}
-        <Route path="/product/:product" exact element={<ProductPage />} />
+        <Route
+          path="/product/:category/:product/:productId"
+          exact
+          element={<ProductPage />}
+        />
         <Route path="/cart" exact element={<Cart />} />
-        <Route path="/succes" exact element={<SuccesPage />} />
+        <Route path="/success" exact element={<SuccesPage />} />
         <Route
           path="/product-category/:category"
           exact

@@ -6,11 +6,11 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Source Sans 3", sans-serif;
-  font-family: "Playfair Display", serif;
-  /* background-color: #f5f3ef; */
+  font-family: "Oswald", sans-serif;
 }
-
+body::-webkit-scrollbar {
+  display: none;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -18,7 +18,13 @@ code {
 .para {
   margin-bottom: -0.5rem;
 }
+.activeLink {
+  color: #ba445e;
+}
+.activeLink:active {
+  color: #ba445e;
+}
 
-/* @media only screen and (min-width: 451px) and (max-width: 1020px) {
-
-} */
+.nonActiveLink {
+  color: black;
+}

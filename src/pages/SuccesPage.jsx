@@ -8,9 +8,9 @@ const MainBox = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 93vh;
+  height: 100vh;
   text-align: center;
-  background-color: #ebf0f5;
+  background-color: #e4e4e4;
 `;
 
 const Card = styled.div`
@@ -60,7 +60,7 @@ const Card = styled.div`
       width: 100%;
     }
     i {
-      font-size: 90px;
+      font-size: 110px;
     }
   }
 `;
@@ -79,7 +79,6 @@ const SuccesPage = () => {
 
   return (
     <>
-      <Navbar />
       <MainBox>
         <Card data-aos="zoom-in" class="card">
           <div data-aos="flip-right" data-aos-delay="250">

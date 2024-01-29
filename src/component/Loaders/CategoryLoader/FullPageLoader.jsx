@@ -33,11 +33,10 @@ const AniLoader = keyframes`
 
 const MainBox = styled.div`
   width: 100vw;
-  display: block;
-  margin: 0 auto;
+
   height: 100vh;
   overflow: hidden;
-  background-color: #0000008f;
+  background-color: #27272749;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
 import ImagesSLider from "../component/UI/ImagesSlider";
@@ -370,14 +370,13 @@ const ProductsBox = styled.div`
 `;
 
 const ProductPage = (props) => {
-  const { state } = useLocation();
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState(null);
   const [selectedClr, setSelectedClr] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [productAdded, setProductAdded] = useState(false);
-  const productId = state.productId;
+  const productId = useParams().productId;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   let counter = 0;
@@ -786,7 +785,7 @@ const ProductPage = (props) => {
                             const image = item.images.split(" ")[0];
                             return (
                               <Link
-                                to={`/product/${item.slug}`}
+                                to={`/product/${item.category}/${item.slug}/${item.id}`}
                                 key={item.id + item.title}
                                 state={{ productId: `${item.id}` }}
                               >

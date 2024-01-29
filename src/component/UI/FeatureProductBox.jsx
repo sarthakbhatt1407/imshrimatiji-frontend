@@ -14,7 +14,9 @@ const MainBox = styled.div`
   height: fit-content;
   cursor: pointer;
   &:hover {
-    /* transform: scale(1.5); */
+    img {
+      transform: scale(1.05);
+    }
   }
   @media only screen and (max-width: 949px) {
     padding: 2rem 2rem;
@@ -28,6 +30,7 @@ const MainBox = styled.div`
 
 const ImgBox = styled.div`
   img {
+    transition: all 0.5s;
     width: 32rem;
     height: 38rem;
     border-radius: 0.5rem;
@@ -39,12 +42,16 @@ const ImgBox = styled.div`
 `;
 
 const TextBox = styled.div`
-  color: black;
+  color: #3a3a3a;
   text-transform: capitalize;
 
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
   h5 {
     display: flex;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     justify-content: center;
     align-items: center;
   }
@@ -61,7 +68,7 @@ const FeatureProductBox = (props) => {
   const titleArr = title.split(" ");
 
   return (
-    <MainBox>
+    <MainBox data-aos="fade-up">
       <ImgBox>
         <img src={`${process.env.REACT_APP_BASE_URL}/${img}`} alt="" />
       </ImgBox>

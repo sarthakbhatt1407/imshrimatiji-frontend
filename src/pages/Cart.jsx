@@ -294,7 +294,7 @@ const Cart = () => {
         }
       );
       const d = await orderCreator.json();
-
+      console.log(d);
       createdOrders.push(d.createdOrder);
       console.log(createdOrders);
     });
@@ -310,6 +310,10 @@ const Cart = () => {
       contact: userContact,
       handler: async function (response) {
         createdOrders.map(async (item) => {
+          if (!item.paymentOrderId) {
+            return;
+          }
+          console.log(item.paymentOrderId);
           const paymentVerifier = await fetch(
             `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
             {
@@ -322,24 +326,27 @@ const Cart = () => {
           );
           const data = await paymentVerifier.json();
           console.log(data);
-          const orderPaymentUpdater = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                orderId: item._id,
-                orderPaymentStatus: data.captured,
-              }),
-            }
-          );
-          const updaterData = await orderPaymentUpdater.json();
-          console.log(updaterData);
+          if (data.captured) {
+            const orderPaymentUpdater = await fetch(
+              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: item._id,
+                  orderPaymentStatus: data.captured,
+                }),
+              }
+            );
+            const updaterData = await orderPaymentUpdater.json();
+            console.log(updaterData);
+          }
         });
         dispatch({ type: "clearCart" });
-        navigate("/succes");
+
+        navigate("/success");
       },
       theme: {
         color: "#32a86d",

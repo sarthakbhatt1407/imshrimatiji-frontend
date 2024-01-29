@@ -246,7 +246,7 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               return (
                 <Link
-                  to={`/product/${item.slug}`}
+                  to={`/product/${item.category}/${item.slug}/${item.id}`}
                   key={item.id + item.title}
                   state={{ productId: `${item.id}` }}
                 >
@@ -270,7 +270,7 @@ const FeatureProducts = () => {
 
               return (
                 <Link
-                  to={`/product/${item.slug}`}
+                  to={`/product/${item.category}/${item.slug}/${item.id}`}
                   key={item.id + item.title}
                   state={{ productId: `${item.id}` }}
                 >
@@ -294,7 +294,7 @@ const FeatureProducts = () => {
 
               return (
                 <Link
-                  to={`/product/${item.slug}`}
+                  to={`/product/${item.category}/${item.slug}/${item.id}`}
                   key={item.id + item.title}
                   state={{ productId: `${item.id}` }}
                 >
@@ -316,7 +316,7 @@ const FeatureProducts = () => {
               const image = item.images.split(" ")[0];
               return (
                 <Link
-                  to={`/product/${item.slug}`}
+                  to={`/product/${item.category}/${item.slug}/${item.id}`}
                   key={item.id + item.title}
                   state={{ productId: `${item.id}` }}
                 >
