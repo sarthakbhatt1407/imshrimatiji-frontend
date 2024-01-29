@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
+const OuterBox = styled.div`
+  position: relative;
+`;
+
 const MainBox = styled.div`
   width: 100%;
   height: 100%;
@@ -11,7 +15,7 @@ const MainBox = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7; */
   @media (max-width: 450px) {
     width: 100%;
     height: 40vh;
@@ -40,7 +44,7 @@ const ArrowLeft = styled.button`
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 1%;
   font-size: 1.5rem;
   svg {
@@ -57,7 +61,7 @@ const ArrowRight = styled.button`
   position: absolute;
   right: 1%;
   font-size: 1.5rem;
-  top: 40%;
+  top: 50%;
   svg {
     transform: scale(1.5);
   }
@@ -114,19 +118,19 @@ const ImagesSlider = (props) => {
     }
   };
   return (
-    <>
+    <OuterBox>
       <MainBox data-aos="fade-right">
         {imgSlides.map((item) => {
           return <ImgBox key={item} img={item} className="image"></ImgBox>;
         })}
-        <ArrowLeft onClick={prev}>
-          <ChevronLeft />
-        </ArrowLeft>
-        <ArrowRight onClick={next}>
-          <ChevronRight />
-        </ArrowRight>
       </MainBox>
-    </>
+      <ArrowLeft onClick={prev}>
+        <ChevronLeft />
+      </ArrowLeft>
+      <ArrowRight onClick={next}>
+        <ChevronRight />
+      </ArrowRight>
+    </OuterBox>
   );
 };
 
