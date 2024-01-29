@@ -212,7 +212,7 @@ const Products = (props) => {
     setIsLoading(false);
   };
   useEffect(() => {
-    // document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     fetcher();
 
     return () => {};

@@ -7,8 +7,10 @@ const MainBox = styled.div`
   height: 100%;
   margin: auto;
   position: relative;
-  overflow: hidden;
-  /* border: 1px solid #ebebeb; */
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   background-color: #f7f7f7;
   @media (max-width: 450px) {
     width: 100%;
