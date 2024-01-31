@@ -25,6 +25,8 @@ const MainBox = styled.div`
 
 const PcCartBox = styled.div`
   display: grid;
+  height: 50vh;
+  max-height: fit-content;
   gap: 1rem;
   grid-template-columns: 1.8fr 1fr;
   gap: 3rem;
@@ -59,9 +61,10 @@ const ProductsTable = styled.table`
     tr {
       border-bottom: 1px solid #e5e5e5;
       td {
-        padding: 1.4rem;
+        padding: 1rem 0;
         font-size: 1.5rem;
         color: black;
+        text-align: center;
         a {
           color: black;
           text-decoration: none;
@@ -87,7 +90,7 @@ const ProductsTable = styled.table`
         td {
           font-size: 1.6rem;
           color: #000000;
-          text-align: center;
+
           padding: 1.4rem 0;
           span {
           }
@@ -211,9 +214,9 @@ const Cart = () => {
 
   function handleClickBasic(id) {
     confirm({
-      title: "Do you wnt to delete ?",
+      title: "Do you want to delete ?",
       language: "en",
-      content: <h2></h2>,
+      content: <h2> </h2>,
       onOk: () => dispatch({ type: "itemRemover", id: id }),
     });
   }
@@ -381,7 +384,7 @@ const Cart = () => {
                       <tr key={item.productId + Math.random() * 20}>
                         <td>
                           <Link
-                            to={`/product/fkdjk`}
+                            to={`/product/${item.category}/${item.slug}/${item.productId}`}
                             state={{ productId: `${item.productId}` }}
                           >
                             <ProductImgTextBox>

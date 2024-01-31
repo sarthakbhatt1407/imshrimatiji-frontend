@@ -11,7 +11,7 @@ const moveX = keyframes`
 `;
 
 const MainBox = styled.div`
-  width: 24rem;
+  width: 45rem;
   border-radius: 0.4rem;
   position: absolute;
   top: 0;

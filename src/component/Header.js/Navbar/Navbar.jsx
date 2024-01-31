@@ -347,7 +347,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link onClick={menuButtonHandler} to="/">
+          <Link onClick={menuButtonHandler} to="/orders">
             Orders
           </Link>
         )}
@@ -379,6 +379,16 @@ const Navbar = () => {
             to="/"
           >
             Home
+          </Link>
+          <Link
+            className={
+              path === "/product-category/all-products"
+                ? "activeLink"
+                : "nonActiveLink"
+            }
+            to="/product-category/all-products"
+          >
+            Shop All
           </Link>
           <Link
             className={
@@ -418,10 +428,16 @@ const Navbar = () => {
           >
             Suit
           </Link>
+          <Link
+            className={path === "/profile" ? "activeLink" : "nonActiveLink"}
+            to="/profile"
+          >
+            Profile
+          </Link>
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>
-          {isLoggedIn && <Link to="/">Orders</Link>}
+          {isLoggedIn && <Link to="/orders">Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
           {isLoggedIn && (
             <Link

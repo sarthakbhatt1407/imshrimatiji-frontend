@@ -89,10 +89,10 @@ export function LoginForm(props) {
       }),
     });
     const data = await res.json();
+
     console.log(data);
     if (res.ok) {
       dispatch({ type: "log in", data: { ...data } });
-
       history("/");
     }
     setInpField(defaultField);

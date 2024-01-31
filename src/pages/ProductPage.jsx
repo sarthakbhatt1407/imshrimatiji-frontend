@@ -15,7 +15,7 @@ import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 10rem;
+  padding: 3rem 10rem;
   position: relative;
   @media only screen and (max-width: 949px) {
     padding: 1rem 2rem;
@@ -27,20 +27,22 @@ const MainBox = styled.div`
 const SliderAndProductInfoBox = styled.div`
   display: grid;
   width: 90%;
-  grid-template-columns: 1fr 1.4fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
+
   @media only screen and (max-width: 949px) {
     display: flex;
     width: 100%;
     flex-direction: column;
     gap: 2rem;
+    height: auto;
   }
 `;
 
 const ProductInfoBox = styled.div`
   padding: 0 2rem;
   display: flex;
-  gap: 1rem;
+  gap: 0.7rem;
   flex-direction: column;
 
   h1 {
@@ -63,8 +65,8 @@ const ProductInfoBox = styled.div`
     }
   }
   p {
-    color: #a0a0a0;
-    font-size: 1.3rem;
+    color: #7d7d7d;
+    font-size: 1.6rem;
   }
   @media only screen and (max-width: 949px) {
     h1 {
@@ -79,6 +81,8 @@ const ColorAndInfoBox = styled.div`
   align-items: center;
   gap: 1rem;
   position: relative;
+  color: #7d7d7d;
+  font-size: 1.6rem;
 `;
 const ColorBox = styled.div`
   height: 4rem;
@@ -135,7 +139,7 @@ const AddToCartDiv = styled.div`
   gap: 2rem;
   height: 5rem;
   position: relative;
-  width: 30rem;
+  width: 45rem;
   button {
     text-transform: uppercase;
     background-color: black;
@@ -167,6 +171,7 @@ const InpBox = styled.div`
 `;
 
 const CheckOutBox = styled.div`
+  padding: 1rem 0;
   h4 {
     position: relative;
     font-size: 2rem;
@@ -191,7 +196,7 @@ const CheckOutBox = styled.div`
     }
   }
   img {
-    width: 20rem;
+    width: 30rem;
     display: block;
     margin: 0 auto;
     opacity: 0.9;
@@ -204,10 +209,11 @@ const CheckOutBox = styled.div`
     li {
       display: block;
       margin: 0 auto;
-      color: #7a7979;
+      color: #7d7d7d;
+      font-size: 1.6rem;
       list-style: circle;
       text-transform: capitalize;
-      width: 30%;
+      width: 60%;
       @media only screen and (max-width: 949px) {
         width: 80%;
         margin: 0;
@@ -245,7 +251,7 @@ const OutOfStockPara = styled.h2`
   font-size: 3rem;
   letter-spacing: 0.1rem;
   font-weight: bold;
-  color: #a7a7a7;
+  color: #bb1313;
 `;
 
 // Desc
@@ -265,6 +271,7 @@ const ImgAndTextbox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2rem;
+
   @media only screen and (max-width: 949px) {
     display: none;
   }
@@ -298,7 +305,7 @@ const TextBox = styled.div`
   gap: 2rem;
   padding: 0 2rem;
   h5 {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
     font-weight: bold;
     letter-spacing: 0.1rem;
     text-transform: capitalize;
@@ -309,8 +316,8 @@ const TextBox = styled.div`
   }
   p {
     text-align: center;
-    color: #797979;
-    font-size: 1.3rem;
+    color: #7d7d7d;
+    font-size: 1.5rem;
     letter-spacing: 0.1rem;
     @media only screen and (max-width: 949px) {
       font-size: 1.1rem;
@@ -368,8 +375,40 @@ const ProductsBox = styled.div`
     color: black;
   }
 `;
+const Select = styled.select`
+  padding: 1rem;
+  border: none;
+  color: #777;
+  background-color: white;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 0.04rem;
+  &:focus {
+    outline: none;
+    border: none;
+    border: 1px solid #777;
+    border-style: dotted;
+  }
+  @media only screen and (max-width: 1099px) {
+    padding: 1rem 0;
+  }
+`;
+const Option = styled.option`
+  color: #777;
+  font-weight: bold;
+`;
+
+const ErrDiv = styled.div`
+  color: red;
+`;
+const CartErrDIv = styled.div`
+  color: red;
+`;
 
 const ProductPage = (props) => {
+  const cartItems = useSelector((state) => state.cartItems);
+
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [colors, setColors] = useState(null);
@@ -378,9 +417,21 @@ const ProductPage = (props) => {
   const [productAdded, setProductAdded] = useState(false);
   const productId = useParams().productId;
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [cartError, setCartError] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
   const dispatch = useDispatch();
   let counter = 0;
   const cartMsg = useSelector((state) => state.cartMsg);
+
+  const getSelectValueHandler = () => {
+    setError(false);
+    const e = document.getElementById("searchFilter");
+
+    const value = e.options[e.selectedIndex].value;
+    console.log(value);
+    setSelectedSize(value);
+  };
 
   function shuffle(array) {
     let currentIndex = array.length,
@@ -431,7 +482,7 @@ const ProductPage = (props) => {
         `${process.env.REACT_APP_BASE_URL}/product/${productId}`
       );
       const data = await res.json();
-      // console.log(data.product);
+      console.log(data.product);
       setProduct(data.product);
       setSelectedClr(data.product.color);
       const clrArr = data.product.color.split(",");
@@ -474,11 +525,12 @@ const ProductPage = (props) => {
   //   ele.style.opacity = "1";
   // };
 
-  const addToCartHandler = () => {
-    // if (!selectedClr) {
-    //   setErr(true);
-    //   return;
-    // }
+  const addToCartHandler = async () => {
+    setError(false);
+    if (!selectedSize) {
+      setError(true);
+      return;
+    }
     setIsLoading(true);
     const titleArr = product.title.split(" ");
     let title;
@@ -494,9 +546,70 @@ const ProductPage = (props) => {
       image: product.images.split(" ")[0],
       quantity: quantity,
       color: selectedClr,
+      category: product.category,
+      slug: product.slug,
       stockAvailable: Number(product.stock),
     };
-    dispatch({ type: "addToCart", product: { ...obj } });
+
+    // Stock Verifier
+
+    const alreadyFound = cartItems.find((item) => {
+      return item.productId === obj.productId;
+    });
+    console.log(alreadyFound);
+    if (alreadyFound) {
+      const stockVerifier = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/stock`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: product.id,
+            quantity: Number(alreadyFound.quantity) + obj.quantity,
+          }),
+        }
+      );
+      const stockData = await stockVerifier.json();
+      console.log(stockData);
+      if (stockData.add) {
+        dispatch({ type: "addToCart", product: { ...obj } });
+        setSelectedSize(null);
+      } else {
+        setCartError(true);
+        setTimeout(() => {
+          setCartError(false);
+        }, 2000);
+      }
+    } else {
+      const stockVerifier = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/stock`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: product.id,
+            quantity: obj.quantity,
+          }),
+        }
+      );
+      const stockData = await stockVerifier.json();
+      console.log(stockData);
+      if (stockData.add) {
+        dispatch({ type: "addToCart", product: { ...obj } });
+        setSelectedSize(null);
+      } else {
+        setCartError(true);
+        setTimeout(() => {
+          setCartError(false);
+        }, 2000);
+      }
+    }
+
+    //
     setProductAdded(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -519,6 +632,7 @@ const ProductPage = (props) => {
           <Navbar />
           <MainBox>
             {productAdded && <FloatingBox data={cartMsg} />}
+
             {product && (
               <>
                 <SliderAndProductInfoBox>
@@ -573,6 +687,20 @@ const ProductPage = (props) => {
                               <Remove onClick={quantutyMinus} />
                             </button>
                           </InpBox>
+                          <Select
+                            name="searchFilter"
+                            id="searchFilter"
+                            onChange={getSelectValueHandler}
+                          >
+                            <Option value="">Size</Option>
+                            {product.size.split(",").map((size) => {
+                              return (
+                                <Option key={size} value={size}>
+                                  Size : {size}
+                                </Option>
+                              );
+                            })}
+                          </Select>
                           <button onClick={addToCartHandler}>
                             add to cart
                           </button>
@@ -582,6 +710,12 @@ const ProductPage = (props) => {
                         <OutOfStockPara>Out of stock</OutOfStockPara>
                       )}
                     </AddToCartDiv>
+                    {error && <ErrDiv data-aos="fade-up">Select Size</ErrDiv>}
+                    {cartError && (
+                      <CartErrDIv data-aos="fade-up">
+                        Stock not available, please reduce quantity
+                      </CartErrDIv>
+                    )}
                     <CheckOutBox>
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />
@@ -603,7 +737,7 @@ const ProductPage = (props) => {
                         </p>
                       </span>
                     </MoneyInfoBox>
-                    <CheckOutBox data-aos="fade-up">
+                    <CheckOutBox>
                       <h4>Details</h4>
                       <ul>
                         <li>
@@ -618,6 +752,8 @@ const ProductPage = (props) => {
                             <span>{`${product.fabric}`}</span>
                           </span>
                         </li>
+                      </ul>
+                      <ul>
                         <li>
                           <span>
                             <span>Country Of Origin </span>

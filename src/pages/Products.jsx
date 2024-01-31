@@ -194,20 +194,29 @@ const Products = (props) => {
   const [allProducts, setAllProducts] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState(null);
   const fetcher = async () => {
-    const res = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/product/category`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ category: path }),
-      }
-    );
-    const data = await res.json();
-    console.log(data.products);
-    setAllProducts(data.products);
-    setFilteredProducts(data.products.reverse());
+    if (path === "all-products") {
+      const resProducts = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/all-items`
+      );
+      const dataProducts = await resProducts.json();
+      //
+      setAllProducts(dataProducts.products);
+      setFilteredProducts(dataProducts.products.reverse());
+    } else {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/product/category`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ category: path }),
+        }
+      );
+      const data = await res.json();
+      setAllProducts(data.products);
+      setFilteredProducts(data.products.reverse());
+    }
 
     setIsLoading(false);
   };
