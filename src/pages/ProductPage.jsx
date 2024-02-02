@@ -14,7 +14,7 @@ import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 3rem 10rem;
+  padding: 1rem 10rem;
   position: relative;
   overflow-x: hidden;
   @media only screen and (max-width: 949px) {
@@ -755,7 +755,7 @@ const ProductPage = (props) => {
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />
                     </CheckOutBox>
-                    <MoneyInfoBox data-aos="fade-up">
+                    <MoneyInfoBox>
                       <h5>free shipping on orders over ₹999</h5>
                       <span>
                         <p>

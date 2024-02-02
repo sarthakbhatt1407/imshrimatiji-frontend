@@ -8,7 +8,7 @@ const OuterBox = styled.div`
 
 const MainBox = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80vh;
   margin: auto;
   position: relative;
   overflow: scroll;
@@ -44,8 +44,8 @@ const ArrowLeft = styled.button`
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  top: 45%;
-  left: 0%;
+  top: 40%;
+  left: 0.5%;
   font-size: 1.5rem;
   svg {
     transform: scale(1.5);
@@ -59,9 +59,9 @@ const ArrowRight = styled.button`
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  right: 0%;
+  right: 0.5%;
   font-size: 1.5rem;
-  top: 45%;
+  top: 40%;
   svg {
     transform: scale(1.5);
   }
