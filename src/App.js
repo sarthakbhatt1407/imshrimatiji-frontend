@@ -29,6 +29,12 @@ const App = () => {
       clearInterval(aosRefresh);
     };
   }, []);
+
+  const obj = {
+    xl: 3,
+    l: 2,
+    m: 1,
+  };
   return (
     <>
       <Routes>

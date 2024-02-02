@@ -16,6 +16,13 @@ const Orders = () => {
     <>
       <Navbar />
       <MainBox>
+        <HeadingBox>
+          <h1>My Orders</h1>
+          <p>
+            <span>View and track your pending, deliv</span>
+            <span></span>
+          </p>
+        </HeadingBox>
         <OrderUpperBox></OrderUpperBox>
         <OrderLowerBox></OrderLowerBox>
       </MainBox>

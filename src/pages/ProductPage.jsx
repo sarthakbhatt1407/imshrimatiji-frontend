@@ -17,6 +17,7 @@ const MainBox = styled.div`
   flex-direction: column;
   padding: 3rem 10rem;
   position: relative;
+  overflow-x: hidden;
   @media only screen and (max-width: 949px) {
     padding: 1rem 2rem;
   }
@@ -406,6 +407,11 @@ const CartErrDIv = styled.div`
   color: red;
 `;
 
+const RzrpayDiv = styled.div`
+  width: 100%;
+  height: fit-content;
+`;
+
 const ProductPage = (props) => {
   const cartItems = useSelector((state) => state.cartItems);
 
@@ -429,6 +435,7 @@ const ProductPage = (props) => {
     const e = document.getElementById("searchFilter");
 
     const value = e.options[e.selectedIndex].value;
+    console.log(value);
     console.log(value);
     setSelectedSize(value);
   };
@@ -470,10 +477,12 @@ const ProductPage = (props) => {
       des: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio sapiente illo odio aut dolorem? Tempore maxime animi perspiciatis ex atque est vitae. Velit voluptate similique aliquam fuga optio enim ad magni. Aspernatur minus necessitatibus molestias aperiam accusantium eius distinctio suscipit?",
     },
   ];
+
   let swicther = true;
   useEffect(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
+
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
     }
@@ -482,8 +491,8 @@ const ProductPage = (props) => {
         `${process.env.REACT_APP_BASE_URL}/product/${productId}`
       );
       const data = await res.json();
-      console.log(data.product);
       setProduct(data.product);
+
       setSelectedClr(data.product.color);
       const clrArr = data.product.color.split(",");
       setColors(clrArr);
@@ -493,9 +502,24 @@ const ProductPage = (props) => {
       );
       const dataProducts = await resProducts.json();
       setProducts(shuffle(dataProducts.products));
+      const key = "rzp_test_ymEsmet2FmOUDv";
+
+      const widgetConfig = {
+        key: key,
+        amount: Number(data.product.price) * 100,
+      };
+      const rzpAffordabilitySuite = await new window.RazorpayAffordabilitySuite(
+        widgetConfig
+      );
+      await rzpAffordabilitySuite.render();
     };
     fetcher();
+
+    return () => {};
   }, [productId]);
+
+  //Replace it with your Test Key ID generated from the Dashboard
+  // const amount = product ? product.amount : 40000; //in paise
 
   const quantityAdder = () => {
     if (quantity < 2) {
@@ -546,6 +570,7 @@ const ProductPage = (props) => {
       image: product.images.split(" ")[0],
       quantity: quantity,
       color: selectedClr,
+      size: selectedSize,
       category: product.category,
       slug: product.slug,
       stockAvailable: Number(product.stock),
@@ -568,6 +593,7 @@ const ProductPage = (props) => {
           body: JSON.stringify({
             productId: product.id,
             quantity: Number(alreadyFound.quantity) + obj.quantity,
+            size: selectedSize,
           }),
         }
       );
@@ -593,14 +619,15 @@ const ProductPage = (props) => {
           body: JSON.stringify({
             productId: product.id,
             quantity: obj.quantity,
+            size: selectedSize,
           }),
         }
       );
       const stockData = await stockVerifier.json();
       console.log(stockData);
       if (stockData.add) {
+        setProductAdded(true);
         dispatch({ type: "addToCart", product: { ...obj } });
-        setSelectedSize(null);
       } else {
         setCartError(true);
         setTimeout(() => {
@@ -608,9 +635,7 @@ const ProductPage = (props) => {
         }, 2000);
       }
     }
-
-    //
-    setProductAdded(true);
+    setSelectedSize(null);
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -619,6 +644,7 @@ const ProductPage = (props) => {
       setProductAdded(false);
     }, 2000);
   };
+
   // const [rating, setRating] = useState(0);
   // const ratingsChanger = (newRating, name) => {
   //   setRating(newRating);
@@ -655,8 +681,10 @@ const ProductPage = (props) => {
                       odio fugiat hic ad quam id! Nobis perspiciatis deserunt
                       veniam vel velit nesciunt repellendus provident corporis
                       quae?
-                    </p>
-
+                    </p>{" "}
+                    <RzrpayDiv>
+                      <div id="razorpay-affordability-widget"></div>
+                    </RzrpayDiv>
                     <ColorAndInfoBox>
                       Color :
                       {colors.map((clr) => {
@@ -672,11 +700,9 @@ const ProductPage = (props) => {
                         );
                       })}
                     </ColorAndInfoBox>
-
                     <AddToCartDiv>
                       {isLoading && <BtnLoader />}
-
-                      {product.stock > 0 && !isLoading && (
+                      {product.stock.length > 0 && !isLoading && (
                         <>
                           <InpBox>
                             <button onClick={quantityAdder}>
@@ -692,20 +718,25 @@ const ProductPage = (props) => {
                             id="searchFilter"
                             onChange={getSelectValueHandler}
                           >
-                            <Option value="">Size</Option>
-                            {product.size.split(",").map((size) => {
-                              return (
-                                <Option key={size} value={size}>
-                                  Size : {size}
-                                </Option>
-                              );
+                            <Option defaultValue value={selectedSize}>
+                              Select Size
+                            </Option>
+                            ;
+                            {product.stock.map((i) => {
+                              for (const k in i) {
+                                return (
+                                  <Option key={k} value={k}>
+                                    Size : {k}
+                                  </Option>
+                                );
+                              }
                             })}
                           </Select>
                           <button onClick={addToCartHandler}>
                             add to cart
                           </button>
                         </>
-                      )}
+                      )}{" "}
                       {product.stock < 1 && (
                         <OutOfStockPara>Out of stock</OutOfStockPara>
                       )}
@@ -716,6 +747,7 @@ const ProductPage = (props) => {
                         Stock not available, please reduce quantity
                       </CartErrDIv>
                     )}
+                    <div id="razorpay-affordability-widget"> </div>
                     <CheckOutBox>
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />
@@ -736,7 +768,7 @@ const ProductPage = (props) => {
                           No-Risk moneyback guarantee
                         </p>
                       </span>
-                    </MoneyInfoBox>
+                    </MoneyInfoBox>{" "}
                     <CheckOutBox>
                       <h4>Details</h4>
                       <ul>
@@ -775,6 +807,7 @@ const ProductPage = (props) => {
                   <CheckOutBox data-aos="fade-up">
                     <h4>About</h4>
                   </CheckOutBox>
+
                   <ImgAndTextbox>
                     {product.images.split(" ").map((img, ind) => {
                       if (img !== "") {

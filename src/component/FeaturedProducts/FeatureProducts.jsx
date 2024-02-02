@@ -6,6 +6,7 @@ import FeatureProductBox from "../UI/FeatureProductBox";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import CategoryLoader from "../Loaders/CategoryLoader/CategoryLoader";
 import { Link } from "react-router-dom";
+import { colors } from "../../data";
 
 const MainBox = styled.section`
   padding: 1rem 0;
@@ -30,7 +31,6 @@ const CategoryBox = styled.div`
 `;
 
 const CategoryButton = styled.button`
-  border: 1px solid black;
   transition: all 0.4s;
   padding: 0.3rem 2rem;
   border-radius: 2rem;

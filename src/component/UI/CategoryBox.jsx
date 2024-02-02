@@ -9,6 +9,8 @@ const CategoryBoxDiv = styled.div`
   background-color: #f7f7f7;
   position: relative;
   animation-delay: 0.7s;
+  height: 53vh;
+  border-radius: 0.8rem;
   &:hover {
     img {
       transform: scale(1.05);
@@ -58,7 +60,7 @@ const CategoryBox = (props) => {
   const data = props.data;
 
   return (
-    <CategoryBoxDiv data-aos={`${data}`}>
+    <CategoryBoxDiv>
       <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" />
       <span>
         <b>{title}</b>

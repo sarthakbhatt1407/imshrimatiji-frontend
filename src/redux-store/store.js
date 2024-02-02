@@ -50,12 +50,16 @@ const storeReducer = (state = defaultState, action) => {
     const cartItems = state.cartItems;
     let alreadyFound = cartItems.find((item) => {
       return (
-        item.productId === product.productId && item.color === product.color
+        item.productId === product.productId &&
+        item.color === product.color &&
+        product.size === item.size
       );
     });
     const alreadyFoundIndex = cartItems.findIndex((item) => {
       return (
-        item.productId === product.productId && item.color === product.color
+        item.productId === product.productId &&
+        item.color === product.color &&
+        product.size === item.size
       );
     });
     if (alreadyFound) {
@@ -151,7 +155,7 @@ const storeReducer = (state = defaultState, action) => {
     let amount = state.cartTotalAmount;
     const updatedCartItems = [];
     for (const item of cartItems) {
-      if (item.productId !== id) {
+      if (item.productId !== id && item.size) {
         amount -= Number(item.quantity) * Number(item.price);
         updatedCartItems.push(item);
       }

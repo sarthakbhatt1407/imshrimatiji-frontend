@@ -4,7 +4,6 @@ import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-
 import "react-alert-confirm/lib/style.css";
 import confirm from "react-alert-confirm";
 
@@ -25,8 +24,7 @@ const MainBox = styled.div`
 
 const PcCartBox = styled.div`
   display: grid;
-  height: 50vh;
-  max-height: fit-content;
+  height: fit-content;
   gap: 1rem;
   grid-template-columns: 1.8fr 1fr;
   gap: 3rem;
@@ -43,7 +41,7 @@ const ProductsTable = styled.table`
     background-color: #f1f2f2;
     tr {
       td {
-        padding: 0.9rem;
+        padding: 1rem;
         color: #5e5e5e;
         text-transform: capitalize;
         font-size: 1.5rem;
@@ -61,10 +59,10 @@ const ProductsTable = styled.table`
     tr {
       border-bottom: 1px solid #e5e5e5;
       td {
-        padding: 1rem 0;
+        padding: 1rem;
         font-size: 1.5rem;
         color: black;
-        text-align: center;
+        text-transform: capitalize;
         a {
           color: black;
           text-decoration: none;
@@ -91,7 +89,6 @@ const ProductsTable = styled.table`
           font-size: 1.6rem;
           color: #000000;
 
-          padding: 1.4rem 0;
           span {
           }
         }
@@ -222,7 +219,6 @@ const Cart = () => {
   }
   const itemRemover = (e) => {
     const id = e.target.id;
-
     handleClickBasic(id);
     // dispatch({ type: "itemRemover", id: id });
   };
@@ -392,10 +388,12 @@ const Cart = () => {
                                 src={`${process.env.REACT_APP_BASE_URL}/${item.image}`}
                                 alt=""
                               />
-
                               <p>
-                                <span>{item.title} </span>
-                                <span>({item.color})</span>
+                                <div>
+                                  <span>{item.title} </span>
+                                  <span>({item.color})</span>
+                                </div>
+                                <div>{item.size}</div>
                               </p>
                             </ProductImgTextBox>
                           </Link>
