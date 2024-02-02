@@ -9,7 +9,6 @@ import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
 import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
-import FloatingBox from "../component/Login/FloatingBox";
 import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
 
 const MainBox = styled.div`
@@ -403,8 +402,9 @@ const Option = styled.option`
 const ErrDiv = styled.div`
   color: red;
 `;
-const CartErrDIv = styled.div`
-  color: red;
+
+const AddedToCart = styled.div`
+  color: black;
 `;
 
 const RzrpayDiv = styled.div`
@@ -428,7 +428,6 @@ const ProductPage = (props) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const dispatch = useDispatch();
   let counter = 0;
-  const cartMsg = useSelector((state) => state.cartMsg);
 
   const getSelectValueHandler = () => {
     setError(false);
@@ -600,6 +599,7 @@ const ProductPage = (props) => {
       const stockData = await stockVerifier.json();
       console.log(stockData);
       if (stockData.add) {
+        setProductAdded(true);
         dispatch({ type: "addToCart", product: { ...obj } });
         setSelectedSize(null);
       } else {
@@ -642,7 +642,7 @@ const ProductPage = (props) => {
 
     setTimeout(() => {
       setProductAdded(false);
-    }, 2000);
+    }, 1500);
   };
 
   // const [rating, setRating] = useState(0);
@@ -657,8 +657,6 @@ const ProductPage = (props) => {
         <>
           <Navbar />
           <MainBox>
-            {productAdded && <FloatingBox data={cartMsg} />}
-
             {product && (
               <>
                 <SliderAndProductInfoBox>
@@ -741,11 +739,16 @@ const ProductPage = (props) => {
                         <OutOfStockPara>Out of stock</OutOfStockPara>
                       )}
                     </AddToCartDiv>
+                    {productAdded && (
+                      <AddedToCart data-aos="fade-right">
+                        Added to cart{" "}
+                      </AddedToCart>
+                    )}
                     {error && <ErrDiv data-aos="fade-up">Select Size</ErrDiv>}
                     {cartError && (
-                      <CartErrDIv data-aos="fade-up">
+                      <ErrDiv data-aos="fade-up">
                         Stock not available, please reduce quantity
-                      </CartErrDIv>
+                      </ErrDiv>
                     )}
                     <div id="razorpay-affordability-widget"> </div>
                     <CheckOutBox>
