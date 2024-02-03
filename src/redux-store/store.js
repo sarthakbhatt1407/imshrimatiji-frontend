@@ -135,7 +135,7 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "itemRemover") {
-    const { id } = action;
+    const { id, itemSize } = action;
     const cartItems = state.cartItems;
     if (cartItems.length === 1) {
       const obj = {
@@ -152,14 +152,22 @@ const storeReducer = (state = defaultState, action) => {
         cartTotalAmount: 0,
       };
     }
+
     let amount = state.cartTotalAmount;
-    const updatedCartItems = [];
-    for (const item of cartItems) {
-      if (item.productId !== id && item.size) {
+    const updatedCartItems = cartItems.filter((item) => {
+      if (item.productId === id && item.size === itemSize) {
         amount -= Number(item.quantity) * Number(item.price);
-        updatedCartItems.push(item);
+        return;
       }
-    }
+      return item;
+    });
+    // for (const item of cartItems) {
+    //   if (item.productId === id && itemSize != item.size) {
+    //     amount -= Number(item.quantity) * Number(item.price);
+    //     updatedCartItems.push(item);
+    //   }
+    // }
+
     if (updatedCartItems.length > 0) {
       const obj = {
         ...state,

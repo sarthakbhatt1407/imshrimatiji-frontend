@@ -146,6 +146,14 @@ const PriceTotalTable = styled.table`
 const ProductImgTextBox = styled.div`
   margin: auto;
   width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  div {
+    p {
+      color: #8e8e8e;
+    }
+  }
   img {
     width: 8rem;
     border-radius: 0.4rem;
@@ -160,12 +168,14 @@ const ProductImgTextBox = styled.div`
     font-weight: bold;
   }
   @media only screen and (max-width: 1220px) {
-    width: 90%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.4rem;
+    text-align: center;
+
     p {
       font-size: 1.25rem;
     }
@@ -209,17 +219,18 @@ const Cart = () => {
     // return () => window.removeEventListener("beforeunload", unloadCallback);
   }, []);
 
-  function handleClickBasic(id) {
+  function handleClickBasic(id, size) {
     confirm({
       title: "Do you want to delete ?",
       language: "en",
       content: <h2> </h2>,
-      onOk: () => dispatch({ type: "itemRemover", id: id }),
+      onOk: () => dispatch({ type: "itemRemover", id: id, itemSize: size }),
     });
   }
   const itemRemover = (e) => {
+    const size = e.target.classList["value"];
     const id = e.target.id;
-    handleClickBasic(id);
+    handleClickBasic(id, size);
     // dispatch({ type: "itemRemover", id: id });
   };
 
@@ -393,7 +404,10 @@ const Cart = () => {
                                   <span>{item.title} </span>
                                   <span>({item.color})</span>
                                 </div>
-                                <div>{item.size}</div>
+                                <div>
+                                  <p>Size : </p>
+                                  {item.size}
+                                </div>
                               </p>
                             </ProductImgTextBox>
                           </Link>
@@ -407,7 +421,11 @@ const Cart = () => {
                           ).toLocaleString("en-IN")}
                         </td>
                         <td>
-                          <button onClick={itemRemover} id={item.productId}>
+                          <button
+                            className={item.size}
+                            onClick={itemRemover}
+                            id={item.productId}
+                          >
                             x
                           </button>
                         </td>

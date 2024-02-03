@@ -172,10 +172,12 @@ const InpBox = styled.div`
 
 const CheckOutBox = styled.div`
   padding: 1rem 0;
+
   h4 {
     position: relative;
     font-size: 2rem;
     z-index: 1;
+    margin: 1rem 0;
     overflow: hidden;
     text-align: center;
     color: #aaa9a9;
