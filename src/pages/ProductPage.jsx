@@ -44,7 +44,7 @@ const ProductInfoBox = styled.div`
   display: flex;
   gap: 0.7rem;
   flex-direction: column;
-
+  text-align: justify;
   h1 {
     margin-bottom: -1.5rem;
     text-transform: capitalize;
@@ -259,6 +259,7 @@ const OutOfStockPara = styled.h2`
 // Desc
 const DescBox = styled.div`
   display: flex;
+
   flex-direction: column;
   margin-top: 3rem;
   padding: 2rem 0;
@@ -428,6 +429,7 @@ const ProductPage = (props) => {
   const [error, setError] = useState(false);
   const [cartError, setCartError] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [deliverAvail, setDeliveryAvail] = useState(false);
   const dispatch = useDispatch();
   let counter = 0;
 
@@ -669,8 +671,10 @@ const ProductPage = (props) => {
                     <h3>
                       ₹ {Number(product.price).toLocaleString("en-IN")}
                       <i>
-                        {(Number(product.price) * 100) /
-                          (100 - Number(product.discount))}
+                        {Number.parseInt(
+                          (Number(product.price) * 100) /
+                            (100 - Number(product.discount))
+                        )}
                       </i>
                     </h3>
                     <p>
@@ -699,6 +703,32 @@ const ProductPage = (props) => {
                           </ColorBox>
                         );
                       })}
+                      <div>
+                        <input type="text" name="" id="pinCode" />
+                        <button
+                          onClick={async () => {
+                            const pinCode = document.querySelector("#pinCode");
+                            const reslt = await fetch(
+                              `${process.env.REACT_APP_BASE_URL}/product/check-delivery`,
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  pinCode: pinCode.value,
+                                }),
+                              }
+                            );
+                            const data = await reslt.json();
+                            console.log(data);
+                            pinCode.value = "";
+                            alert(data.message + `: ${data.data.city}`);
+                          }}
+                        >
+                          Check
+                        </button>
+                      </div>
                     </ColorAndInfoBox>
                     <AddToCartDiv>
                       {isLoading && <BtnLoader />}
@@ -743,8 +773,11 @@ const ProductPage = (props) => {
                     </AddToCartDiv>
                     {productAdded && (
                       <AddedToCart data-aos="fade-right">
-                        Added to cart{" "}
+                        Added to cart
                       </AddedToCart>
+                    )}
+                    {deliverAvail && (
+                      <AddedToCart data-aos="fade-right"></AddedToCart>
                     )}
                     {error && <ErrDiv data-aos="fade-up">Select Size</ErrDiv>}
                     {cartError && (
@@ -752,7 +785,6 @@ const ProductPage = (props) => {
                         Stock not available, please reduce quantity
                       </ErrDiv>
                     )}
-                    <div id="razorpay-affordability-widget"> </div>
                     <CheckOutBox>
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />

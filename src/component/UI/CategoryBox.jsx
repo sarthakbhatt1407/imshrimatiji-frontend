@@ -55,12 +55,11 @@ const CategoryBoxDiv = styled.div`
 `;
 
 const CategoryBox = (props) => {
-  AOS.refresh();
   const { title, image } = props.item;
   const data = props.data;
 
   return (
-    <CategoryBoxDiv>
+    <CategoryBoxDiv data-aos={data}>
       <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" />
       <span>
         <b>{title}</b>
