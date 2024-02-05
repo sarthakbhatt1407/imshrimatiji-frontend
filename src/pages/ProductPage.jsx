@@ -3,13 +3,22 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
 import ImagesSLider from "../component/UI/ImagesSlider";
-import { Add, CheckCircle, Remove } from "@mui/icons-material";
+import {
+  Add,
+  CheckCircle,
+  CheckCircleOutline,
+  CurrencyRupee,
+  LocalShipping,
+  LocationOn,
+  Remove,
+} from "@mui/icons-material";
 import card from "../assets/images/cards/card.jpg";
 import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
 import Footer from "../component/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
 import BtnLoader from "../component/Loaders/CategoryLoader/BtnLoader";
+import CompLoader from "../component/Loaders/CompLoader/CompLoader";
 
 const MainBox = styled.div`
   display: flex;
@@ -42,7 +51,7 @@ const SliderAndProductInfoBox = styled.div`
 const ProductInfoBox = styled.div`
   padding: 0 2rem;
   display: flex;
-  gap: 0.7rem;
+  gap: 1rem;
   flex-direction: column;
   text-align: justify;
   h1 {
@@ -172,7 +181,7 @@ const InpBox = styled.div`
 
 const CheckOutBox = styled.div`
   padding: 1rem 0;
-
+  /* background-color: red; */
   h4 {
     position: relative;
     font-size: 2rem;
@@ -207,7 +216,10 @@ const CheckOutBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
+    width: 100%;
+    /* background-color: red; */
+    justify-content: center;
+    align-items: center;
     li {
       display: block;
       margin: 0 auto;
@@ -215,10 +227,11 @@ const CheckOutBox = styled.div`
       font-size: 1.6rem;
       list-style: circle;
       text-transform: capitalize;
-      width: 60%;
+      width: 100%;
+
       @media only screen and (max-width: 949px) {
-        width: 80%;
         margin: 0;
+        margin-left: -5rem;
       }
       span {
         display: flex;
@@ -415,11 +428,121 @@ const RzrpayDiv = styled.div`
   height: fit-content;
 `;
 
+const ColorPincodeBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+
+  @media only screen and (max-width: 949px) {
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+  }
+`;
+
+const PinCodeInnerBox = styled.div`
+  background-color: white;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid #e1e1e1;
+  width: 50%;
+  @media only screen and (max-width: 949px) {
+    width: 100%;
+  }
+`;
+
+const Input = styled.input`
+  border: none;
+  width: 80%;
+  padding: 0 1rem;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const CheckButton = styled.button`
+  border: none;
+  background-color: black;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.5rem;
+  width: 20%;
+  @media only screen and (max-width: 949px) {
+    width: 30%;
+  }
+`;
+
+const DeliveryResultBox = styled.div`
+  background-color: #f6f6f9;
+  width: 65%;
+  height: fit-content;
+  border-radius: 0.8rem;
+  border: 1px solid #e1e1e1;
+  display: flex;
+  flex-direction: column;
+
+  padding: 2rem;
+  padding-top: 1rem;
+  gap: 1rem;
+  @media only screen and (max-width: 949px) {
+    width: 100%;
+  }
+`;
+const DeliveryResultTextBox = styled.div`
+  border: 1px solid #c5c5c5;
+  border-style: dashed;
+  background-color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem;
+    gap: 1rem;
+    margin-bottom: 0.1rem;
+    /* width: 100%; */
+    svg {
+      color: black;
+      &:first-child {
+        color: #57c13d;
+      }
+    }
+  }
+  @media only screen and (max-width: 949px) {
+    /* padding: 0.2rem 0.1rem; */
+    p {
+      font-size: 1.38rem;
+    }
+    div {
+      gap: 0.5rem;
+    }
+  }
+`;
+const ParaBox = styled.div`
+  color: black;
+`;
+
+const MoneyDetailsInfoBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  @media only screen and (max-width: 949px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
 const ProductPage = (props) => {
   const cartItems = useSelector((state) => state.cartItems);
-
+  const [deliveryDate, setDeliveryDate] = useState(null);
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
+  const [deliveryResult, setDeliveryResult] = useState(null);
+  const [pinLoading, setPinLoading] = useState(false);
   const [colors, setColors] = useState(null);
   const [selectedClr, setSelectedClr] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -429,7 +552,6 @@ const ProductPage = (props) => {
   const [error, setError] = useState(false);
   const [cartError, setCartError] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [deliverAvail, setDeliveryAvail] = useState(false);
   const dispatch = useDispatch();
   let counter = 0;
 
@@ -483,7 +605,7 @@ const ProductPage = (props) => {
 
   let swicther = true;
   useEffect(() => {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    // document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
 
     if (localStr) {
@@ -689,47 +811,147 @@ const ProductPage = (props) => {
                     <RzrpayDiv>
                       <div id="razorpay-affordability-widget"></div>
                     </RzrpayDiv>
-                    <ColorAndInfoBox>
-                      Color :
-                      {colors.map((clr) => {
-                        return (
-                          <ColorBox key={product.id + clr}>
-                            <span>{clr}</span>
-                            <i
-                              className="clrBox"
-                              id={clr.trim()}
-                              style={{ backgroundColor: `${clr}` }}
-                            ></i>
-                          </ColorBox>
-                        );
-                      })}
-                      <div>
-                        <input type="text" name="" id="pinCode" />
-                        <button
-                          onClick={async () => {
-                            const pinCode = document.querySelector("#pinCode");
-                            const reslt = await fetch(
-                              `${process.env.REACT_APP_BASE_URL}/product/check-delivery`,
-                              {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                  pinCode: pinCode.value,
-                                }),
+                    <ColorPincodeBox>
+                      <ColorAndInfoBox>
+                        Color :
+                        {colors.map((clr) => {
+                          return (
+                            <ColorBox key={product.id + clr}>
+                              <span>{clr}</span>
+                              <i
+                                className="clrBox"
+                                id={clr.trim()}
+                                style={{ backgroundColor: `${clr}` }}
+                              ></i>
+                            </ColorBox>
+                          );
+                        })}
+                      </ColorAndInfoBox>
+                      {!deliveryResult && (
+                        <PinCodeInnerBox id="pincodeInner">
+                          <LocationOn />
+                          <Input
+                            type="number"
+                            max={6}
+                            id="pinCode"
+                            placeholder="Enter pincode"
+                            onChange={() => {
+                              const pinCode =
+                                document.querySelector("#pinCode");
+                              const pincodeInner =
+                                document.querySelector("#pincodeInner");
+
+                              pincodeInner.style.border = "1px solid #e1e1e1";
+                              pinCode.placeholder = "Enter pincode";
+                              return;
+                            }}
+                          />
+                          <CheckButton
+                            onClick={async () => {
+                              setPinLoading(true);
+                              const pinCode =
+                                document.querySelector("#pinCode");
+                              const pincodeInner =
+                                document.querySelector("#pincodeInner");
+                              if (pinCode.value.length < 6) {
+                                pinCode.value = "";
+                                pincodeInner.style.border = "1px solid red";
+                                pinCode.placeholder = "Enter valid pincode";
+                                return;
                               }
-                            );
-                            const data = await reslt.json();
-                            console.log(data);
-                            pinCode.value = "";
-                            alert(data.message + `: ${data.data.city}`);
+                              if (pinCode.value.length > 6) {
+                                pinCode.value = "";
+                                pincodeInner.style.border = "1px solid red";
+                                pinCode.placeholder = "Enter valid pincode";
+                                return;
+                              }
+                              const reslt = await fetch(
+                                `${process.env.REACT_APP_BASE_URL}/product/check-delivery`,
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    pinCode: pinCode.value,
+                                  }),
+                                }
+                              );
+                              const data = await reslt.json();
+                              console.log(data);
+                              setDeliveryResult(data);
+                              setPinLoading(false);
+                              pinCode.value = "";
+                              // alert(data.message + `: ${data.data.city}`);
+                              var date = new Date();
+                              date.setDate(date.getDate() + 9);
+                              setDeliveryDate(date.toString().split(" "));
+                              console.log(deliveryDate);
+                            }}
+                          >
+                            Check
+                          </CheckButton>
+                        </PinCodeInnerBox>
+                      )}
+                    </ColorPincodeBox>
+                    {deliveryResult && (
+                      <DeliveryResultBox data-aos="zoom-in">
+                        {pinLoading && <CompLoader />}
+                        {deliveryResult.available && (
+                          <h4>
+                            Available at {deliveryResult.data.city} (
+                            {deliveryResult.data.pin})
+                          </h4>
+                        )}
+                        {!deliveryResult.available && (
+                          <h4>Not available at your pincode.</h4>
+                        )}
+                        <DeliveryResultTextBox>
+                          {deliveryResult.available && (
+                            <p style={{ color: "#57C13D" }}>
+                              We are available and serving at your location.
+                            </p>
+                          )}
+                          {!deliveryResult.available && (
+                            <p style={{ color: "red" }}>
+                              We are not available at your location. Stay tuned
+                              for updates.
+                            </p>
+                          )}
+                          {deliveryResult.available && (
+                            <>
+                              <div>
+                                {" "}
+                                <CheckCircleOutline />
+                                <LocalShipping />
+                                <ParaBox>
+                                  <strong>Expected Delivery -</strong>
+                                  <span>
+                                    {deliveryDate[0]}, {deliveryDate[1]}{" "}
+                                    {deliveryDate[2]}
+                                  </span>
+                                </ParaBox>
+                              </div>
+                              <div>
+                                <CheckCircleOutline />
+                                <CurrencyRupee />
+                                <ParaBox>
+                                  <strong>Payment -</strong>
+                                  <span>Online Only</span>
+                                </ParaBox>
+                              </div>
+                            </>
+                          )}
+                        </DeliveryResultTextBox>
+                        <CheckButton
+                          onClick={() => {
+                            setDeliveryResult(null);
                           }}
                         >
-                          Check
-                        </button>
-                      </div>
-                    </ColorAndInfoBox>
+                          Change
+                        </CheckButton>
+                      </DeliveryResultBox>
+                    )}
                     <AddToCartDiv>
                       {isLoading && <BtnLoader />}
                       {product.stock.length > 0 && !isLoading && (
@@ -776,9 +998,6 @@ const ProductPage = (props) => {
                         Added to cart
                       </AddedToCart>
                     )}
-                    {deliverAvail && (
-                      <AddedToCart data-aos="fade-right"></AddedToCart>
-                    )}
                     {error && <ErrDiv data-aos="fade-up">Select Size</ErrDiv>}
                     {cartError && (
                       <ErrDiv data-aos="fade-up">
@@ -789,54 +1008,56 @@ const ProductPage = (props) => {
                       <h4>Safe Checkout</h4>
                       <img src={card} alt="" />
                     </CheckOutBox>
-                    <MoneyInfoBox>
-                      <h5>free shipping on orders over ₹999</h5>
-                      <span>
-                        <p>
-                          <CheckCircle />
-                          Secure payments
-                        </p>
-                        <p>
-                          <CheckCircle />
-                          No hassle replacements
-                        </p>
-                        <p>
-                          <CheckCircle />
-                          No-Risk moneyback guarantee
-                        </p>
-                      </span>
-                    </MoneyInfoBox>{" "}
-                    <CheckOutBox>
-                      <h4>Details</h4>
-                      <ul>
-                        <li>
-                          <span>
-                            <span>Category</span>
-                            <span> {`${product.category}`}</span>
-                          </span>
-                        </li>
-                        <li>
-                          <span>
-                            <span>Fabric </span>
-                            <span>{`${product.fabric}`}</span>
-                          </span>
-                        </li>
-                      </ul>
-                      <ul>
-                        <li>
-                          <span>
-                            <span>Country Of Origin </span>
-                            <span>INDIA</span>
-                          </span>
-                        </li>
-                        <li>
-                          <span>
-                            <span>Discount </span>
-                            <span>{`${product.discount}%`}</span>
-                          </span>
-                        </li>
-                      </ul>
-                    </CheckOutBox>
+                    <MoneyDetailsInfoBox>
+                      <MoneyInfoBox>
+                        <h5>free shipping on orders over ₹999</h5>
+                        <span>
+                          <p>
+                            <CheckCircle />
+                            Secure payments
+                          </p>
+                          <p>
+                            <CheckCircle />
+                            No hassle replacements
+                          </p>
+                          <p>
+                            <CheckCircle />
+                            No-Risk moneyback guarantee
+                          </p>
+                        </span>
+                      </MoneyInfoBox>{" "}
+                      <CheckOutBox>
+                        <h4>Details</h4>
+                        <ul>
+                          <li>
+                            <span>
+                              <span>Category</span>
+                              <span> {`${product.category}`}</span>
+                            </span>
+                          </li>
+                          <li>
+                            <span>
+                              <span>Fabric </span>
+                              <span>{`${product.fabric}`}</span>
+                            </span>
+                          </li>
+                        </ul>
+                        <ul>
+                          <li>
+                            <span>
+                              <span>Country Of Origin </span>
+                              <span>INDIA</span>
+                            </span>
+                          </li>
+                          <li>
+                            <span>
+                              <span>Discount </span>
+                              <span>{`${product.discount}%`}</span>
+                            </span>
+                          </li>
+                        </ul>
+                      </CheckOutBox>
+                    </MoneyDetailsInfoBox>
                   </ProductInfoBox>
                 </SliderAndProductInfoBox>
 

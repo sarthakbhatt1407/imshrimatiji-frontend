@@ -161,7 +161,7 @@ const ProductsDiv = styled.div`
 `;
 const LastBtn = styled.button`
   border: 1px solid #ededed;
-  width: 15%;
+  width: 20%;
   padding: 1rem;
   background-color: transparent;
   line-height: 2.3rem;

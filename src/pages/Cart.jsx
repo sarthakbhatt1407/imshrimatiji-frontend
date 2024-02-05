@@ -200,6 +200,7 @@ const NoItemsFoundBox = styled.div`
 `;
 
 const Cart = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const userName = useSelector((state) => state.userName);
   const userEmail = useSelector((state) => state.userEmail);
   const userContact = useSelector((state) => state.userContact);
@@ -250,6 +251,10 @@ const Cart = () => {
 
   //function will get called when clicked on the pay button.
   const displayRazorpayPaymentSdk = async () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     const res = await loadRazorpayScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );

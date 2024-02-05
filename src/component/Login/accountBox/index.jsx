@@ -19,7 +19,9 @@ const BoxContainer = styled.div`
   flex-direction: column;
   border-radius: 19px;
   background-color: #fff;
-  box-shadow: 0.1rem 0.1rem 0.9rem rgba(131, 130, 130, 0.28);
+  box-shadow: 0.1rem 0.1rem 0.9rem rgba(181, 181, 181, 0.28);
+  /* border: 1px solid black;
+  border-style: dashed; */
   position: relative;
   overflow: hidden;
 `;
