@@ -605,7 +605,7 @@ const ProductPage = (props) => {
 
   let swicther = true;
   useEffect(() => {
-    // document.body.scrollTop = document.documentElement.scrollTop = 0;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const localStr = JSON.parse(localStorage.getItem("state"));
 
     if (localStr) {

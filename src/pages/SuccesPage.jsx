@@ -69,7 +69,7 @@ const SuccesPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timeOut = setTimeout(() => {
-      navigate("/");
+      navigate("/orders");
     }, 3000);
 
     return () => {

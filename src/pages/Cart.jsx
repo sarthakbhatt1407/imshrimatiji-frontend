@@ -297,6 +297,8 @@ const Cart = () => {
         shippingCharges: 99,
         secretKey: process.env.REACT_APP_SECRET_KEY,
         paymentOrderId: data.order_id,
+        image: item.image,
+        size: item.size,
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,
