@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Footer from "../component/Footer/Footer";
 import { useSelector } from "react-redux";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
-import { MyLocation } from "@mui/icons-material";
+import { ListAlt, MyLocation } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const LoaderBox = styled.div`
@@ -61,8 +61,12 @@ const OrderBox = styled.div`
   padding: 2rem;
   background-color: white;
   border-radius: 0.8rem;
+  box-shadow: 0.2rem 0.2rem 0.8rem #dfdfdf;
   @media only screen and (max-width: 1220px) {
-    padding: 1rem;
+    padding: 1rem 0.5rem;
+  }
+  a {
+    text-decoration: none;
   }
 `;
 
@@ -72,7 +76,7 @@ const OrderUpperBox = styled.div`
   border-bottom: 1px solid #ededed;
   padding: 1rem;
   @media only screen and (max-width: 1220px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.7fr 2fr;
     align-items: center;
   }
 `;
@@ -85,7 +89,7 @@ const UpperBoxIdBox = styled.div`
     span {
       &:not(:first-child) {
         text-transform: uppercase;
-        color: #77a9e1;
+        color: #963c51;
       }
     }
   }
@@ -106,7 +110,6 @@ const UpperBoxStatusBox = styled.div`
     align-items: center;
     gap: 0.5rem;
     margin-left: auto;
-    background-color: #ff9800;
     border: none;
     padding: 1rem 2rem;
     border-radius: 2rem;
@@ -115,14 +118,14 @@ const UpperBoxStatusBox = styled.div`
     letter-spacing: 0.09rem;
     text-transform: uppercase;
     @media only screen and (max-width: 1220px) {
-      padding: 1rem 0.8rem;
+      padding: 1rem 0.7rem;
       font-size: 1.2rem;
     }
   }
 `;
 
 const OrderMidBox = styled.div`
-  padding: 1rem 3rem;
+  padding: 2rem 3rem;
   border-bottom: 1px solid #ededed;
   display: flex;
   justify-content: space-between;
@@ -175,7 +178,7 @@ const ProductStatusInfoBox = styled.div`
     font-size: 1.8rem;
     letter-spacing: 0.13rem;
     font-weight: 500;
-    color: #ff9800;
+
     @media only screen and (max-width: 1220px) {
       margin-top: 0;
       font-size: 1.7rem;
@@ -193,9 +196,98 @@ const ProductStatusInfoBox = styled.div`
   }
 `;
 
-const OrderLowerBox = styled.div``;
+const OrderLowerBox = styled.div`
+  display: grid;
+  grid-template-columns: 0.7fr 3fr;
+  padding: 1rem 0;
+  div {
+    padding: 0 1rem;
+    &:first-child {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid #ededed;
+      button {
+        border: none;
+        padding: 1rem 3rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
+        letter-spacing: .07rem;
+        @media only screen and (max-width: 1220px) {
+p        padding: 1rem 4rem;
+      }
+      }
+      @media only screen and (max-width: 1220px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    &:last-child {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h5 {
+        font-size: 2rem;
+      }
+      p {
+        margin: 0;
+        color: #818181;
+        font-size: 1.3rem;
+        span {
+          text-transform: capitalize;
+          color: #414040;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 1220px) {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+`;
 
 const Orders = () => {
+  const paymentUpdater = async (orders) => {
+    orders.map(async (item) => {
+      if (item.paymentStatus === "completed") {
+        return;
+      }
+      if (!item.paymentOrderId) {
+        return;
+      }
+      const paymentVerifier = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: item.paymentOrderId }),
+        }
+      );
+      const data = await paymentVerifier.json();
+      if (data.captured) {
+        const orderPaymentUpdater = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId: item._id,
+              orderPaymentStatus: data.captured,
+              paymentMethod: data.method,
+            }),
+          }
+        );
+      }
+    });
+  };
+
   const userId = useSelector((state) => state.userId);
   const [orders, setOrders] = useState(null);
   const [products, setProducts] = useState(null);
@@ -218,6 +310,7 @@ const Orders = () => {
       let arr = [];
       if (data.orders) {
         setOrders(data.orders.reverse());
+        paymentUpdater(data.orders);
       }
       if (res.ok) {
         for (const ord of data.orders) {
@@ -232,9 +325,11 @@ const Orders = () => {
       setProducts(arr);
     };
     fetcher();
+
     const intv = setInterval(() => {
       fetcher();
-    }, 1500);
+    }, 2500);
+
     return () => {
       clearInterval(intv);
     };
@@ -260,12 +355,15 @@ const Orders = () => {
             </HeadingBox>
             {products &&
               orders.map((ord) => {
+                if (ord.paymentStatus === "pending") {
+                  return;
+                }
                 const product = products.find((pro) => {
                   return ord.productId === pro.id;
                 });
                 if (product) {
                   return (
-                    <OrderBox data-aos="fade-up" key={ord.id}>
+                    <OrderBox key={ord.id}>
                       <OrderUpperBox>
                         <UpperBoxIdBox>
                           <h5>
@@ -284,9 +382,18 @@ const Orders = () => {
                           </p>
                         </UpperBoxIdBox>
                         <UpperBoxStatusBox>
-                          <button>
-                            <MyLocation /> Track order
-                          </button>
+                          {ord.tracking.length > 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <button style={{ backgroundColor: "#ff9800" }}>
+                                <MyLocation /> Track order
+                              </button>
+                            )}
+                          {ord.tracking.length === 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <button style={{ backgroundColor: "#963C51" }}>
+                                <ListAlt /> Order Received
+                              </button>
+                            )}
                         </UpperBoxStatusBox>
                       </OrderUpperBox>
                       <OrderMidBox>
@@ -313,26 +420,74 @@ const Orders = () => {
                         </Link>
                         <ProductStatusInfoBox>
                           <h5>Status</h5>
-                          <p>In-Transit</p>
+                          {ord.tracking.length > 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <p style={{ color: "#ff9800" }}>In Transit</p>
+                            )}
+                          {ord.tracking.length === 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <p style={{ color: "#963C51" }}>
+                                Waiting for pickup
+                              </p>
+                            )}
                         </ProductStatusInfoBox>
                         <ProductStatusInfoBox>
                           <h5>Expected Delivery</h5>
-                          <p style={{ color: "#3e3e3e" }}>24 Decemeber 2024</p>
+                          <p style={{ color: "#3e3e3e" }}>
+                            {ord.expectedDelivery}
+                          </p>
                         </ProductStatusInfoBox>
                       </OrderMidBox>
-                      <OrderLowerBox></OrderLowerBox>
+                      <OrderLowerBox>
+                        <div>
+                          {ord.tracking.length === 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <button
+                                style={{
+                                  backgroundColor: "#963C51",
+                                  color: "white",
+                                }}
+                              >
+                                View order
+                              </button>
+                            )}
+                          {ord.tracking.length > 0 &&
+                            ord.paymentStatus === "completed" && (
+                              <button
+                                style={{
+                                  backgroundColor: "#ff9800",
+                                  color: "white",
+                                }}
+                              >
+                                View order
+                              </button>
+                            )}
+                        </div>
+                        <div>
+                          <p>
+                            Payment method used :{" "}
+                            <span>{ord.paymentMethod}</span>
+                          </p>
+                          <h5>
+                            Rs.
+                            {Number(
+                              ord.price * Number(ord.quantity)
+                            ).toLocaleString("en-IN")}
+                          </h5>
+                        </div>
+                      </OrderLowerBox>
                     </OrderBox>
                   );
                 }
               })}
-            {/* <button
+            <button
               onClick={() => {
                 console.log(orders.reverse());
                 console.log(products);
               }}
             >
               ll
-            </button> */}
+            </button>
           </MainBox>
         )}
       </OuterBox>

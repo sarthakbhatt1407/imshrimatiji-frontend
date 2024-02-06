@@ -884,7 +884,7 @@ const ProductPage = (props) => {
                               pinCode.value = "";
                               // alert(data.message + `: ${data.data.city}`);
                               var date = new Date();
-                              date.setDate(date.getDate() + 9);
+                              date.setDate(date.getDate() + 10);
                               setDeliveryDate(date.toString().split(" "));
                               console.log(deliveryDate);
                             }}

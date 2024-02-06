@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import "react-alert-confirm/lib/style.css";
 import confirm from "react-alert-confirm";
-
+import moment from "moment";
+moment().format();
 const MainBox = styled.div`
   height: fit-content;
   padding: 4rem 4rem;
@@ -251,10 +252,10 @@ const Cart = () => {
 
   //function will get called when clicked on the pay button.
   const displayRazorpayPaymentSdk = async () => {
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
+    // if (!isLoggedIn) {
+    //   navigate("/login");
+    //   return;
+    // }
     const res = await loadRazorpayScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -285,6 +286,12 @@ const Cart = () => {
     const data = await orderRes.json();
     console.log(data);
     const createdOrders = [];
+
+    var date = moment().add(10, "d").toDate();
+
+    const dateArr = date.toString().split(" ");
+    console.log(dateArr);
+    const expectedDate = dateArr[2] + " " + dateArr[1] + ", " + dateArr[3];
     cartItems.map(async (item) => {
       let obj = {
         userId: userId,
@@ -293,12 +300,12 @@ const Cart = () => {
         price: item.price,
         orderPrice: Number(item.quantity) * Number(item.price),
         productId: item.productId,
-        paymentMethod: "online",
         shippingCharges: 99,
         secretKey: process.env.REACT_APP_SECRET_KEY,
         paymentOrderId: data.order_id,
         image: item.image,
         size: item.size,
+        expectedDelivery: expectedDate,
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,
@@ -354,6 +361,7 @@ const Cart = () => {
                 body: JSON.stringify({
                   orderId: item._id,
                   orderPaymentStatus: data.captured,
+                  paymentMethod: data.method,
                 }),
               }
             );
