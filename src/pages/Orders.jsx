@@ -212,10 +212,10 @@ const OrderLowerBox = styled.div`
         padding: 1rem 3rem;
         border-radius: 2rem;
         text-transform: uppercase;
-        letter-spacing: .07rem;
+        letter-spacing: 0.07rem;
         @media only screen and (max-width: 1220px) {
-p        padding: 1rem 4rem;
-      }
+          padding: 1rem 4rem;
+        }
       }
       @media only screen and (max-width: 1220px) {
         display: flex;
@@ -250,47 +250,44 @@ p        padding: 1rem 4rem;
 `;
 
 const Orders = () => {
-  const paymentUpdater = async (orders) => {
-    orders.map(async (item) => {
-      if (item.paymentStatus === "completed") {
-        return;
+  const userId = useSelector((state) => state.userId);
+  const [orders, setOrders] = useState([]);
+  const paymentUpdater = async (order) => {
+    if (order.paymentStatus === "completed") {
+      return;
+    }
+    if (!order.paymentOrderId) {
+      return;
+    }
+    const paymentVerifier = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: order.paymentOrderId }),
       }
-      if (!item.paymentOrderId) {
-        return;
-      }
-      const paymentVerifier = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
+    );
+    const data = await paymentVerifier.json();
+    if (data.captured) {
+      const orderPaymentUpdater = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ id: item.paymentOrderId }),
+          body: JSON.stringify({
+            orderId: order._id,
+            orderPaymentStatus: data.captured,
+            paymentMethod: data.method,
+          }),
         }
       );
-      const data = await paymentVerifier.json();
-      if (data.captured) {
-        const orderPaymentUpdater = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              orderId: item._id,
-              orderPaymentStatus: data.captured,
-              paymentMethod: data.method,
-            }),
-          }
-        );
-      }
-    });
+    }
   };
 
-  const userId = useSelector((state) => state.userId);
-  const [orders, setOrders] = useState(null);
-  const [products, setProducts] = useState(null);
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(
@@ -307,22 +304,9 @@ const Orders = () => {
       );
       const data = await res.json();
       // console.log(data);
-      let arr = [];
       if (data.orders) {
         setOrders(data.orders.reverse());
-        paymentUpdater(data.orders);
       }
-      if (res.ok) {
-        for (const ord of data.orders) {
-          const res = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/product/${ord.productId}`
-          );
-          const data = await res.json();
-          arr.push(data.product);
-        }
-      }
-
-      setProducts(arr);
     };
     fetcher();
 
@@ -333,7 +317,7 @@ const Orders = () => {
     return () => {
       clearInterval(intv);
     };
-  }, [userId]);
+  }, []);
 
   return (
     <>
@@ -344,7 +328,7 @@ const Orders = () => {
       )}
       <Navbar />
       <OuterBox>
-        {orders && products && (
+        {orders.length > 0 && (
           <MainBox>
             <HeadingBox>
               <h1>My Orders</h1>
@@ -353,145 +337,135 @@ const Orders = () => {
                 <span>orders and track them here</span>
               </p>
             </HeadingBox>
-            {products &&
-              orders.map((ord) => {
-                if (ord.paymentStatus === "pending") {
-                  return;
-                }
-                const product = products.find((pro) => {
-                  return ord.productId === pro.id;
-                });
-                if (product) {
-                  return (
-                    <OrderBox key={ord.id}>
-                      <OrderUpperBox>
-                        <UpperBoxIdBox>
-                          <h5>
-                            <span>Order </span>
-                            <span>#{ord.id}</span>
-                          </h5>
+            {orders.map((ord) => {
+              if (ord.paymentStatus === "pending") {
+                paymentUpdater(ord);
+                return;
+              }
+
+              return (
+                <OrderBox key={ord.id}>
+                  <OrderUpperBox>
+                    <UpperBoxIdBox>
+                      <h5>
+                        <span>Order </span>
+                        <span>#{ord.id}</span>
+                      </h5>
+                      <p>
+                        <span>
+                          <strong> Order Placed : </strong>
+                          {ord.day} {ord.month} {ord.year}
+                        </span>
+                        <span>
+                          <strong>Time : </strong>
+                          {ord.time}
+                        </span>
+                      </p>
+                    </UpperBoxIdBox>
+                    <UpperBoxStatusBox>
+                      {ord.tracking.length > 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button style={{ backgroundColor: "#ff9800" }}>
+                            <MyLocation /> Track order
+                          </button>
+                        )}
+                      {ord.tracking.length === 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button style={{ backgroundColor: "#963C51" }}>
+                            <ListAlt /> Order Received
+                          </button>
+                        )}
+                    </UpperBoxStatusBox>
+                  </OrderUpperBox>
+                  <OrderMidBox>
+                    <Link
+                      to={`/product/${ord.category}/${ord.title}/${ord.productId}`}
+                    >
+                      <ProductImgtextInfoBox>
+                        <img
+                          src={`${process.env.REACT_APP_BASE_URL}/${ord.image}`}
+                          alt=""
+                        />
+                        <ProductTextInfo>
+                          <h5>{ord.orderTitle}</h5>
                           <p>
-                            <span>
-                              <strong> Order Placed : </strong>
-                              {ord.day} {ord.month} {ord.year}
-                            </span>
-                            <span>
-                              <strong>Time : </strong>
-                              {ord.time}
-                            </span>
+                            <span>Size : {ord.size}</span>
                           </p>
-                        </UpperBoxIdBox>
-                        <UpperBoxStatusBox>
-                          {ord.tracking.length > 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <button style={{ backgroundColor: "#ff9800" }}>
-                                <MyLocation /> Track order
-                              </button>
-                            )}
-                          {ord.tracking.length === 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <button style={{ backgroundColor: "#963C51" }}>
-                                <ListAlt /> Order Received
-                              </button>
-                            )}
-                        </UpperBoxStatusBox>
-                      </OrderUpperBox>
-                      <OrderMidBox>
-                        <Link
-                          to={`/product/${product.category}/${product.title}/${product.id}`}
-                        >
-                          <ProductImgtextInfoBox>
-                            <img
-                              src={`${process.env.REACT_APP_BASE_URL}/${ord.image}`}
-                              alt=""
-                            />
-                            <ProductTextInfo>
-                              <h5>{product.title}</h5>
-                              <p>
-                                <span>Size : {ord.size}</span>
-                              </p>
-                              <p>Qty : {ord.quantity}</p>
-                              <p>
-                                Price : {"₹ "}
-                                {Number(product.price.toLocaleString("en-IN"))}
-                              </p>
-                            </ProductTextInfo>
-                          </ProductImgtextInfoBox>
-                        </Link>
-                        <ProductStatusInfoBox>
-                          <h5>Status</h5>
-                          {ord.tracking.length > 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <p style={{ color: "#ff9800" }}>In Transit</p>
-                            )}
-                          {ord.tracking.length === 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <p style={{ color: "#963C51" }}>
-                                Waiting for pickup
-                              </p>
-                            )}
-                        </ProductStatusInfoBox>
-                        <ProductStatusInfoBox>
-                          <h5>Expected Delivery</h5>
-                          <p style={{ color: "#3e3e3e" }}>
-                            {ord.expectedDelivery}
-                          </p>
-                        </ProductStatusInfoBox>
-                      </OrderMidBox>
-                      <OrderLowerBox>
-                        <div>
-                          {ord.tracking.length === 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <button
-                                style={{
-                                  backgroundColor: "#963C51",
-                                  color: "white",
-                                }}
-                              >
-                                View order
-                              </button>
-                            )}
-                          {ord.tracking.length > 0 &&
-                            ord.paymentStatus === "completed" && (
-                              <button
-                                style={{
-                                  backgroundColor: "#ff9800",
-                                  color: "white",
-                                }}
-                              >
-                                View order
-                              </button>
-                            )}
-                        </div>
-                        <div>
+                          <p>Qty : {ord.quantity}</p>
                           <p>
-                            Payment method used :{" "}
-                            <span>{ord.paymentMethod}</span>
+                            Price : {"₹ "}
+                            {Number(ord.price).toLocaleString("en-IN")}
                           </p>
-                          <h5>
-                            Rs.
-                            {Number(
-                              ord.price * Number(ord.quantity)
-                            ).toLocaleString("en-IN")}
-                          </h5>
-                        </div>
-                      </OrderLowerBox>
-                    </OrderBox>
-                  );
-                }
-              })}
-            <button
-              onClick={() => {
-                console.log(orders.reverse());
-                console.log(products);
-              }}
-            >
-              ll
-            </button>
+                        </ProductTextInfo>
+                      </ProductImgtextInfoBox>
+                    </Link>
+                    <ProductStatusInfoBox>
+                      <h5>Status</h5>
+                      {ord.tracking.length > 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <p style={{ color: "#ff9800" }}>In Transit</p>
+                        )}
+                      {ord.tracking.length === 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <p style={{ color: "#963C51" }}>Waiting for pickup</p>
+                        )}
+                    </ProductStatusInfoBox>
+                    <ProductStatusInfoBox>
+                      <h5>Expected Delivery</h5>
+                      <p style={{ color: "#3e3e3e" }}>{ord.expectedDelivery}</p>
+                    </ProductStatusInfoBox>
+                  </OrderMidBox>
+                  <OrderLowerBox>
+                    <div>
+                      {ord.tracking.length === 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button
+                            style={{
+                              backgroundColor: "#963C51",
+                              color: "white",
+                            }}
+                          >
+                            View order
+                          </button>
+                        )}
+                      {ord.tracking.length > 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button
+                            style={{
+                              backgroundColor: "#ff9800",
+                              color: "white",
+                            }}
+                          >
+                            View order
+                          </button>
+                        )}
+                    </div>
+                    <div>
+                      <p>
+                        Payment method used : <span>{ord.paymentMethod}</span>
+                      </p>
+                      <h5>
+                        Rs.{" "}
+                        {Number(
+                          ord.price * Number(ord.quantity)
+                        ).toLocaleString("en-IN")}
+                      </h5>
+                    </div>
+                  </OrderLowerBox>
+                </OrderBox>
+              );
+            })}
           </MainBox>
         )}
       </OuterBox>
-      {orders && products && <Footer />}
+      <button
+        onClick={() => {
+          console.log(orders.reverse());
+        }}
+      >
+        ll
+      </button>
+      {orders && <Footer />}
     </>
   );
 };

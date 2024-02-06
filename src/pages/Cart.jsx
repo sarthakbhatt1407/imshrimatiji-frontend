@@ -306,6 +306,7 @@ const Cart = () => {
         image: item.image,
         size: item.size,
         expectedDelivery: expectedDate,
+        orderTitle: item.title,
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,
