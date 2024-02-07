@@ -307,8 +307,8 @@ const Cart = () => {
       shipping_phone: userContact,
       order_items: cartItems.map((item) => {
         const obj = {
-          name: item.title + "-" + item.color + "(" + item.size + ")",
-          sku: item.category,
+          name: item.title + "-" + item.color,
+          sku: item.category + " " + "(" + item.size + ")",
           units: item.quantity,
           selling_price: item.price,
           discount: "",
