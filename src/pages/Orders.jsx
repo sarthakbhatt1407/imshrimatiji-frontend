@@ -291,17 +291,17 @@ const Orders = () => {
     };
   }, [userId]);
   const paymentUpdater = async (order) => {
-    if (order.paymentStatus === "completed") {
-      return;
-    }
-    if (order.deleted === true) {
-      return;
-    }
     // if (!order.paymentOrderId) {
     //   return;
     // }
     const paymentVerifier = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`
+      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     const data = await paymentVerifier.json();
     // console.log(data);
@@ -380,11 +380,7 @@ const Orders = () => {
               </p>
             </HeadingBox>
             {orders.map((ord) => {
-              if (ord.paymentStatus === "pending") {
-                paymentUpdater(ord);
-                console.log("hi");
-                return;
-              }
+              paymentUpdater(ord);
 
               if (ord.deleted) {
                 return;

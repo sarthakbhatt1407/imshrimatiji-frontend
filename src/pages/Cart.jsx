@@ -406,9 +406,9 @@ const Cart = () => {
         //       `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
         //       {
         //         method: "POST",
-        //         headers: {
-        //           "Content-Type": "application/json",
-        //         },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
         //         body: JSON.stringify({
         //           orderId: item._id,
         //           orderPaymentStatus: data.captured,
