@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MainBox = styled.div`
   display: flex;
@@ -67,9 +68,10 @@ const Card = styled.div`
 
 const SuccesPage = () => {
   const navigate = useNavigate();
+  const userId = useSelector((state) => state.userId);
   useEffect(() => {
     const timeOut = setTimeout(() => {
-      navigate("/orders");
+      navigate(`/account/${userId}/orders`);
     }, 3000);
 
     return () => {

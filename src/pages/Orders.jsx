@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
 import Footer from "../component/Footer/Footer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
 import { ListAlt, MyLocation } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const LoaderBox = styled.div`
   width: 100%;
@@ -249,27 +249,94 @@ const OrderLowerBox = styled.div`
   }
 `;
 
+const NoOrdersFoundBox = styled.div`
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  letter-spacing: 0.2rem;
+  text-transform: capitalize;
+  color: #cacaca;
+`;
+
 const Orders = () => {
-  const userId = useSelector((state) => state.userId);
+  const { userId } = useParams();
+
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/order/${userId}`
+      );
+      const data = await res.json();
+
+      if (data.orders) {
+        setOrders(data.orders.reverse());
+      }
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    };
+    fetcher();
+
+    const intv = setInterval(() => {
+      fetcher();
+    }, 1500);
+
+    return () => {
+      clearInterval(intv);
+    };
+  }, [userId]);
   const paymentUpdater = async (order) => {
     if (order.paymentStatus === "completed") {
       return;
     }
-    if (!order.paymentOrderId) {
+    if (order.deleted === true) {
       return;
     }
+    // if (!order.paymentOrderId) {
+    //   return;
+    // }
     const paymentVerifier = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: order.paymentOrderId }),
-      }
+      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`
     );
     const data = await paymentVerifier.json();
+    // console.log(data);
+    if (data.captured === false) {
+      const orderPaymentUpdater = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId: order._id,
+            orderPaymentStatus: false,
+            paymentMethod: "",
+          }),
+        }
+      );
+      const ds = await orderPaymentUpdater.json();
+      // console.log(ds);
+      const shippingUpdater = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/shipping/cancel-order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ids: [order.shippingOrderId],
+          }),
+        }
+      );
+      const shipping = await shippingUpdater.json();
+      // console.log(shipping);
+    }
     if (data.captured) {
       const orderPaymentUpdater = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
@@ -285,49 +352,24 @@ const Orders = () => {
           }),
         }
       );
+      const ds = await orderPaymentUpdater.json();
+      // console.log(ds);
     }
   };
 
-  useEffect(() => {
-    const fetcher = async () => {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/order/order-by-userid`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId,
-          }),
-        }
-      );
-      const data = await res.json();
-      // console.log(data);
-      if (data.orders) {
-        setOrders(data.orders.reverse());
-      }
-    };
-    fetcher();
-
-    const intv = setInterval(() => {
-      fetcher();
-    }, 2500);
-
-    return () => {
-      clearInterval(intv);
-    };
-  }, []);
-
   return (
     <>
-      {!orders && (
-        <LoaderBox>
-          <CompLoader />
-        </LoaderBox>
-      )}
       <Navbar />
       <OuterBox>
+        {isLoading && (
+          <LoaderBox>
+            <CompLoader />
+          </LoaderBox>
+        )}
+        {orders.length === 0 && !isLoading && (
+          <NoOrdersFoundBox>No orders found ...</NoOrdersFoundBox>
+        )}
+
         {orders.length > 0 && (
           <MainBox>
             <HeadingBox>
@@ -340,11 +382,15 @@ const Orders = () => {
             {orders.map((ord) => {
               if (ord.paymentStatus === "pending") {
                 paymentUpdater(ord);
+                console.log("hi");
                 return;
               }
 
+              if (ord.deleted) {
+                return;
+              }
               return (
-                <OrderBox key={ord.id}>
+                <OrderBox key={ord.id} data-aos="fade-up">
                   <OrderUpperBox>
                     <UpperBoxIdBox>
                       <h5>

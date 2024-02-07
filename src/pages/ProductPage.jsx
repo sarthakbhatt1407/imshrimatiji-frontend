@@ -866,7 +866,7 @@ const ProductPage = (props) => {
                                 return;
                               }
                               const reslt = await fetch(
-                                `${process.env.REACT_APP_BASE_URL}/product/check-delivery`,
+                                `${process.env.REACT_APP_BASE_URL}/shipping/check-delivery`,
                                 {
                                   method: "POST",
                                   headers: {
@@ -878,7 +878,6 @@ const ProductPage = (props) => {
                                 }
                               );
                               const data = await reslt.json();
-                              console.log(data);
                               setDeliveryResult(data);
                               setPinLoading(false);
                               pinCode.value = "";
@@ -886,7 +885,6 @@ const ProductPage = (props) => {
                               var date = new Date();
                               date.setDate(date.getDate() + 10);
                               setDeliveryDate(date.toString().split(" "));
-                              console.log(deliveryDate);
                             }}
                           >
                             Check
@@ -898,10 +896,7 @@ const ProductPage = (props) => {
                       <DeliveryResultBox data-aos="zoom-in">
                         {pinLoading && <CompLoader />}
                         {deliveryResult.available && (
-                          <h4>
-                            Available at {deliveryResult.data.city} (
-                            {deliveryResult.data.pin})
-                          </h4>
+                          <h4>Available at {deliveryResult.data[0].city}</h4>
                         )}
                         {!deliveryResult.available && (
                           <h4>Not available at your pincode.</h4>

@@ -48,7 +48,7 @@ const App = () => {
           element={<ProductPage />}
         />
         <Route path="/cart" exact element={<Cart />} />
-        <Route path="/orders" exact element={<Orders />} />
+        <Route path="/account/:userId/orders" exact element={<Orders />} />
         <Route path="/success" exact element={<SuccesPage />} />
         <Route
           path="/product-category/:category"

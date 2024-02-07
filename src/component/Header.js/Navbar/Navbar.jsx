@@ -262,6 +262,7 @@ const CollapsibleDiv = styled.div`
 const Navbar = () => {
   const path = useLocation().pathname;
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const userId = useSelector((state) => state.userId);
   const cartTotalItems = useSelector((state) => state.cartItems.length);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -347,7 +348,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link onClick={menuButtonHandler} to="/orders">
+          <Link onClick={menuButtonHandler} to={`/account/orders/${userId}`}>
             Orders
           </Link>
         )}
@@ -437,7 +438,7 @@ const Navbar = () => {
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>
-          {isLoggedIn && <Link to="/orders">Orders</Link>}
+          {isLoggedIn && <Link to={`/account/${userId}/orders`}>Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
           {isLoggedIn && (
             <Link
