@@ -8,3 +8,15 @@ const colors = {
 
 // exports.EnvVariables = EnvVariables;
 exports.colors = colors;
+
+// const res = await fetch(
+//   `${process.env.REACT_APP_BASE_URL}/product/category`,
+//   {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ category: path }),
+//   }
+// );
+// const data = await res.json();

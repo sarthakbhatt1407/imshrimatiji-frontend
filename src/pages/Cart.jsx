@@ -284,63 +284,63 @@ const Cart = () => {
       }
     );
     const data = await orderRes.json();
-    const obj = {
-      order_id: data.order_id,
-      order_date: "2024-02-06 11:11",
-      billing_customer_name: userName,
-      billing_last_name: "",
-      billing_address: "House 221B, Leaf Village",
-      billing_city: "Dehradun",
-      billing_pincode: "249201",
-      billing_state: "Uttarakhand",
-      billing_country: "India",
-      billing_email: userEmail,
-      billing_phone: userContact,
-      shipping_is_billing: true,
-      shipping_customer_name: userName,
-      shipping_address: "House 221B, Leaf Village",
-      shipping_city: "Dehradun",
-      shipping_pincode: "249201",
-      shipping_country: "India",
-      shipping_state: "Uttarakhand",
-      shipping_email: userEmail,
-      shipping_phone: userContact,
-      order_items: cartItems.map((item) => {
-        const obj = {
-          name: item.title + "-" + item.color,
-          sku: item.category + " " + "(" + item.size + ")",
-          units: item.quantity,
-          selling_price: item.price,
-          discount: "",
-          tax: 18,
-          hsn: 441122,
-        };
-        return obj;
-      }),
-      payment_method: "Prepaid",
-      shipping_charges: 0,
-      giftwrap_charges: 0,
-      transaction_charges: 0,
-      total_discount: 0,
-      sub_total:
-        cartTotalAmount < 999 ? Number(cartTotalAmount + 99) : cartTotalAmount,
-      length: 10,
-      breadth: 15,
-      height: 20,
-      weight: 2.5,
-    };
-    const shippingRes = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/shipping/create-new-order`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(obj),
-      }
-    );
-    const shippingData = await shippingRes.json();
-    console.log(shippingData);
+    // const obj = {
+    //   order_id: data.order_id,
+    //   order_date: "2024-02-06 11:11",
+    //   billing_customer_name: userName,
+    //   billing_last_name: "",
+    //   billing_address: "House 221B, Leaf Village",
+    //   billing_city: "Dehradun",
+    //   billing_pincode: "249201",
+    //   billing_state: "Uttarakhand",
+    //   billing_country: "India",
+    //   billing_email: userEmail,
+    //   billing_phone: userContact,
+    //   shipping_is_billing: true,
+    //   shipping_customer_name: userName,
+    //   shipping_address: "House 221B, Leaf Village",
+    //   shipping_city: "Dehradun",
+    //   shipping_pincode: "249201",
+    //   shipping_country: "India",
+    //   shipping_state: "Uttarakhand",
+    //   shipping_email: userEmail,
+    //   shipping_phone: userContact,
+    //   order_items: cartItems.map((item) => {
+    //     const obj = {
+    //       name: item.title + "-" + item.color + " " + "(" + item.size + ")",
+    //       sku: item.category + "-" + item.productId.slice(0, 5),
+    //       units: item.quantity,
+    //       selling_price: item.price,
+    //       discount: "",
+    //       tax: 18,
+    //       hsn: 441122,
+    //     };
+    //     return obj;
+    //   }),
+    //   payment_method: "Prepaid",
+    //   shipping_charges: 0,
+    //   giftwrap_charges: 0,
+    //   transaction_charges: 0,
+    //   total_discount: 0,
+    //   sub_total:
+    //     cartTotalAmount < 999 ? Number(cartTotalAmount + 99) : cartTotalAmount,
+    //   length: 10,
+    //   breadth: 15,
+    //   height: 20,
+    //   weight: 2.5,
+    // };
+    // const shippingRes = await fetch(
+    //   `${process.env.REACT_APP_BASE_URL}/shipping/create-new-order`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(obj),
+    //   }
+    // );
+    // const shippingData = await shippingRes.json();
+    // console.log(shippingData);
     const createdOrders = [];
 
     var date = moment().add(10, "d").toDate();
@@ -363,7 +363,8 @@ const Cart = () => {
         size: item.size,
         expectedDelivery: expectedDate,
         orderTitle: item.title,
-        shippingOrderId: shippingData.resData.order_id,
+        category: item.category,
+        slug: item.slug,
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,
@@ -391,35 +392,40 @@ const Cart = () => {
       email: userEmail,
       contact: userContact,
       handler: async function (response) {
-        // createdOrders.map(async (item) => {
-        //   if (!item.paymentOrderId) {
-        //     return;
-        //   }
-        //   console.log(item.paymentOrderId);
-        //   const paymentVerifier = await fetch(
-        //     `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${item.paymentOrderId}`
-        //   );
-        //   const data = await paymentVerifier.json();
-        //   console.log(data);
-        //   if (data.captured) {
-        //     const orderPaymentUpdater = await fetch(
-        //       `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-        //       {
-        //         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        //         body: JSON.stringify({
-        //           orderId: item._id,
-        //           orderPaymentStatus: data.captured,
-        //           paymentMethod: data.method,
-        //         }),
-        //       }
-        //     );
-        //     const updaterData = await orderPaymentUpdater.json();
-        //     console.log(updaterData);
-        //   }
-        // });
+        createdOrders.map(async (item) => {
+          if (!item.paymentOrderId) {
+            return;
+          }
+          const paymentVerifier = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${item.paymentOrderId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await paymentVerifier.json();
+          console.log(data);
+          if (data.captured) {
+            const orderPaymentUpdater = await fetch(
+              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: item._id,
+                  orderPaymentStatus: data.captured,
+                  paymentMethod: data.method,
+                }),
+              }
+            );
+            const updaterData = await orderPaymentUpdater.json();
+            console.log(updaterData);
+          }
+        });
         dispatch({ type: "clearCart" });
 
         navigate("/success");

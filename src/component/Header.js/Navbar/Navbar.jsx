@@ -348,7 +348,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link onClick={menuButtonHandler} to={`/account/orders/${userId}`}>
+          <Link onClick={menuButtonHandler} to={`/account/${userId}/orders`}>
             Orders
           </Link>
         )}

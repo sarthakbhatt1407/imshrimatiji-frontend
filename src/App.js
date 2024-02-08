@@ -10,6 +10,7 @@ import Cart from "./pages/Cart";
 import SuccesPage from "./pages/SuccesPage";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -49,6 +50,11 @@ const App = () => {
         />
         <Route path="/cart" exact element={<Cart />} />
         <Route path="/account/:userId/orders" exact element={<Orders />} />
+        <Route
+          path="/account/:userId/orders/:orderId"
+          exact
+          element={<OrderDetailsPage />}
+        />
         <Route path="/success" exact element={<SuccesPage />} />
         <Route
           path="/product-category/:category"

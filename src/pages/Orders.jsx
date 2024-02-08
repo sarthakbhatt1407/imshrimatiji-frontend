@@ -59,6 +59,7 @@ const HeadingBox = styled.div`
 
 const OrderBox = styled.div`
   padding: 2rem;
+  text-decoration: none;
   background-color: white;
   border-radius: 0.8rem;
   box-shadow: 0.2rem 0.2rem 0.8rem #dfdfdf;
@@ -86,6 +87,8 @@ const UpperBoxIdBox = styled.div`
   gap: 2rem;
   align-items: center;
   h5 {
+    color: black;
+
     span {
       &:not(:first-child) {
         text-transform: uppercase;
@@ -275,21 +278,75 @@ const Orders = () => {
 
       if (data.orders) {
         setOrders(data.orders.reverse());
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
       }
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      data.orders.map(async (order) => {
+        if (order.paymentStatus === "completed" && order.deleted === false) {
+          return;
+        } else {
+          console.log("hi2");
+          const paymentVerifier = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await paymentVerifier.json();
+          console.log(data);
+          if (data.captured === false) {
+            const orderPaymentUpdater = await fetch(
+              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: order._id,
+                  orderPaymentStatus: false,
+                  paymentMethod: "",
+                }),
+              }
+            );
+            const ds = await orderPaymentUpdater.json();
+            console.log(ds);
+          }
+          if (data.captured) {
+            const orderPaymentUpdater = await fetch(
+              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: order._id,
+                  orderPaymentStatus: data.captured,
+                  paymentMethod: data.method,
+                }),
+              }
+            );
+            const ds = await orderPaymentUpdater.json();
+            console.log(ds);
+          }
+        }
+      });
     };
     fetcher();
 
     const intv = setInterval(() => {
       fetcher();
-    }, 1500);
+    }, 5000);
 
     return () => {
       clearInterval(intv);
     };
-  }, [userId]);
+  }, []);
   const paymentUpdater = async (order) => {
     // if (!order.paymentOrderId) {
     //   return;
@@ -322,20 +379,6 @@ const Orders = () => {
       );
       const ds = await orderPaymentUpdater.json();
       // console.log(ds);
-      const shippingUpdater = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/shipping/cancel-order`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ids: [order.shippingOrderId],
-          }),
-        }
-      );
-      const shipping = await shippingUpdater.json();
-      // console.log(shipping);
     }
     if (data.captured) {
       const orderPaymentUpdater = await fetch(
@@ -380,48 +423,51 @@ const Orders = () => {
               </p>
             </HeadingBox>
             {orders.map((ord) => {
-              paymentUpdater(ord);
+              // paymentUpdater(ord);
 
               if (ord.deleted) {
                 return;
               }
               return (
                 <OrderBox key={ord.id} data-aos="fade-up">
-                  <OrderUpperBox>
-                    <UpperBoxIdBox>
-                      <h5>
-                        <span>Order </span>
-                        <span>#{ord.id}</span>
-                      </h5>
-                      <p>
-                        <span>
-                          <strong> Order Placed : </strong>
-                          {ord.day} {ord.month} {ord.year}
-                        </span>
-                        <span>
-                          <strong>Time : </strong>
-                          {ord.time}
-                        </span>
-                      </p>
-                    </UpperBoxIdBox>
-                    <UpperBoxStatusBox>
-                      {ord.tracking.length > 0 &&
-                        ord.paymentStatus === "completed" && (
-                          <button style={{ backgroundColor: "#ff9800" }}>
-                            <MyLocation /> Track order
-                          </button>
-                        )}
-                      {ord.tracking.length === 0 &&
-                        ord.paymentStatus === "completed" && (
-                          <button style={{ backgroundColor: "#963C51" }}>
-                            <ListAlt /> Order Received
-                          </button>
-                        )}
-                    </UpperBoxStatusBox>
-                  </OrderUpperBox>
+                  <Link to={`/account/${userId}/orders/${ord.id}`}>
+                    <OrderUpperBox>
+                      <UpperBoxIdBox>
+                        <h5>
+                          <span>Order </span>
+                          <span>#{ord.id}</span>
+                        </h5>
+
+                        <p>
+                          <span>
+                            <strong> Order Placed : </strong>
+                            {ord.day} {ord.month} {ord.year}
+                          </span>
+                          <span>
+                            <strong>Time : </strong>
+                            {ord.time}
+                          </span>
+                        </p>
+                      </UpperBoxIdBox>
+                      <UpperBoxStatusBox>
+                        {ord.tracking.length > 0 &&
+                          ord.paymentStatus === "completed" && (
+                            <button style={{ backgroundColor: "#ff9800" }}>
+                              <MyLocation /> Track order
+                            </button>
+                          )}
+                        {ord.tracking.length === 0 &&
+                          ord.paymentStatus === "completed" && (
+                            <button style={{ backgroundColor: "#963C51" }}>
+                              <ListAlt /> Order Received
+                            </button>
+                          )}
+                      </UpperBoxStatusBox>
+                    </OrderUpperBox>
+                  </Link>
                   <OrderMidBox>
                     <Link
-                      to={`/product/${ord.category}/${ord.title}/${ord.productId}`}
+                      to={`/product/${ord.category}/${ord.slug}/${ord.productId}`}
                     >
                       <ProductImgtextInfoBox>
                         <img
@@ -461,25 +507,29 @@ const Orders = () => {
                     <div>
                       {ord.tracking.length === 0 &&
                         ord.paymentStatus === "completed" && (
-                          <button
-                            style={{
-                              backgroundColor: "#963C51",
-                              color: "white",
-                            }}
-                          >
-                            View order
-                          </button>
+                          <Link to={`/account/${userId}/orders/${ord.id}`}>
+                            <button
+                              style={{
+                                backgroundColor: "#963C51",
+                                color: "white",
+                              }}
+                            >
+                              View order
+                            </button>
+                          </Link>
                         )}
                       {ord.tracking.length > 0 &&
                         ord.paymentStatus === "completed" && (
-                          <button
-                            style={{
-                              backgroundColor: "#ff9800",
-                              color: "white",
-                            }}
-                          >
-                            View order
-                          </button>
+                          <Link to="/">
+                            <button
+                              style={{
+                                backgroundColor: "#ff9800",
+                                color: "white",
+                              }}
+                            >
+                              View order
+                            </button>
+                          </Link>
                         )}
                     </div>
                     <div>
