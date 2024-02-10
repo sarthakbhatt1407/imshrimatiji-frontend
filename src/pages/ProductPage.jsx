@@ -704,9 +704,11 @@ const ProductPage = (props) => {
     // Stock Verifier
 
     const alreadyFound = cartItems.find((item) => {
-      return item.productId === obj.productId;
+      if (item.size === obj.size) {
+        return item.productId === obj.productId;
+      }
     });
-    console.log(alreadyFound);
+
     if (alreadyFound) {
       const stockVerifier = await fetch(
         `${process.env.REACT_APP_BASE_URL}/product/stock`,

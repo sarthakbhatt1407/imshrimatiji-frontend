@@ -365,6 +365,13 @@ const Cart = () => {
         orderTitle: item.title,
         category: item.category,
         slug: item.slug,
+        addressLine1: "Bengali Kothi",
+        addressLine2: "Banjarawala",
+        city: "Dehradun",
+        addressState: "Uttarakhand",
+        addressCountry: "India",
+        color: item.color,
+        cityPincode: "248001",
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,

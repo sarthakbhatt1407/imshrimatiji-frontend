@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
 import { ListAlt, MyLocation } from "@mui/icons-material";
 import { Link, useParams } from "react-router-dom";
+import { Avatar, Skeleton } from "@mui/material";
 
 const LoaderBox = styled.div`
   width: 100%;
@@ -341,7 +342,7 @@ const Orders = () => {
 
     const intv = setInterval(() => {
       fetcher();
-    }, 5000);
+    }, 3000);
 
     return () => {
       clearInterval(intv);
@@ -424,7 +425,9 @@ const Orders = () => {
             </HeadingBox>
             {orders.map((ord) => {
               // paymentUpdater(ord);
-
+              if (ord.paymentStatus !== "completed") {
+                return;
+              }
               if (ord.deleted) {
                 return;
               }
@@ -550,13 +553,13 @@ const Orders = () => {
           </MainBox>
         )}
       </OuterBox>
-      <button
+      {/* <button
         onClick={() => {
           console.log(orders.reverse());
         }}
       >
         ll
-      </button>
+      </button> */}
       {orders && <Footer />}
     </>
   );

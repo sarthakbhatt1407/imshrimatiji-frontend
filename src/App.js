@@ -11,6 +11,7 @@ import SuccesPage from "./pages/SuccesPage";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -43,6 +44,7 @@ const App = () => {
         {isLoggedIn && <Route path="/login" element={<Navigate to="/" />} />}
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         {isLoggedIn && <Route path="/login" element={<Login />} />}
+        {isLoggedIn && <Route path="/profile" element={<Profile />} />}
         <Route
           path="/product/:category/:product/:productId"
           exact

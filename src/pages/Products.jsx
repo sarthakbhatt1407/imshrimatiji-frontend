@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Footer from "../component/Footer/Footer";
 import FeatureProductBox from "../component/UI/FeatureProductBox";
 import FullPageLoader from "../component/Loaders/CategoryLoader/FullPageLoader";
@@ -247,7 +247,6 @@ const Products = (props) => {
             <HeadingAndSearch>
               <h1>{path}</h1>
             </HeadingAndSearch>
-
             <ResultAndFilter>
               <DetailPara>Showing all results</DetailPara>{" "}
               <FilterAndSearchBox>

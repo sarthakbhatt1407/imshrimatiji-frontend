@@ -5,7 +5,6 @@ import Navbar from "../component/Header.js/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import MyDocument from "./MyDocument";
-import ReactPDF from "@react-pdf/renderer";
 import { Description } from "@mui/icons-material";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
 
@@ -297,8 +296,8 @@ const OrderDetailsPage = () => {
                   <span>
                     <Description />
                     <PDFDownloadLink
-                      document={<MyDocument />}
-                      fileName="fee_acceptance.pdf"
+                      document={<MyDocument data={order} />}
+                      fileName={`invoice-${order.id}.pdf`}
                     >
                       {({ blob, url, loading, error }) =>
                         loading ? "Loading document..." : "Download"

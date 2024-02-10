@@ -57,7 +57,7 @@ const ProductsBox = styled.div`
   height: fit-content;
   overflow-x: scroll;
   @media only screen and (max-width: 949px) {
-    width: 90%;
+    width: 80%;
     max-width: 90%;
     justify-content: start;
   }
