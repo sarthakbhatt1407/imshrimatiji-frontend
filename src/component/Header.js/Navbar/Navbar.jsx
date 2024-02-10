@@ -303,6 +303,7 @@ const Navbar = () => {
         )}
         {linksActive && (
           <Link
+            onClick={menuButtonHandler}
             className={
               path === "/product-category/all-products"
                 ? "activeLink"
