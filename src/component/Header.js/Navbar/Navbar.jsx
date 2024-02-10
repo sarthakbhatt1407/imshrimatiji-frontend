@@ -302,6 +302,18 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
+          <Link
+            className={
+              path === "/product-category/all-products"
+                ? "activeLink"
+                : "nonActiveLink"
+            }
+            to="/product-category/all-products"
+          >
+            Shop All
+          </Link>
+        )}
+        {linksActive && (
           <Link>
             <p
               onClick={() => {
@@ -312,7 +324,7 @@ const Navbar = () => {
               data-toggle="collapse"
               data-target="#demo"
             >
-              <>Shop</>
+              <>Category</>
               <i
                 onClick={() => {
                   const para = document.querySelector(".para");
