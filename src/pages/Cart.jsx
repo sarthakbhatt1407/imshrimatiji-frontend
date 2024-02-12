@@ -236,216 +236,6 @@ const Cart = () => {
     // dispatch({ type: "itemRemover", id: id });
   };
 
-  const loadRazorpayScript = (src) => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  };
-
-  //function will get called when clicked on the pay button.
-  const displayRazorpayPaymentSdk = async () => {
-    // if (!isLoggedIn) {
-    //   navigate("/login");
-    //   return;
-    // }
-    const res = await loadRazorpayScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      alert("Razorpay SDK failed to load. please check are you online?");
-      return;
-    }
-
-    const orderRes = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/payment/create-order`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount:
-            cartTotalAmount < 999
-              ? Number(cartTotalAmount + 99).toString()
-              : cartTotalAmount.toString(),
-          userEmail,
-          userContact,
-          userName,
-        }),
-      }
-    );
-    const data = await orderRes.json();
-    // const obj = {
-    //   order_id: data.order_id,
-    //   order_date: "2024-02-06 11:11",
-    //   billing_customer_name: userName,
-    //   billing_last_name: "",
-    //   billing_address: "House 221B, Leaf Village",
-    //   billing_city: "Dehradun",
-    //   billing_pincode: "249201",
-    //   billing_state: "Uttarakhand",
-    //   billing_country: "India",
-    //   billing_email: userEmail,
-    //   billing_phone: userContact,
-    //   shipping_is_billing: true,
-    //   shipping_customer_name: userName,
-    //   shipping_address: "House 221B, Leaf Village",
-    //   shipping_city: "Dehradun",
-    //   shipping_pincode: "249201",
-    //   shipping_country: "India",
-    //   shipping_state: "Uttarakhand",
-    //   shipping_email: userEmail,
-    //   shipping_phone: userContact,
-    //   order_items: cartItems.map((item) => {
-    //     const obj = {
-    //       name: item.title + "-" + item.color + " " + "(" + item.size + ")",
-    //       sku: item.category + "-" + item.productId.slice(0, 5),
-    //       units: item.quantity,
-    //       selling_price: item.price,
-    //       discount: "",
-    //       tax: 18,
-    //       hsn: 441122,
-    //     };
-    //     return obj;
-    //   }),
-    //   payment_method: "Prepaid",
-    //   shipping_charges: 0,
-    //   giftwrap_charges: 0,
-    //   transaction_charges: 0,
-    //   total_discount: 0,
-    //   sub_total:
-    //     cartTotalAmount < 999 ? Number(cartTotalAmount + 99) : cartTotalAmount,
-    //   length: 10,
-    //   breadth: 15,
-    //   height: 20,
-    //   weight: 2.5,
-    // };
-    // const shippingRes = await fetch(
-    //   `${process.env.REACT_APP_BASE_URL}/shipping/create-new-order`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(obj),
-    //   }
-    // );
-    // const shippingData = await shippingRes.json();
-    // console.log(shippingData);
-    const createdOrders = [];
-
-    var date = moment().add(10, "d").toDate();
-
-    const dateArr = date.toString().split(" ");
-
-    const expectedDate = dateArr[2] + " " + dateArr[1] + ", " + dateArr[3];
-    cartItems.map(async (item) => {
-      let obj = {
-        userId: userId,
-        address: "dehradun uk",
-        quantity: item.quantity,
-        price: item.price,
-        orderPrice: Number(item.quantity) * Number(item.price),
-        productId: item.productId,
-        shippingCharges: 99,
-        secretKey: process.env.REACT_APP_SECRET_KEY,
-        paymentOrderId: data.order_id,
-        image: item.image,
-        size: item.size,
-        expectedDelivery: expectedDate,
-        orderTitle: item.title,
-        category: item.category,
-        slug: item.slug,
-        addressLine1: "Bengali Kothi",
-        addressLine2: "Banjarawala",
-        city: "Dehradun",
-        addressState: "Uttarakhand",
-        addressCountry: "India",
-        color: item.color,
-        cityPincode: "248001",
-      };
-      const orderCreator = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/order/new-order`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...obj }),
-        }
-      );
-      const d = await orderCreator.json();
-      console.log(d);
-      createdOrders.push(d.createdOrder);
-      console.log(createdOrders);
-    });
-
-    var options = {
-      key: data.key_id,
-      amount: data.amount,
-      currency: "INR",
-      name: data.product_name,
-      description: data.description,
-      order_id: data.order_id,
-      email: userEmail,
-      contact: userContact,
-      handler: async function (response) {
-        createdOrders.map(async (item) => {
-          if (!item.paymentOrderId) {
-            return;
-          }
-          const paymentVerifier = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${item.paymentOrderId}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const data = await paymentVerifier.json();
-          console.log(data);
-          if (data.captured) {
-            const orderPaymentUpdater = await fetch(
-              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  orderId: item._id,
-                  orderPaymentStatus: data.captured,
-                  paymentMethod: data.method,
-                }),
-              }
-            );
-            const updaterData = await orderPaymentUpdater.json();
-            console.log(updaterData);
-          }
-        });
-        dispatch({ type: "clearCart" });
-
-        navigate("/success");
-      },
-      theme: {
-        color: "#32a86d",
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  };
-
   return (
     <div>
       <Navbar />
@@ -539,7 +329,17 @@ const Cart = () => {
                   </tr>
                   <tr>
                     <td>
-                      <button onClick={displayRazorpayPaymentSdk}>
+                      <button
+                        onClick={() => {
+                          if (!isLoggedIn) {
+                            navigate("/login");
+                            return;
+                          }
+                          if (isLoggedIn) {
+                            navigate("/checkout");
+                          }
+                        }}
+                      >
                         proceed to checkout
                       </button>
                     </td>

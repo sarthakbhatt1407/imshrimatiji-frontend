@@ -342,7 +342,7 @@ const Orders = () => {
 
     const intv = setInterval(() => {
       fetcher();
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearInterval(intv);

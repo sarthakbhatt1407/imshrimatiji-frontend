@@ -15,7 +15,6 @@ const storeReducer = (state = defaultState, action) => {
   if (action.type === "log in") {
     const data = action.data;
     const user = data.user;
-    console.log("done");
     const obj = {
       ...state,
       isLoggedIn: true,
@@ -35,6 +34,7 @@ const storeReducer = (state = defaultState, action) => {
       userId: user.id,
       userName: user.name,
       userContact: user.contactNum,
+      userAddress: user.address,
     };
   }
 

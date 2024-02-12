@@ -809,7 +809,7 @@ const ProductPage = (props) => {
                       odio fugiat hic ad quam id! Nobis perspiciatis deserunt
                       veniam vel velit nesciunt repellendus provident corporis
                       quae?
-                    </p>{" "}
+                    </p>
                     <RzrpayDiv>
                       <div id="razorpay-affordability-widget"></div>
                     </RzrpayDiv>
@@ -881,6 +881,7 @@ const ProductPage = (props) => {
                               );
                               const data = await reslt.json();
                               setDeliveryResult(data);
+                              console.log(data);
                               setPinLoading(false);
                               pinCode.value = "";
                               // alert(data.message + `: ${data.data.city}`);

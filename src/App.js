@@ -12,6 +12,7 @@ import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import Profile from "./pages/Profile";
+import CheckoutPage from "./pages/CheckoutPage";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -58,6 +59,7 @@ const App = () => {
           element={<OrderDetailsPage />}
         />
         <Route path="/success" exact element={<SuccesPage />} />
+        <Route path="/checkout" exact element={<CheckoutPage />} />
         <Route
           path="/product-category/:category"
           exact
