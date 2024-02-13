@@ -606,11 +606,11 @@ const ProductPage = (props) => {
   let swicther = true;
   useEffect(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
-    const localStr = JSON.parse(localStorage.getItem("state"));
+    // const localStr = JSON.parse(localStorage.getItem("state"));
 
-    if (localStr) {
-      dispatch({ type: "reload", data: { ...localStr } });
-    }
+    // if (localStr) {
+    //   dispatch({ type: "reload", data: { ...localStr } });
+    // }
     const fetcher = async () => {
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/product/${productId}`

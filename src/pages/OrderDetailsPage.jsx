@@ -230,6 +230,7 @@ const OrderDetailsPage = () => {
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const fetcher = async () => {
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/get-order/${orderId}`
@@ -259,15 +260,15 @@ const OrderDetailsPage = () => {
             <UpperBox>
               <AddressBox>
                 <h4>Delivery Address</h4>
-                <p>Sarthak Bhatt</p>
-                <span>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit
-                </span>
-                <span>Lorem ipsum dolor sit amet</span>
-                <p>Dehradun - 248001</p>
-                <p>Uttarakhand</p>
+                <p>{order.fullName}</p>
+                <span>{order.addressLine1}</span>
+                <span>{order.addressLine2}</span>
                 <p>
-                  <span>Phone number</span> 1234567890
+                  {order.city} - {order.cityPincode}
+                </p>
+                <p>{order.addressState}</p>
+                <p>
+                  <span>Phone number</span> {order.contactNum}
                 </p>
               </AddressBox>
               <OrderDetailBox>

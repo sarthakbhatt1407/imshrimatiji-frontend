@@ -20,12 +20,19 @@ const MainDiv = styled.div`
     margin: 2rem 0;
     text-align: center;
   }
-  @media only screen and (max-width: 949px) {
+  @media only screen and (max-width: 1220px) {
     grid-template-columns: 1fr;
 
     padding: 0;
     h3 {
     }
+  }
+`;
+
+const FormBox = styled.div`
+  width: 50vw;
+  @media only screen and (max-width: 1220px) {
+    width: 100%;
   }
 `;
 
@@ -216,6 +223,10 @@ const CheckoutPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const [err, setErr] = useState(false);
+  const [errTxt, setErrTxt] = useState("");
+  const [deliveryAvailable, setDeliveryAvailable] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetcher = async () => {
       const reslt = await fetch(
@@ -246,10 +257,15 @@ const CheckoutPage = () => {
     cityPincode: "",
     addressState: "",
     addressCountry: "",
+    contactNum: "",
   };
   const [inpFields, setInpFields] = useState(obj);
   const onChangeHandler = (e) => {
+    setErr(false);
+    setErrTxt("");
     const id = e.target.id;
+    const ele = document.querySelector(`#${id}`);
+    ele.style.border = "1px solid #ccc";
     const val = e.target.value;
     setInpFields({ ...inpFields, [id]: val });
   };
@@ -276,12 +292,73 @@ const CheckoutPage = () => {
     const value = e.target.value;
     userAddress.map((add) => {
       if (add.addressId === value) {
+        console.log(add);
         setInpFields({ ...add });
+        if (!inpFields.fullName.trim().length < 4) {
+          const ele = document.querySelector("#fullName");
+          ele.style.border = "1px solid #ccc";
+        }
+        if (!inpFields.addressLine1.trim().length < 31) {
+          const ele = document.querySelector("#addressLine1");
+          ele.style.border = "1px solid #ccc";
+        }
+        if (!inpFields.contactNum.length < 10) {
+          const ele = document.querySelector("#contactNum");
+          ele.style.border = "1px solid #ccc";
+        }
+        if (!inpFields.cityPincode.length < 6) {
+          console.log("hi");
+          setDeliveryAvailable(false);
+          const ele = document.querySelector("#cityPincode");
+          ele.style.border = "1px solid #ccc";
+          const fetcher = async () => {
+            const reslt = await fetch(
+              `${process.env.REACT_APP_BASE_URL}/shipping/check-delivery`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pinCode: add.cityPincode,
+                }),
+              }
+            );
+            const data = await reslt.json();
+            console.log(data);
+            if (data.available) {
+              setDeliveryAvailable(true);
+              setInpFields({
+                ...add,
+                cityPincode: add.cityPincode,
+                city: data.data[0].city,
+                addressState: data.data[0].state,
+                addressCountry: "India",
+              });
+            } else {
+              const ele = document.querySelector("#cityPincode");
+              ele.style.border = "1px solid red";
+              setDeliveryAvailable(false);
+              setErrTxt("Delivery not available");
+            }
+            setIsLoading(false);
+          };
+          fetcher();
+        }
       }
     });
   };
 
   const pincodeHandler = async (e) => {
+    setIsLoading(true);
+    if (e.target.value.length > 6) {
+      return;
+    }
+    console.log("hi");
+    setErr(false);
+    setErrTxt("");
+    const ele = document.querySelector(`#${e.target.id}`);
+    ele.style.border = "1px solid #ccc";
     setInpFields({
       ...inpFields,
       cityPincode: e.target.value,
@@ -304,8 +381,10 @@ const CheckoutPage = () => {
         }
       );
       const data = await reslt.json();
+
       console.log(data);
       if (data.available) {
+        setDeliveryAvailable(true);
         setInpFields({
           ...inpFields,
           cityPincode: e.target.value,
@@ -313,7 +392,13 @@ const CheckoutPage = () => {
           addressState: data.data[0].state,
           addressCountry: "India",
         });
+      } else {
+        const ele = document.querySelector("#cityPincode");
+        ele.style.border = "1px solid red";
+        setDeliveryAvailable(false);
+        setErrTxt("Delivery not available");
       }
+      setIsLoading(false);
     }
   };
 
@@ -333,6 +418,35 @@ const CheckoutPage = () => {
 
   //function will get called when clicked on the pay button.
   const displayRazorpayPaymentSdk = async () => {
+    if (inpFields.fullName.trim().length < 4) {
+      const ele = document.querySelector("#fullName");
+      ele.style.border = "1px solid red";
+      setErr(true);
+      return;
+    }
+    if (inpFields.addressLine1.trim().length < 31) {
+      const ele = document.querySelector("#addressLine1");
+      ele.style.border = "1px solid red";
+      setErr(true);
+      return;
+    }
+    if (inpFields.cityPincode.length < 6) {
+      setDeliveryAvailable(false);
+      const ele = document.querySelector("#cityPincode");
+      ele.style.border = "1px solid red";
+      setErr(true);
+      return;
+    }
+    if (inpFields.contactNum.length < 10) {
+      const ele = document.querySelector("#contactNum");
+      ele.style.border = "1px solid red";
+      setErr(true);
+      return;
+    }
+    if (!deliveryAvailable) {
+      return;
+    }
+
     if (!isLoggedIn) {
       navigate("/login");
       return;
@@ -398,6 +512,8 @@ const CheckoutPage = () => {
         addressCountry: "India",
         color: item.color,
         cityPincode: inpFields.cityPincode,
+        contactNum: inpFields.contactNum,
+        fullName: inpFields.fullName,
       };
       const orderCreator = await fetch(
         `${process.env.REACT_APP_BASE_URL}/order/new-order`,
@@ -496,7 +612,8 @@ const CheckoutPage = () => {
 
       <MainDiv>
         <AddressFormBox>
-          <div className="container" data-aos="fade-right" data-aos-once="true">
+          {/* \    data-aos="fade-right" */}
+          <FormBox className="container" data-aos-once="true">
             <div className="row">
               <div className="col-xs-12">
                 <form className="form-horizontal">
@@ -547,19 +664,46 @@ const CheckoutPage = () => {
                       </div>
                     </div>
                   )}
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label
                       htmlFor="inputFullName"
                       className="col-sm-2 control-label"
                     >
                       Full Name
                     </label>
-
+                    {setErr && (
+                      <p className="col-sm-offset-2 col-sm-10 help-block">
+                        Street address, P.O. box, company name, c/o
+                      </p>
+                    )}
                     <div className="col-sm-10">
                       <input
                         type="text"
-                        onChange={onChangeHandler}
+                       
+                      />
+                    </div>
+                  </div> */}
+                  <div className="form-group">
+                    {err && inpFields.fullName.trim().length < 4 && (
+                      <p
+                        data-aos="fade-up"
+                        style={{ color: "red" }}
+                        className="col-sm-offset-2 col-sm-10 help-block"
+                      >
+                        Name is too short.
+                      </p>
+                    )}
+                    <label
+                      htmlFor="fullName"
+                      className="col-sm-2 control-label"
+                    >
+                      Full Name
+                    </label>
+                    <div className="col-sm-10">
+                      <input
+                        type="text"
                         className="form-control"
+                        onChange={onChangeHandler}
                         id="fullName"
                         name="full-name"
                         placeholder="Full Name"
@@ -568,9 +712,43 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                   <div className="form-group">
-                    <p className="col-sm-offset-2 col-sm-10 help-block">
-                      Street address, P.O. box, company name, c/o
-                    </p>
+                    {err && inpFields.contactNum.length < 10 && (
+                      <p
+                        data-aos="fade-up"
+                        style={{ color: "red" }}
+                        className="col-sm-offset-2 col-sm-10 help-block"
+                      >
+                        Enter valid contact number.
+                      </p>
+                    )}
+                    <label
+                      htmlFor="contactNum"
+                      className="col-sm-2 control-label"
+                    >
+                      Contact Number
+                    </label>
+                    <div className="col-sm-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        onChange={onChangeHandler}
+                        id="contactNum"
+                        name="contactNum"
+                        placeholder="Contact Number"
+                        value={inpFields.contactNum}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    {err && inpFields.addressLine1.trim().length < 31 && (
+                      <p
+                        data-aos="fade-up"
+                        style={{ color: "red" }}
+                        className="col-sm-offset-2 col-sm-10 help-block"
+                      >
+                        Adrress length should be greater than 30 characters
+                      </p>
+                    )}
                     <label
                       htmlFor="inputAddressLine1"
                       className="col-sm-2 control-label"
@@ -612,8 +790,28 @@ const CheckoutPage = () => {
                     </div>
                   </div>{" "}
                   <div className="form-group">
+                    {err && inpFields.cityPincode.length < 6 && (
+                      <p
+                        data-aos="fade-up"
+                        style={{ color: "red" }}
+                        className="col-sm-offset-2 col-sm-10 help-block"
+                      >
+                        Enter Valid Pincode
+                      </p>
+                    )}
+                    {!deliveryAvailable &&
+                      !isLoading &&
+                      inpFields.cityPincode.length === 6 && (
+                        <p
+                          data-aos="fade-up"
+                          style={{ color: "red" }}
+                          className="col-sm-offset-2 col-sm-10 help-block"
+                        >
+                          Delivery not available
+                        </p>
+                      )}
                     <label
-                      htmlFor="inputZipPostalCode"
+                      htmlFor="cityPincode"
                       className="col-sm-2 control-label"
                     >
                       Zip / Postal Code
@@ -622,8 +820,8 @@ const CheckoutPage = () => {
                       <input
                         type="number"
                         className="form-control"
-                        id="inputZipPostalCode"
-                        name="cityPincode"
+                        id="cityPincode"
+                        name="city-Pincode"
                         value={inpFields.cityPincode}
                         placeholder="Pincode"
                         onChange={pincodeHandler}
@@ -690,9 +888,10 @@ const CheckoutPage = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </FormBox>
         </AddressFormBox>
-        <ItemsAndPriceTable data-aos="fade-left" data-aos-once="true">
+        {/* data-aos="fade-left" */}
+        <ItemsAndPriceTable data-aos-once="true">
           <ProductsTable>
             <thead>
               <tr>
