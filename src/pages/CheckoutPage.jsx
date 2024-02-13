@@ -491,7 +491,6 @@ const CheckoutPage = () => {
     cartItems.map(async (item) => {
       let obj = {
         userId: userId,
-        address: "dehradun uk",
         quantity: item.quantity,
         price: item.price,
         orderPrice: Number(item.quantity) * Number(item.price),

@@ -9,6 +9,7 @@ const defaultState = {
   cartMsg: "",
   cartTotalAmount: 0,
   userContact: null,
+  userSince: "",
 };
 
 const storeReducer = (state = defaultState, action) => {
@@ -23,6 +24,7 @@ const storeReducer = (state = defaultState, action) => {
       userId: user.id,
       userName: user.name,
       userContact: user.contact,
+      userSince: user.userSince,
     };
 
     localStorage.setItem("state", JSON.stringify(obj));
@@ -35,6 +37,7 @@ const storeReducer = (state = defaultState, action) => {
       userName: user.name,
       userContact: user.contactNum,
       userAddress: user.address,
+      userSince: user.userSince,
     };
   }
 

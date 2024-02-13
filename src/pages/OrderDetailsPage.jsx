@@ -268,7 +268,7 @@ const OrderDetailsPage = () => {
                 </p>
                 <p>{order.addressState}</p>
                 <p>
-                  <span>Phone number</span> {order.contactNum}
+                  <span>Contact number</span> {order.contactNum}
                 </p>
               </AddressBox>
               <OrderDetailBox>

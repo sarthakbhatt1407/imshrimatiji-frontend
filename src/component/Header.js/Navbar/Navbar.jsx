@@ -366,7 +366,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link onClick={menuButtonHandler} to="/">
+          <Link onClick={menuButtonHandler} to="/account">
             Account
           </Link>
         )}
@@ -444,9 +444,9 @@ const Navbar = () => {
           </Link>
           <Link
             className={path === "/profile" ? "activeLink" : "nonActiveLink"}
-            to="/profile"
+            to="/account"
           >
-            Profile
+            Account
           </Link>
         </PageLinksDiv>
         <UserControlsDiv>

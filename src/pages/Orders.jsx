@@ -287,7 +287,6 @@ const Orders = () => {
         if (order.paymentStatus === "completed" && order.deleted === false) {
           return;
         } else {
-          console.log("hi2");
           const paymentVerifier = await fetch(
             `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
             {
@@ -299,6 +298,7 @@ const Orders = () => {
           );
           const data = await paymentVerifier.json();
           console.log(data);
+
           if (data.captured === false) {
             const orderPaymentUpdater = await fetch(
               `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
@@ -308,6 +308,8 @@ const Orders = () => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                  productId: order.productId,
+                  size: order.size,
                   orderId: order._id,
                   orderPaymentStatus: false,
                   paymentMethod: "",
@@ -329,6 +331,8 @@ const Orders = () => {
                   orderId: order._id,
                   orderPaymentStatus: data.captured,
                   paymentMethod: data.method,
+                  productId: order.productId,
+                  size: order.size,
                 }),
               }
             );

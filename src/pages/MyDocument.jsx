@@ -226,11 +226,11 @@ const MyDocument = (props) => {
         <View style={styles.upperBox}>
           <View style={styles.addressBox}>
             <Text style={styles.upperBoxMainHeading}>SHIPPING ADDRESS:</Text>
-            <Text style={styles.upperBoxText}>Sarthak Bhatt</Text>
+            <Text style={styles.upperBoxText}>{order.fullName}</Text>
             <Text style={styles.upperBoxText}>{order.addressLine1}</Text>
 
             <Text style={styles.upperBoxText}>{order.addressLine2}</Text>
-
+            <Text style={styles.upperBoxText}>{order.contactNum}</Text>
             <Text style={styles.upperBoxText}>
               {order.city} - {order.cityPincode}
             </Text>
