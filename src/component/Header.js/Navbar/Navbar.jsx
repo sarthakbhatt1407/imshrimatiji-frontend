@@ -81,7 +81,7 @@ const UserControlsDiv = styled.div`
   justify-content: end;
   gap: 1.8rem;
   align-items: center;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   padding-right: 1.5rem;
   a {
     text-decoration: none;
@@ -366,7 +366,7 @@ const Navbar = () => {
           </Link>
         )}
         {linksActive && (
-          <Link onClick={menuButtonHandler} to="/account">
+          <Link onClick={menuButtonHandler} to={`/account/${userId}`}>
             Account
           </Link>
         )}
@@ -444,7 +444,7 @@ const Navbar = () => {
           </Link>
           <Link
             className={path === "/profile" ? "activeLink" : "nonActiveLink"}
-            to="/account"
+            to={`/account/${userId}`}
           >
             Account
           </Link>

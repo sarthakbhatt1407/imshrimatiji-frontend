@@ -8,9 +8,10 @@ import {
   LocationOn,
   Settings,
 } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { colors } from "../data";
 import { useSelector } from "react-redux";
+import CompLoader from "../component/Loaders/CompLoader/CompLoader";
 
 const OuterBox = styled.div`
   width: 100%;
@@ -67,7 +68,7 @@ const LinksBox = styled.div`
   button {
     width: 25rem;
     padding: 2rem;
-    background-color: transparent;
+    background-color: white;
     padding-left: 3rem;
     display: flex;
     align-items: center;
@@ -230,20 +231,18 @@ const AddressTag = styled.div`
   font-weight: 500;
   width: fit-content;
 `;
+
 const Profile = () => {
   const [currentActive, setCurrentActive] = useState("mydetails");
   const [userAddress, setUserAddress] = useState(null);
-  const userName = useSelector((state) => state.userName);
-  const userEmail = useSelector((state) => state.userEmail);
-  const userContact = useSelector((state) => state.userContact);
-  const userSince = useSelector((state) => state.userSince);
-  const userId = useSelector((state) => state.userId);
+  const [user, setUser] = useState(null);
+  const userId = useParams().userId;
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetcher = async () => {
       const reslt = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/get-address`,
+        `${process.env.REACT_APP_BASE_URL}/user/get-user`,
         {
           method: "POST",
           headers: {
@@ -255,12 +254,13 @@ const Profile = () => {
         }
       );
       const data = await reslt.json();
-      console.log(data.address);
+      console.log(data);
+      setUser(data);
       setUserAddress(data.address);
     };
     fetcher();
     return () => {};
-  }, []);
+  }, [userId]);
 
   const activeHandler = (e) => {
     setCurrentActive(e.target.id);
@@ -279,11 +279,64 @@ const Profile = () => {
             Home / <span>My Account</span>
           </p>
           <h1>My Account</h1>
+          <div>
+            <input type="email" placeholder="email" id="otpEmail" />
+            <button
+              onClick={async () => {
+                const em = document.querySelector("#otpEmail").value;
+
+                const reslt = await fetch(
+                  `${process.env.REACT_APP_BASE_URL}/user/send-email`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      email: em,
+                    }),
+                  }
+                );
+                const data = await reslt.json();
+                alert(data.message);
+                console.log(data);
+              }}
+            >
+              click to send
+            </button>
+          </div>
+
+          <div>
+            <input type="number" id="otp" placeholder="otp" />
+            <button
+              onClick={async () => {
+                const ot = document.querySelector("#otp").value;
+
+                const reslt = await fetch(
+                  `${process.env.REACT_APP_BASE_URL}/user/send-email`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      otpInp: ot,
+                    }),
+                  }
+                );
+                const data = await reslt.json();
+                alert(data.message);
+                console.log(data);
+              }}
+            >
+              send
+            </button>
+          </div>
           <LinksAndDetailsBox>
             <LinksBox>
               {currentActive === "mydetails" && (
                 <button
-                  style={{ backgroundColor: "#eeeeee" }}
+                  style={{ backgroundColor: "#eeeeee", color: "#ba445e" }}
                   id="mydetails"
                   onClick={activeHandler}
                 >
@@ -297,7 +350,7 @@ const Profile = () => {
               )}
               {currentActive === "myaddress" && (
                 <button
-                  style={{ backgroundColor: "#eeeeee" }}
+                  style={{ backgroundColor: "#eeeeee", color: "#ba445e" }}
                   onClick={activeHandler}
                   id="myaddress"
                 >
@@ -317,13 +370,11 @@ const Profile = () => {
               >
                 <LocalShipping /> My orders
               </button>
-              {/* <button id="accountsett">
-                <Settings /> Account settings
-              </button> */}
             </LinksBox>
             <DetailsBox>
               {/*  */}
-              {currentActive === "mydetails" && (
+              {!user && <CompLoader />}
+              {currentActive === "mydetails" && user && (
                 <MyDetailsBox data-aos="fade-up" data-aos-once="true">
                   <h3>My details</h3>
                   <p>Personal Information</p>
@@ -332,16 +383,16 @@ const Profile = () => {
                     <InfoBox>
                       <LabelInputBox>
                         <label htmlFor="">Name</label>
-                        <input type="text" disabled value={userName} />
+                        <input type="text" disabled value={user.name} />
                       </LabelInputBox>
 
                       <LabelInputBox>
                         <label htmlFor="">Contact Number</label>
-                        <input type="text" disabled value={userContact} />
+                        <input type="text" disabled value={user.contact} />
                       </LabelInputBox>
                       <LabelInputBox>
                         <label htmlFor="">User Since</label>
-                        <input type="text" disabled value={userSince} />
+                        <input type="text" disabled value={user.userSince} />
                       </LabelInputBox>
                     </InfoBox>
                   </UserInformationBox>
@@ -355,7 +406,7 @@ const Profile = () => {
                           style={{ textTransform: "none" }}
                           type="text"
                           disabled
-                          value={userEmail}
+                          value={user.email}
                         />
                       </LabelInputBox>
                     </InfoBox>
