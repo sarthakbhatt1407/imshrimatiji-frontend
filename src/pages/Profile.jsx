@@ -320,7 +320,7 @@ const Profile = () => {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      otpInp: ot,
+                      otpInp: Number(ot),
                     }),
                   }
                 );
