@@ -313,7 +313,7 @@ const Profile = () => {
                 const ot = document.querySelector("#otp").value;
 
                 const reslt = await fetch(
-                  `${process.env.REACT_APP_BASE_URL}/user/send-email`,
+                  `${process.env.REACT_APP_BASE_URL}/user/verify-otp`,
                   {
                     method: "POST",
                     headers: {
