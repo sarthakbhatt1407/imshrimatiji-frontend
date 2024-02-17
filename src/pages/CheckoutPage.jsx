@@ -541,56 +541,25 @@ const CheckoutPage = () => {
       contact: userContact,
       handler: async function (response) {
         createdOrders.map(async (order) => {
-          if (!order.paymentOrderId) {
-            return;
-          }
-          const paymentVerifier = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
+          console.log(order.id);
+          const orderPaymentUpdater = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
             {
-              method: "GET",
+              method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
+              body: JSON.stringify({
+                orderId: order.id,
+                orderPaymentStatus: true,
+                paymentMethod: "Waiting for confirmation.",
+                productId: order.productId,
+                size: order.size,
+              }),
             }
           );
-          const data = await paymentVerifier.json();
-          console.log(data);
-          if (data.captured === false) {
-            const orderPaymentUpdater = await fetch(
-              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  orderId: order._id,
-                  orderPaymentStatus: false,
-                  paymentMethod: "",
-                }),
-              }
-            );
-            const ds = await orderPaymentUpdater.json();
-            console.log(ds);
-          }
-          if (data.captured) {
-            const orderPaymentUpdater = await fetch(
-              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  orderId: order._id,
-                  orderPaymentStatus: data.captured,
-                  paymentMethod: data.method,
-                }),
-              }
-            );
-            const ds = await orderPaymentUpdater.json();
-            console.log(ds);
-          }
+          const ds = await orderPaymentUpdater.json();
+          console.log(ds);
         });
         dispatch({ type: "clearCart" });
 

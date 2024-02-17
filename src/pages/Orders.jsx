@@ -429,7 +429,10 @@ const Orders = () => {
             </HeadingBox>
             {orders.map((ord) => {
               // paymentUpdater(ord);
-              if (ord.paymentStatus !== "completed") {
+              if (
+                ord.paymentStatus !== "completed" &&
+                ord.paymentStatus !== "Waiting for confirmation."
+              ) {
                 return;
               }
               if (ord.deleted) {

@@ -298,7 +298,7 @@ const Profile = () => {
                   }
                 );
                 const data = await reslt.json();
-                alert(data.message);
+                // alert(data.message);
                 console.log(data);
               }}
             >
@@ -311,7 +311,7 @@ const Profile = () => {
             <button
               onClick={async () => {
                 const ot = document.querySelector("#otp").value;
-
+                const em = document.querySelector("#otpEmail").value;
                 const reslt = await fetch(
                   `${process.env.REACT_APP_BASE_URL}/user/verify-otp`,
                   {
@@ -321,11 +321,12 @@ const Profile = () => {
                     },
                     body: JSON.stringify({
                       otpInp: Number(ot),
+                      email: em,
                     }),
                   }
                 );
                 const data = await reslt.json();
-                alert(data.message);
+                // alert(data.message);
                 console.log(data);
               }}
             >

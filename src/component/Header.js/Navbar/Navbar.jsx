@@ -453,6 +453,7 @@ const Navbar = () => {
           <Link to="/">Story</Link>
           {isLoggedIn && <Link to={`/account/${userId}/orders`}>Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
+          {!isLoggedIn && <Link to="/register">Register</Link>}
           {isLoggedIn && (
             <Link
               onClick={() => {
