@@ -279,32 +279,6 @@ const Profile = () => {
             Home / <span>My Account</span>
           </p>
           <h1>My Account</h1>
-          <div>
-            <input type="email" placeholder="email" id="otpEmail" />
-            <button
-              onClick={async () => {
-                const em = document.querySelector("#otpEmail").value;
-
-                const reslt = await fetch(
-                  `${process.env.REACT_APP_BASE_URL}/user/send-email`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      email: em,
-                    }),
-                  }
-                );
-                const data = await reslt.json();
-                // alert(data.message);
-                console.log(data);
-              }}
-            >
-              click to send
-            </button>
-          </div>
 
           <div>
             <input type="number" id="otp" placeholder="otp" />
