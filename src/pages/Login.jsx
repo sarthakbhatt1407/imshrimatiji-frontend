@@ -305,6 +305,7 @@ const Login = () => {
   };
 
   const onChangeHandler = (e) => {
+    setServerErr(false);
     const id = e.target.id;
     const val = e.target.value;
     allFieldChecker();
@@ -328,17 +329,32 @@ const Login = () => {
       return;
     }
     setIsLoading(true);
+    let res;
+    if (showMobile) {
+      res = await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contactNum: inpFields.contactNum,
+          password: inpFields.password,
+        }),
+      });
+    }
+    if (!showMobile) {
+      res = await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: inpFields.email,
+          password: inpFields.password,
+        }),
+      });
+    }
 
-    const res = await fetch(`${process.env.REACT_APP_BASE_URL}/user/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: inpFields.email,
-        password: inpFields.password,
-      }),
-    });
     const data = await res.json();
 
     if (!res.ok) {

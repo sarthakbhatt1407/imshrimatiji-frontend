@@ -370,7 +370,7 @@ const Navbar = () => {
             Account
           </Link>
         )}
-        {linksActive && !isLoggedIn && (
+        {linksActive && isLoggedIn && (
           <Link
             onClick={() => {
               dispatch({ type: "logout" });

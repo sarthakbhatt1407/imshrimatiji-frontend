@@ -16,7 +16,7 @@ const MainBox = styled.footer`
   flex-direction: column;
   gap: 2rem;
   height: fit-content;
-  padding: 3rem 4rem;
+  padding: 3rem 6rem;
   border-top: 1px solid #ebebeb;
   background-color: #f7f7f7;
   width: 100%;

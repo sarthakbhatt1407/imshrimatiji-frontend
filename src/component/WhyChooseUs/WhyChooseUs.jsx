@@ -18,6 +18,12 @@ const MainBox = styled.div`
   gap: 4rem;
   width: 100%;
   overflow-x: hidden;
+  padding: 4rem 0;
+  margin: 2rem 0;
+  @media only screen and (max-width: 1220px) {
+    padding: 0;
+    margin: 0;
+  }
 `;
 
 const ContentBox = styled.div`
@@ -75,7 +81,7 @@ const WhyChooseUs = () => {
     {
       icon: <SecurityOutlined />,
       mainHeading: "Secure Checkout",
-      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-left",
+      ani: window.screen.availWidth > 949 ? "fade-down" : "fade-right",
       secondaryHeading:
         " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec.",
     },
