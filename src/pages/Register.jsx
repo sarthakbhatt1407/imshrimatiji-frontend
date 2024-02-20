@@ -5,6 +5,8 @@ import Footer from "../component/Footer/Footer";
 import AccountBox from "../component/Login/accountBox";
 import { colors } from "../data";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
+import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 
 const OuterBox = styled.div`
   background-color: #f7f7f7;
@@ -16,15 +18,18 @@ const OuterBox = styled.div`
 
 const MainBox = styled.div`
   background-color: white;
-  width: 60vw;
+  width: 55vw;
   box-shadow: 0.1rem 0.1rem 2rem rgba(161, 161, 161, 0.28);
   border-radius: 0.8rem;
   overflow: hidden;
   height: fit-content;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 2fr;
+
   @media only screen and (max-width: 700px) {
-    display: none;
+    /* display: none; */
+    grid-template-columns: 1fr;
+    width: 90vw;
   }
 `;
 
@@ -56,8 +61,6 @@ const RightDivAni = keyframes`
     }
 `;
 const LeftDiv = styled.div`
-  clip-path: circle(70.8% at 28% 50%);
-
   background: rgb(186, 68, 94);
   background: linear-gradient(
     126deg,
@@ -87,6 +90,7 @@ const LeftDiv = styled.div`
   }
   button {
     background-color: transparent;
+    margin: 0 auto;
     border: 1px solid white;
     border-radius: 2rem;
     padding: 1rem 5rem;
@@ -95,9 +99,24 @@ const LeftDiv = styled.div`
     letter-spacing: 0.1rem;
     font-weight: bold;
   }
+  @media only screen and (max-width: 700px) {
+    padding: 2rem 1rem;
+    gap: 1rem;
+    h1 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 1.4rem;
+    }
+    button {
+      padding: 1rem 3rem;
+      font-size: 1.4rem;
+    }
+  }
 `;
 const RightDiv = styled.div`
   margin: 1rem 0;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -108,27 +127,45 @@ const RightDiv = styled.div`
   h2 {
     font-size: 3.2rem;
   }
+  @media only screen and (max-width: 700px) {
+    padding: 2rem;
+  }
 `;
 
 const MobileLogin = styled.div`
   display: none;
 
   @media only screen and (max-width: 700px) {
-    display: block;
+    /* display: block; */
   }
 `;
 
 const EmailVerificationBox = styled.div`
   display: flex;
-  width: 60%;
+  width: 90%;
+  height: 36vh;
+  max-height: 36vh;
   gap: 1rem;
   flex-direction: column;
   align-items: center;
+  position: relative;
+
   p {
     width: 100%;
     color: rgb(221, 57, 57);
-    margin-top: -2rem;
+    margin-top: -1rem;
+    letter-spacing: 0.08rem;
   }
+`;
+const LoaderBox = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 0.6rem;
+  z-index: 2;
+  background-color: #ebeaea53;
 `;
 
 const Input = styled.input`
@@ -171,10 +208,55 @@ const SubmitButton = styled.button`
     filter: brightness(1.03);
   }
 `;
+
+const DisabledBtn = styled.button`
+  width: 100%;
+  max-width: 150px;
+  padding: 10px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 240ms ease-in-out;
+  background: #dbdbdb;
+
+  &:hover {
+    filter: brightness(1.03);
+  }
+`;
+
 const Register = () => {
   const [emailVer, setEmailVer] = useState(true);
   const [showOtp, setShowOtp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [emailErr, setEmailErr] = useState(false);
+  const [nameErr, setNameErr] = useState(false);
+  const [mobileErr, setMobileErr] = useState(false);
+  const [passwordErr, setPasswordErr] = useState(false);
+  const [allValid, setAllValid] = useState(false);
+  const [otpErr, setOtpErr] = useState(false);
+  const [otpText, setOtpText] = useState("");
+  const [serverErr, setServerErr] = useState(false);
+  const [serverTxt, setServerTxt] = useState("");
+  const navigate = useNavigate();
+
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleClick = (newState) => () => {
+    setState({ ...newState, open: true });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
   const defaultFields = {
     fullName: "",
     email: "",
@@ -183,19 +265,76 @@ const Register = () => {
     otp: "",
   };
   const [inpFields, setInpFields] = useState(defaultFields);
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const allFieldChecker = () => {
+    setAllValid(false);
+    const fullName = document.querySelector("#fullName").value;
+    const email = document.querySelector("#email").value;
+    const contactNum = document.querySelector("#contactNum").value;
+    const password = document.querySelector("#password").value;
+    if (fullName.length < 4) {
+      setNameErr(true);
+      return;
+    }
+    if (!validateEmail(email)) {
+      setEmailErr(true);
+      return;
+    }
+
+    if (contactNum.length < 10) {
+      setMobileErr(true);
+      return;
+    }
+    if (password.trim().length < 8) {
+      setPasswordErr(true);
+      return;
+    }
+    if (!nameErr && !emailErr && !mobileErr && !passwordErr) {
+      setAllValid(true);
+      return;
+    }
+    return;
+  };
+  const onBlurHandler = () => {
+    allFieldChecker();
+  };
 
   const onChangeHandler = (e) => {
     const id = e.target.id;
     const val = e.target.value;
+    allFieldChecker();
+    if (id === "fullName") {
+      setNameErr(false);
+    }
+    if (id === "email") {
+      setServerErr(false);
+      setServerTxt("");
+      setEmailErr(false);
+    }
+    if (id === "contactNum") {
+      setMobileErr(false);
+    }
+    if (id === "password") {
+      setPasswordErr(false);
+    }
+    if (id === "otp") {
+      setOtpErr(false);
+    }
     setInpFields({ ...inpFields, [id]: val });
   };
   const onSubmitHandler = async () => {
-    setIsLoading(true);
-    const allInp = document.querySelectorAll(".inputField");
-    for (const ele of allInp) {
-      ele.disabled = true;
+    if (!allValid) {
+      return;
     }
-    console.log(inpFields);
+    setIsLoading(true);
+
     const reslt = await fetch(
       `${process.env.REACT_APP_BASE_URL}/user/send-email`,
       {
@@ -209,9 +348,17 @@ const Register = () => {
       }
     );
     const data = await reslt.json();
+    if (!reslt.ok) {
+      setServerErr(true);
+      setServerTxt(data.message);
+    }
     // alert(data.message);
     console.log(data);
     if (data.sent) {
+      const allInp = document.querySelectorAll(".inputField");
+      for (const ele of allInp) {
+        ele.disabled = true;
+      }
       setShowOtp(true);
     }
     setIsLoading(false);
@@ -235,6 +382,10 @@ const Register = () => {
     const data = await reslt.json();
     // alert(data.message);
     console.log(data);
+    if (data.valid === false) {
+      setOtpText(data.message);
+      setOtpErr(true);
+    }
     if (data.valid) {
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/user/signup`, {
         method: "POST",
@@ -250,6 +401,12 @@ const Register = () => {
       });
       const resData = await res.json();
       console.log(resData);
+      if (resData.success) {
+        setState({ ...state, open: true });
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
     }
     setIsLoading(false);
   };
@@ -257,7 +414,23 @@ const Register = () => {
   return (
     <>
       <Navbar />
+      <Snackbar
+        open={open}
+        anchorOrigin={{ vertical, horizontal }}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%", top: 0, fontSize: "1.6rem" }}
+        >
+          Sign up successfull. Kindly login now
+        </Alert>
+      </Snackbar>
       <OuterBox>
+        {" "}
         <MainBox>
           <LeftDiv>
             {/* <img src={logo} alt="" /> */}
@@ -265,12 +438,23 @@ const Register = () => {
             <p>
               To keep connected with us please login with your personal info.
             </p>
-            <button>Sign In</button>
+            <button
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              Sign In
+            </button>
           </LeftDiv>
           <RightDiv>
             <h2>Create Account</h2>
             {emailVer && (
               <EmailVerificationBox>
+                {isLoading && (
+                  <LoaderBox>
+                    <CompLoader />
+                  </LoaderBox>
+                )}
                 <Input
                   type="text"
                   name="fullName"
@@ -279,8 +463,16 @@ const Register = () => {
                   placeholder="Full Name"
                   onChange={onChangeHandler}
                   value={inpFields.fullName}
+                  onBlur={onBlurHandler}
+                  style={{
+                    border: `${
+                      nameErr
+                        ? "1px solid #d72020"
+                        : "1px solid rgba(166, 166, 166, 0.3)"
+                    }`,
+                  }}
                 />
-
+                {nameErr && <p>Invalid Name</p>}
                 <Input
                   type="text"
                   className="inputField"
@@ -288,28 +480,56 @@ const Register = () => {
                   id="email"
                   onChange={onChangeHandler}
                   placeholder="Email"
+                  onBlur={onBlurHandler}
                   value={inpFields.email}
+                  style={{
+                    border: `${
+                      emailErr
+                        ? "1px solid #d72020"
+                        : "1px solid rgba(166, 166, 166, 0.3)"
+                    }`,
+                  }}
                 />
-                {/* <p>Invalid Name</p> */}
+                {emailErr && <p>Invalid Email</p>}
                 <Input
                   type="number"
                   name=""
                   className="inputField"
                   id="contactNum"
+                  onBlur={onBlurHandler}
                   onChange={onChangeHandler}
                   placeholder="Mobile number"
                   value={inpFields.contactNum}
-                />
+                  style={{
+                    border: `${
+                      mobileErr
+                        ? "1px solid #d72020"
+                        : "1px solid rgba(166, 166, 166, 0.3)"
+                    }`,
+                  }}
+                />{" "}
+                {mobileErr && <p>Invalid Contact Number</p>}
                 <Input
                   type="password"
                   name=""
                   className="inputField"
                   id="password"
+                  onBlur={onBlurHandler}
                   value={inpFields.password}
                   onChange={onChangeHandler}
                   placeholder="Password"
-                />
-
+                  style={{
+                    border: `${
+                      passwordErr
+                        ? "1px solid #d72020"
+                        : "1px solid rgba(166, 166, 166, 0.3)"
+                    }`,
+                  }}
+                />{" "}
+                {passwordErr && (
+                  <p>Password is too short (minimun 8 charcters.)</p>
+                )}
+                {serverErr && <p>{serverTxt}</p>}
                 {showOtp && (
                   <>
                     <Input
@@ -320,27 +540,29 @@ const Register = () => {
                       placeholder="Enter one time password"
                       data-aos="zoom-in"
                       value={inpFields.otp}
+                      style={{
+                        border: `${
+                          otpErr
+                            ? "1px solid #d72020"
+                            : "1px solid rgba(166, 166, 166, 0.3)"
+                        }`,
+                      }}
                     />
+                    {otpErr && <p>{otpText}</p>}
                     <span data-aos="zoom-in">Resend OTP</span>
                   </>
                 )}
-
                 {showOtp && (
                   <SubmitButton onClick={otpVerifier}>Submit</SubmitButton>
                 )}
-                {!showOtp && (
-                  <SubmitButton onClick={onSubmitHandler}>
-                    {isLoading && <CompLoader />}
-                    {!isLoading && "Submit"}
-                  </SubmitButton>
+                {!showOtp && allValid && (
+                  <SubmitButton onClick={onSubmitHandler}>Submit</SubmitButton>
                 )}
+                {!showOtp && !allValid && <DisabledBtn>Submit</DisabledBtn>}
               </EmailVerificationBox>
             )}
           </RightDiv>
         </MainBox>
-        <MobileLogin>
-          <AccountBox />
-        </MobileLogin>
       </OuterBox>
       <Footer />
     </>
