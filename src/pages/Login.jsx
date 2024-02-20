@@ -409,7 +409,7 @@ const Login = () => {
         <MainBox>
           <LeftDiv>
             {/* <img src={logo} alt="" /> */}
-            <h1>New Here?</h1>
+            <h1>New here?</h1>
             <p>
               To get started with your shopping experience, please create an
               account.
