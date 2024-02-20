@@ -360,17 +360,17 @@ const Navbar = () => {
             Story
           </Link>
         )}
-        {linksActive && (
+        {linksActive && isLoggedIn && (
           <Link onClick={menuButtonHandler} to={`/account/${userId}/orders`}>
             Orders
           </Link>
         )}
-        {linksActive && (
+        {linksActive && isLoggedIn && (
           <Link onClick={menuButtonHandler} to={`/account/${userId}`}>
             Account
           </Link>
         )}
-        {linksActive && (
+        {linksActive && !isLoggedIn && (
           <Link
             onClick={() => {
               dispatch({ type: "logout" });
@@ -442,12 +442,14 @@ const Navbar = () => {
           >
             Suit
           </Link>
-          <Link
-            className={path === "/profile" ? "activeLink" : "nonActiveLink"}
-            to={`/account/${userId}`}
-          >
-            Account
-          </Link>
+          {isLoggedIn && (
+            <Link
+              className={path === "/profile" ? "activeLink" : "nonActiveLink"}
+              to={`/account/${userId}`}
+            >
+              Account
+            </Link>
+          )}
         </PageLinksDiv>
         <UserControlsDiv>
           <Link to="/">Story</Link>
