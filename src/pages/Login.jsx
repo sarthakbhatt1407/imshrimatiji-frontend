@@ -228,6 +228,9 @@ const DisabledBtn = styled.button`
     filter: brightness(1.03);
   }
 `;
+const Span = styled.span`
+  text-transform: capitalize;
+`;
 
 const Login = () => {
   const [emailVer, setEmailVer] = useState(true);
@@ -242,6 +245,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [showMobile, setShowMobile] = useState(false);
   const dispatch = useDispatch();
+  const [name, setName] = useState("");
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -294,7 +298,11 @@ const Login = () => {
       setPasswordErr(true);
       return;
     }
-    if (!emailErr && !mobileErr && !passwordErr) {
+    if (!emailErr && !passwordErr) {
+      setAllValid(true);
+      return;
+    }
+    if (!mobileErr && !passwordErr) {
       setAllValid(true);
       return;
     }
@@ -365,7 +373,9 @@ const Login = () => {
     // alert(data.message);
     console.log(data);
     if (data.success) {
+      setName(data.user.name);
       setState({ ...state, open: true });
+
       setTimeout(() => {
         dispatch({ type: "log in", data: { ...data } });
         navigate("/");
@@ -390,7 +400,8 @@ const Login = () => {
           variant="filled"
           sx={{ width: "100%", top: 0, fontSize: "1.6rem" }}
         >
-          Log in successfull. We're thrilled to see you again.
+          Log in successfull. We're thrilled to see you again{" "}
+          <Span>{name}</Span>.
         </Alert>
       </Snackbar>
       <OuterBox>
