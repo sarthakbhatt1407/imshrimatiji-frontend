@@ -231,6 +231,16 @@ const AddressTag = styled.div`
   font-weight: 500;
   width: fit-content;
 `;
+const EmptyAddressBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30vh;
+  font-size: 1.9rem;
+  color: #d1d1d1;
+  letter-spacing: 0.1rem;
+`;
 
 const Profile = () => {
   const [currentActive, setCurrentActive] = useState("mydetails");
@@ -280,33 +290,6 @@ const Profile = () => {
           </p>
           <h1>My Account</h1>
 
-          <div>
-            <input type="number" id="otp" placeholder="otp" />
-            <button
-              onClick={async () => {
-                const ot = document.querySelector("#otp").value;
-                const em = document.querySelector("#otpEmail").value;
-                const reslt = await fetch(
-                  `${process.env.REACT_APP_BASE_URL}/user/verify-otp`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      otpInp: Number(ot),
-                      email: em,
-                    }),
-                  }
-                );
-                const data = await reslt.json();
-                // alert(data.message);
-                console.log(data);
-              }}
-            >
-              send
-            </button>
-          </div>
           <LinksAndDetailsBox>
             <LinksBox>
               {currentActive === "mydetails" && (
@@ -401,6 +384,9 @@ const Profile = () => {
               {currentActive === "myaddress" && userAddress && (
                 <MyAddressBox data-aos="fade-up" data-aos-once="true">
                   <h3>My address</h3>
+                  {userAddress.length === 0 && (
+                    <EmptyAddressBox>No address saved yet.</EmptyAddressBox>
+                  )}
                   <AllAddressBox>
                     {userAddress &&
                       userAddress.map((address) => {

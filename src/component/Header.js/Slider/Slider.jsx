@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import slide1 from "../../../assets/images/slider-image/1.webp";
 
 const SliderBox = styled.div`
@@ -131,6 +131,7 @@ const AddiSpan = styled.span`
 `;
 
 const Slider = () => {
+  const navigate = useNavigate();
   const headerInfo = {
     event: "Republic Day Sale",
     discount: "Up to 50% off",
@@ -156,7 +157,11 @@ const Slider = () => {
                   <AddiSpan data-aos="fade-right">
                     {headerInfo.additional}
                   </AddiSpan>
-                  <button data-aos="fade-in">Shop Now</button>
+                  <Link to={`/product-category/all-products`}>
+                    <button data-aos="fade-in" onClick={() => {}}>
+                      Shop Now
+                    </button>
+                  </Link>
                 </div>
               </TextBox>
             </SlideBox>
