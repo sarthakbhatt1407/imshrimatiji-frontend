@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import styled from "styled-components";
 import ImagesSLider from "../component/UI/ImagesSlider";
@@ -447,7 +447,7 @@ const PinCodeInnerBox = styled.div`
   align-items: center;
   border-radius: 0.5rem;
   border: 1px solid #e1e1e1;
-  width: 50%;
+  width: 60%;
   @media only screen and (max-width: 949px) {
     width: 100%;
   }
@@ -552,9 +552,10 @@ const ProductPage = (props) => {
   const [error, setError] = useState(false);
   const [cartError, setCartError] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [maxQ, setMAxQ] = useState(false);
   const dispatch = useDispatch();
   let counter = 0;
-
+  const navigate = useNavigate();
   const getSelectValueHandler = () => {
     setError(false);
     const e = document.getElementById("searchFilter");
@@ -616,6 +617,10 @@ const ProductPage = (props) => {
         `${process.env.REACT_APP_BASE_URL}/product/${productId}`
       );
       const data = await res.json();
+      if (!data.product) {
+        navigate("/not-found");
+        return;
+      }
       setProduct(data.product);
 
       setSelectedClr(data.product.color);
@@ -708,6 +713,17 @@ const ProductPage = (props) => {
         return item.productId === obj.productId;
       }
     });
+    if (
+      alreadyFound &&
+      Number(alreadyFound.quantity) + Number(obj.quantity) > 2
+    ) {
+      setMAxQ(true);
+      setIsLoading(false);
+      setTimeout(() => {
+        setMAxQ(false);
+      }, 1500);
+      return;
+    }
 
     if (alreadyFound) {
       const stockVerifier = await fetch(
@@ -996,6 +1012,11 @@ const ProductPage = (props) => {
                         Added to cart
                       </AddedToCart>
                     )}
+                    {maxQ && (
+                      <AddedToCart data-aos="fade-right">
+                        Max quantity reached.
+                      </AddedToCart>
+                    )}
                     {error && <ErrDiv data-aos="fade-up">Select Size</ErrDiv>}
                     {cartError && (
                       <ErrDiv data-aos="fade-up">
@@ -1192,39 +1213,51 @@ const ProductPage = (props) => {
                     </RelatedProductDiv>
                   </CheckOutBox> */}
 
-                  <CheckOutBox>
-                    <h4>Related Products</h4>
-                  </CheckOutBox>
-                  <MainBoxProducts>
-                    <ProductsBox id="productBox">
-                      {!isLoading &&
-                        products.length > 0 &&
-                        products.map((item) => {
-                          if (
-                            product.id !== item.id &&
-                            item.category === product.category &&
-                            counter < 4
-                          ) {
-                            counter++;
-                            const colors = item.color.split(",");
-                            const image = item.images.split(" ")[0];
-                            return (
-                              <Link
-                                to={`/product/${item.category}/${item.slug}/${item.id}`}
-                                key={item.id + item.title}
-                                state={{ productId: `${item.id}` }}
-                              >
-                                <FeatureProductBox
-                                  key={item.title}
-                                  data={{ ...item, colors: colors, img: image }}
-                                />
-                              </Link>
-                            );
-                          }
-                          return <></>;
-                        })}
-                    </ProductsBox>
-                  </MainBoxProducts>
+                  {!isLoading &&
+                    products.length > 1 &&
+                    products.filter((item) => {
+                      return item.category === product.category;
+                    }).length > 1 && (
+                      <>
+                        <CheckOutBox>
+                          <h4>Related Products</h4>
+                        </CheckOutBox>
+                        <MainBoxProducts>
+                          <ProductsBox id="productBox">
+                            {!isLoading &&
+                              products.length > 0 &&
+                              products.map((item) => {
+                                if (
+                                  product.id !== item.id &&
+                                  item.category === product.category &&
+                                  counter < 4
+                                ) {
+                                  counter++;
+                                  const colors = item.color.split(",");
+                                  const image = item.images.split(" ")[0];
+                                  return (
+                                    <Link
+                                      to={`/product/${item.category}/${item.slug}/${item.id}`}
+                                      key={item.id + item.title}
+                                      state={{ productId: `${item.id}` }}
+                                    >
+                                      <FeatureProductBox
+                                        key={item.title}
+                                        data={{
+                                          ...item,
+                                          colors: colors,
+                                          img: image,
+                                        }}
+                                      />
+                                    </Link>
+                                  );
+                                }
+                                return <></>;
+                              })}
+                          </ProductsBox>
+                        </MainBoxProducts>
+                      </>
+                    )}
                 </RelatedProductBox>
               </>
             )}

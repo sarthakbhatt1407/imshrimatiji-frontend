@@ -18,7 +18,7 @@ const OuterBox = styled.div`
 
 const MainBox = styled.div`
   background-color: white;
-  width: 55vw;
+  width: 60vw;
   box-shadow: 0.1rem 0.1rem 2rem rgba(161, 161, 161, 0.28);
   border-radius: 0.8rem;
   overflow: hidden;
@@ -76,7 +76,7 @@ const LeftDiv = styled.div`
   color: white;
   padding: 0 4rem;
   transition: all 1s;
-  animation: ${LeftDivAni} 1s;
+  animation: ${LeftDivAni} 0.6s;
   word-wrap: break-word;
   h1 {
     letter-spacing: 0.09rem;
@@ -121,7 +121,7 @@ const RightDiv = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  animation: ${RightDivAni} 1s;
+  animation: ${RightDivAni} 0.6s;
   padding: 4rem;
   h2 {
     font-size: 3.2rem;

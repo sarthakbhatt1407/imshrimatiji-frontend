@@ -16,6 +16,7 @@ const OuterBox = styled.div`
   margin-top: -2rem;
   background-color: #f3f3f3;
   padding: 4rem 2rem;
+  height: fit-content;
 `;
 
 const MainBox = styled.div`
@@ -260,13 +261,21 @@ const NoOrdersFoundBox = styled.div`
   align-items: center;
   font-size: 2.5rem;
   letter-spacing: 0.2rem;
-  text-transform: capitalize;
+  color: #cacaca;
+`;
+const Span = styled.span`
+  font-size: 2.5rem;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 0.2rem;
   color: #cacaca;
 `;
 
 const Orders = () => {
   const { userId } = useParams();
-
+  const [nodOrders, SetNoOrders] = useState(true);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -285,6 +294,7 @@ const Orders = () => {
       }
       data.orders.map(async (order) => {
         if (order.paymentStatus === "completed" && order.deleted === false) {
+          SetNoOrders(false);
           return;
         } else {
           const paymentVerifier = await fetch(
@@ -427,6 +437,7 @@ const Orders = () => {
                 <span>orders and track them here</span>
               </p>
             </HeadingBox>
+            {!isLoading && nodOrders && <Span>No orders found ...</Span>}
             {orders.map((ord) => {
               // paymentUpdater(ord);
               if (

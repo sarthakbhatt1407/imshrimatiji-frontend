@@ -264,6 +264,10 @@ const Profile = () => {
         }
       );
       const data = await reslt.json();
+      if (data.message === "No user found") {
+        navigate("/not-found");
+        return;
+      }
       console.log(data);
       setUser(data);
       setUserAddress(data.address);

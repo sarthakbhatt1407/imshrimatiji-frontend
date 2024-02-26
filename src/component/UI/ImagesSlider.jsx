@@ -8,7 +8,7 @@ const OuterBox = styled.div`
 
 const MainBox = styled.div`
   width: 100%;
-  height: 80vh;
+  height: 80%;
   margin: auto;
   position: relative;
   overflow: scroll;
@@ -26,8 +26,7 @@ const MainBox = styled.div`
 `;
 
 const ImgBox = styled.div`
-  background-image: url(${(props) =>
-    `${process.env.REACT_APP_BASE_URL}/${props.img}`});
+  background-image: url(${(props) => props.img});
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -39,14 +38,16 @@ const ImgBox = styled.div`
 const ArrowLeft = styled.button`
   text-align: center;
   border: none;
-  background-color: #62626225;
+  background-color: #3d3d3d96;
+
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
   position: absolute;
-  top: 40%;
+  top: 37%;
   left: 0.5%;
   font-size: 1.5rem;
+  color: white;
   svg {
     transform: scale(1.5);
   }
@@ -54,14 +55,15 @@ const ArrowLeft = styled.button`
 const ArrowRight = styled.button`
   text-align: center;
   border: none;
-  background-color: #62626225;
+  background-color: #3d3d3d96;
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
+  color: white;
   position: absolute;
   right: 0.5%;
   font-size: 1.5rem;
-  top: 40%;
+  top: 37%;
   svg {
     transform: scale(1.5);
   }
@@ -119,9 +121,16 @@ const ImagesSlider = (props) => {
   };
   return (
     <OuterBox>
-      <MainBox data-aos="fade-right">
+      {/* data-aos="fade-right" */}
+      <MainBox>
         {imgSlides.map((item) => {
-          return <ImgBox key={item} img={item} className="image"></ImgBox>;
+          return (
+            <ImgBox
+              key={item}
+              img={`${process.env.REACT_APP_BASE_URL}/${item}`}
+              className="image"
+            ></ImgBox>
+          );
         })}
       </MainBox>
       <ArrowLeft onClick={prev}>

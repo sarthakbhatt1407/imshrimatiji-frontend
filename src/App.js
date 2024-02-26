@@ -14,6 +14,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import Profile from "./pages/Profile";
 import CheckoutPage from "./pages/CheckoutPage";
 import Register from "./pages/Register";
+import Error from "./pages/Error";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -25,7 +26,9 @@ const App = () => {
     if (localStr) {
       dispatch({ type: "reload", data: { ...localStr } });
     }
-    AOS.init({});
+    AOS.init({
+      once: true,
+    });
     const aosRefresh = setInterval(() => {
       AOS.refresh();
     }, 500);
@@ -37,7 +40,8 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />{" "}
+        <Route path="/not-found" exact element={<Error />} />
         {isLoggedIn && <Route path="/login" element={<Navigate to="/" />} />}
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         {isLoggedIn && <Route path="/login" element={<Login />} />}
@@ -62,6 +66,7 @@ const App = () => {
           exact
           element={<Products />}
         />
+        <Route path="*" exact element={<Error />} />
       </Routes>
     </>
   );

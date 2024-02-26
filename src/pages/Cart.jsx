@@ -11,8 +11,8 @@ moment().format();
 const MainBox = styled.div`
   height: fit-content;
   padding: 4rem 4rem;
-  width: 80%;
-  margin: auto;
+  width: 90%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -212,6 +212,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     // const unloadCallback = (event) => {
     //   event.preventDefault();
     //   event.returnValue = "";

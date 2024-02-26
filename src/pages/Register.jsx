@@ -18,7 +18,7 @@ const OuterBox = styled.div`
 
 const MainBox = styled.div`
   background-color: white;
-  width: 55vw;
+  width: 60vw;
   box-shadow: 0.1rem 0.1rem 2rem rgba(161, 161, 161, 0.28);
   border-radius: 0.8rem;
   overflow: hidden;
@@ -76,7 +76,7 @@ const LeftDiv = styled.div`
   color: white;
   padding: 0 4rem;
   transition: all 1s;
-  animation: ${LeftDivAni} 1s;
+  animation: ${LeftDivAni} 0.6s;
   word-wrap: break-word;
   h1 {
     letter-spacing: 0.09rem;
@@ -116,13 +116,13 @@ const LeftDiv = styled.div`
 `;
 const RightDiv = styled.div`
   margin: 1rem 0;
-
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  animation: ${RightDivAni} 1s;
+  animation: ${RightDivAni} 0.6s;
   padding: 4rem;
   h2 {
     font-size: 3.2rem;
@@ -143,8 +143,8 @@ const MobileLogin = styled.div`
 const EmailVerificationBox = styled.div`
   display: flex;
   width: 90%;
-  height: 36vh;
-  max-height: 36vh;
+  height: fit-content;
+  /* max-height: 36vh; */
   gap: 1rem;
   flex-direction: column;
   align-items: center;
@@ -155,6 +155,9 @@ const EmailVerificationBox = styled.div`
     color: rgb(221, 57, 57);
     margin-top: -1rem;
     letter-spacing: 0.08rem;
+  }
+  span {
+    cursor: pointer;
   }
 `;
 const LoaderBox = styled.div`
@@ -240,6 +243,7 @@ const Register = () => {
   const [otpText, setOtpText] = useState("");
   const [serverErr, setServerErr] = useState(false);
   const [serverTxt, setServerTxt] = useState("");
+  const [resendShow, setResendShow] = useState(false);
   const navigate = useNavigate();
 
   const [state, setState] = React.useState({
@@ -273,43 +277,71 @@ const Register = () => {
       );
   };
 
-  const allFieldChecker = () => {
+  const allFieldChecker = (id) => {
     setAllValid(false);
     const fullName = document.querySelector("#fullName").value;
     const email = document.querySelector("#email").value;
     const contactNum = document.querySelector("#contactNum").value;
     const password = document.querySelector("#password").value;
-    if (fullName.length < 4) {
-      setNameErr(true);
-      return;
-    }
-    if (!validateEmail(email)) {
-      setEmailErr(true);
-      return;
-    }
+    // if (fullName.length < 4) {
+    //   setNameErr(true);
+    //   return;
+    // }
+    // if (!validateEmail(email)) {
+    //   setEmailErr(true);
+    //   return;
+    // }
 
-    if (contactNum.length < 10) {
-      setMobileErr(true);
-      return;
-    }
-    if (password.trim().length < 8) {
-      setPasswordErr(true);
-      return;
-    }
-    if (!nameErr && !emailErr && !mobileErr && !passwordErr) {
+    // if (contactNum.length < 10) {
+    //   setMobileErr(true);
+    //   return;
+    // }
+    // if (password.trim().length < 8) {
+    //   setPasswordErr(true);
+    //   return;
+    // }
+    if (
+      fullName.length > 4 &&
+      validateEmail(email) &&
+      contactNum.length === 10 &&
+      password.trim().length >= 8
+    ) {
       setAllValid(true);
       return;
     }
     return;
   };
-  const onBlurHandler = () => {
-    allFieldChecker();
+  const onBlurHandler = (e) => {
+    const id = e.target.id;
+    const fullName = document.querySelector("#fullName").value;
+    const email = document.querySelector("#email").value;
+    const contactNum = document.querySelector("#contactNum").value;
+    const password = document.querySelector("#password").value;
+    if (id === "fullName" && fullName.length < 4) {
+      setNameErr(true);
+      return;
+    }
+    if (id === "email" && !validateEmail(email)) {
+      setEmailErr(true);
+      return;
+    }
+
+    if (id === "contactNum" && contactNum.length < 10) {
+      setMobileErr(true);
+      return;
+    }
+    if (id === "password" && password.trim().length < 8) {
+      setPasswordErr(true);
+      return;
+    }
+
+    // allFieldChecker();
   };
 
   const onChangeHandler = (e) => {
     const id = e.target.id;
     const val = e.target.value;
-    allFieldChecker();
+    allFieldChecker(id);
     if (id === "fullName") {
       setNameErr(false);
     }
@@ -328,6 +360,24 @@ const Register = () => {
       setOtpErr(false);
     }
     setInpFields({ ...inpFields, [id]: val });
+  };
+
+  const resendOtp = async () => {
+    setIsLoading(true);
+    const reslt = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/user/send-email`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: inpFields.email,
+        }),
+      }
+    );
+    const data = await reslt.json();
+    setIsLoading(false);
   };
   const onSubmitHandler = async () => {
     if (!allValid) {
@@ -549,7 +599,9 @@ const Register = () => {
                       }}
                     />
                     {otpErr && <p>{otpText}</p>}
-                    <span data-aos="zoom-in">Resend OTP</span>
+                    <span data-aos="zoom-in" onClick={resendOtp}>
+                      Resend OTP
+                    </span>
                   </>
                 )}
                 {showOtp && (

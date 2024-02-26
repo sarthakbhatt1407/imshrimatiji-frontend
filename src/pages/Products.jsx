@@ -148,8 +148,8 @@ const ProductsDiv = styled.div`
   @media only screen and (max-width: 1099px) {
     grid-template-columns: repeat(2, 1fr);
     img {
-      width: 14rem;
-      height: 20rem;
+      width: 13rem;
+      height: 17rem;
     }
     h3 {
       font-size: 1.9rem;
@@ -192,6 +192,7 @@ const Products = (props) => {
   const path = useParams().category;
   const [isLoading, setIsLoading] = useState(true);
   const [allProducts, setAllProducts] = useState(null);
+  const [backupArr, setBackupArr] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState(null);
   const fetcher = async () => {
     if (path === "all-products") {
@@ -199,6 +200,8 @@ const Products = (props) => {
         `${process.env.REACT_APP_BASE_URL}/product/all-items`
       );
       const dataProducts = await resProducts.json();
+
+      setBackupArr(dataProducts.products);
       //
       setAllProducts(dataProducts.products);
       setFilteredProducts(dataProducts.products.reverse());
@@ -214,12 +217,14 @@ const Products = (props) => {
         }
       );
       const data = await res.json();
+      setBackupArr(data.products);
       setAllProducts(data.products);
       setFilteredProducts(data.products.reverse());
     }
 
     setIsLoading(false);
   };
+
   useEffect(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     fetcher();
@@ -233,6 +238,25 @@ const Products = (props) => {
       return item.title.toLowerCase().includes(val.toLowerCase());
     });
     setFilteredProducts(arr);
+  };
+  const getSelectValueHandler = () => {
+    const e = document.getElementById("searchFilter");
+    const text = e.options[e.selectedIndex].text.split(":")[1].trim();
+    let arr = allProducts;
+
+    if (text === "popularity") {
+      fetcher();
+    }
+    if (text === "low to high") {
+      const updatedArr = arr.sort((a, b) => a.price - b.price);
+      console.log(arr);
+      setFilteredProducts([...updatedArr]);
+    }
+    if (text === "high to low") {
+      let updatedArr = arr.sort((a, b) => a.price + b.price);
+      updatedArr.reverse();
+      setFilteredProducts([...updatedArr]);
+    }
   };
 
   return (
@@ -256,7 +280,11 @@ const Products = (props) => {
                   placeholder="Search products..."
                   onChange={onChangeHandler}
                 />
-                <Select name="searchFilter" id="searchFilter">
+                <Select
+                  name="searchFilter"
+                  id="searchFilter"
+                  onChange={getSelectValueHandler}
+                >
                   <option value="default" defaultValue>
                     Sort by price: popularity
                   </option>
@@ -271,7 +299,6 @@ const Products = (props) => {
                 <ProductsDiv>
                   {allProducts &&
                     filteredProducts.map((item) => {
-                      console.log(item);
                       const colors = item.color.split(",");
                       const image = item.images.split(" ")[0];
 
