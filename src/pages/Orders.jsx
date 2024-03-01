@@ -439,7 +439,6 @@ const Orders = () => {
             </HeadingBox>
             {!isLoading && nodOrders && <Span>No orders found ...</Span>}
             {orders.map((ord) => {
-              // paymentUpdater(ord);
               if (
                 ord.paymentStatus !== "completed" &&
                 ord.paymentStatus !== "Waiting for confirmation."
@@ -491,10 +490,7 @@ const Orders = () => {
                       to={`/product/${ord.category}/${ord.slug}/${ord.productId}`}
                     >
                       <ProductImgtextInfoBox>
-                        <img
-                          src={`${process.env.REACT_APP_BASE_URL}/${ord.image}`}
-                          alt=""
-                        />
+                        <img src={ord.image} alt="" />
                         <ProductTextInfo>
                           <h5>{ord.orderTitle}</h5>
                           <p>
@@ -541,7 +537,7 @@ const Orders = () => {
                         )}
                       {ord.tracking.length > 0 &&
                         ord.paymentStatus === "completed" && (
-                          <Link to="/">
+                          <Link to={`/account/${userId}/orders/${ord.id}`}>
                             <button
                               style={{
                                 backgroundColor: "#ff9800",

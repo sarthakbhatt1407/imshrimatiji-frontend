@@ -316,10 +316,7 @@ const OrderDetailsPage = () => {
                   to={`/product/${order.category}/${order.slug}/${order.productId}`}
                 >
                   <ProductImgtextInfoBox>
-                    <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${order.image}`}
-                      alt=""
-                    />
+                    <img src={order.image} alt="" />
                     <ProductTextInfo>
                       <h4>{order.orderTitle}</h4>
                       <p>

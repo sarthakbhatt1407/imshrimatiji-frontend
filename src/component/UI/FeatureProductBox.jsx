@@ -70,7 +70,7 @@ const FeatureProductBox = (props) => {
   return (
     <MainBox data-aos="fade-up">
       <ImgBox>
-        <img src={`${process.env.REACT_APP_BASE_URL}/${img}`} alt="" />
+        <img src={img} alt="" />
       </ImgBox>
       <TextBox>
         <h3>

@@ -60,7 +60,7 @@ const CategoryBox = (props) => {
 
   return (
     <CategoryBoxDiv data-aos={data}>
-      <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" />
+      <img src={image} alt="" />
       <span>
         <b>{title}</b>
         <i>6 Products</i>

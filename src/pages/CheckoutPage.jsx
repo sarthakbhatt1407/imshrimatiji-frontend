@@ -878,10 +878,7 @@ const CheckoutPage = () => {
                         state={{ productId: `${item.productId}` }}
                       >
                         <ProductImgTextBox>
-                          <img
-                            src={`${process.env.REACT_APP_BASE_URL}/${item.image}`}
-                            alt=""
-                          />
+                          <img src={item.image} alt="" />
                           <p>
                             <div>
                               <span>{item.title} </span>

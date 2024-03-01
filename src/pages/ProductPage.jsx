@@ -1095,10 +1095,7 @@ const ProductPage = (props) => {
                             return (
                               <>
                                 <ImgBox key={ind + img} data-aos="fade-left">
-                                  <img
-                                    src={`${process.env.REACT_APP_BASE_URL}/${img}`}
-                                    alt=""
-                                  />
+                                  <img src={img} alt="" />
                                 </ImgBox>
                                 <TextBox
                                   key={ind + descData[ind].heading}
@@ -1124,10 +1121,7 @@ const ProductPage = (props) => {
                                   <p>{descData[ind].des}</p>
                                 </TextBox>
                                 <ImgBox key={ind + img} data-aos="fade-right">
-                                  <img
-                                    src={`${process.env.REACT_APP_BASE_URL}/${img}`}
-                                    alt=""
-                                  />
+                                  <img src={img} alt="" />
                                 </ImgBox>
                               </>
                             );
@@ -1146,10 +1140,7 @@ const ProductPage = (props) => {
                           return (
                             <>
                               <ImgBox key={ind + img} data-aos="fade-right">
-                                <img
-                                  src={`${process.env.REACT_APP_BASE_URL}/${img}`}
-                                  alt=""
-                                />
+                                <img src={img} alt="" />
                               </ImgBox>
                               <TextBox
                                 key={ind + descData[ind].heading}

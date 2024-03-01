@@ -124,13 +124,7 @@ const ImagesSlider = (props) => {
       {/* data-aos="fade-right" */}
       <MainBox>
         {imgSlides.map((item) => {
-          return (
-            <ImgBox
-              key={item}
-              img={`${process.env.REACT_APP_BASE_URL}/${item}`}
-              className="image"
-            ></ImgBox>
-          );
+          return <ImgBox key={item} img={item} className="image"></ImgBox>;
         })}
       </MainBox>
       <ArrowLeft onClick={prev}>
