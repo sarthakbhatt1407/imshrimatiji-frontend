@@ -279,7 +279,7 @@ const Span = styled.span`
 
 const Orders = () => {
   const { userId } = useParams();
-  const [nodOrders, setNoOrders] = useState(false);
+  const [nodOrders, setNoOrders] = useState(true);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -300,6 +300,7 @@ const Orders = () => {
       }
       data.orders.map(async (order) => {
         if (order.paymentStatus === "completed" && order.deleted === false) {
+          setNoOrders(false);
           return;
         } else {
           const paymentVerifier = await fetch(

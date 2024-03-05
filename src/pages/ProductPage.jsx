@@ -984,11 +984,14 @@ const ProductPage = (props) => {
                             ;
                             {product.stock.map((i) => {
                               for (const k in i) {
-                                return (
-                                  <Option key={k} value={k}>
-                                    Size : {k}
-                                  </Option>
-                                );
+                                if (Number(i[k]) > 0) {
+                                  return (
+                                    <Option key={k} value={k}>
+                                      Size : {k}
+                                    </Option>
+                                  );
+                                }
+                                return <></>;
                               }
                             })}
                           </Select>
