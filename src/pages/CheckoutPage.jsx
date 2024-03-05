@@ -294,7 +294,7 @@ const CheckoutPage = () => {
       if (add.addressId === value) {
         console.log(add);
         setInpFields({ ...add });
-        if (!inpFields.fullName.trim().length < 4) {
+        if (!(inpFields.fullName.trim().length < 4)) {
           const ele = document.querySelector("#fullName");
           ele.style.border = "1px solid #ccc";
         }
@@ -307,8 +307,6 @@ const CheckoutPage = () => {
           ele.style.border = "1px solid #ccc";
         }
         if (!inpFields.cityPincode.length < 6) {
-          console.log("hi");
-          setDeliveryAvailable(false);
           const ele = document.querySelector("#cityPincode");
           ele.style.border = "1px solid #ccc";
           const fetcher = async () => {
@@ -424,7 +422,7 @@ const CheckoutPage = () => {
       setErr(true);
       return;
     }
-    if (inpFields.addressLine1.trim().length < 31) {
+    if (inpFields.addressLine1.trim().length < 15) {
       const ele = document.querySelector("#addressLine1");
       ele.style.border = "1px solid red";
       setErr(true);
@@ -708,13 +706,13 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                   <div className="form-group">
-                    {err && inpFields.addressLine1.trim().length < 31 && (
+                    {err && inpFields.addressLine1.trim().length < 16 && (
                       <p
                         data-aos="fade-up"
                         style={{ color: "red" }}
                         className="col-sm-offset-2 col-sm-10 help-block"
                       >
-                        Adrress length should be greater than 30 characters
+                        Adrress length should be greater than 15 characters
                       </p>
                     )}
                     <label

@@ -302,7 +302,6 @@ const Orders = () => {
         if (order.paymentStatus === "completed" && order.deleted === false) {
           return;
         } else {
-          setNoOrders(true);
           const paymentVerifier = await fetch(
             `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
             {
@@ -313,7 +312,6 @@ const Orders = () => {
             }
           );
           const data = await paymentVerifier.json();
-          console.log(data);
 
           if (data.captured === false) {
             const orderPaymentUpdater = await fetch(
@@ -353,7 +351,6 @@ const Orders = () => {
               }
             );
             const ds = await orderPaymentUpdater.json();
-            console.log(ds);
           }
         }
       });
