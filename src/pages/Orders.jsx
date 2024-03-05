@@ -126,6 +126,10 @@ const UpperBoxStatusBox = styled.div`
       padding: 1rem 0.7rem;
       font-size: 1.2rem;
     }
+    a {
+      color: white;
+      text-decoration: none;
+    }
   }
 `;
 
@@ -275,7 +279,7 @@ const Span = styled.span`
 
 const Orders = () => {
   const { userId } = useParams();
-  const [nodOrders, SetNoOrders] = useState(true);
+  const [nodOrders, setNoOrders] = useState(false);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -285,7 +289,9 @@ const Orders = () => {
         `${process.env.REACT_APP_BASE_URL}/order/${userId}`
       );
       const data = await res.json();
-
+      if (data.orders.length === 0) {
+        setNoOrders(true);
+      }
       if (data.orders) {
         setOrders(data.orders.reverse());
         setTimeout(() => {
@@ -294,9 +300,9 @@ const Orders = () => {
       }
       data.orders.map(async (order) => {
         if (order.paymentStatus === "completed" && order.deleted === false) {
-          SetNoOrders(false);
           return;
         } else {
+          setNoOrders(true);
           const paymentVerifier = await fetch(
             `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
             {
@@ -424,7 +430,7 @@ const Orders = () => {
             <CompLoader />
           </LoaderBox>
         )}
-        {orders.length === 0 && !isLoading && (
+        {nodOrders && !isLoading && (
           <NoOrdersFoundBox>No orders found ...</NoOrdersFoundBox>
         )}
 
@@ -448,10 +454,11 @@ const Orders = () => {
               if (ord.deleted) {
                 return;
               }
+              //
               return (
                 <OrderBox key={ord.id} data-aos="fade-up">
-                  <Link to={`/account/${userId}/orders/${ord.id}`}>
-                    <OrderUpperBox>
+                  <OrderUpperBox>
+                    <Link to={`/account/${userId}/orders/${ord.id}`}>
                       <UpperBoxIdBox>
                         <h5>
                           <span>Order </span>
@@ -469,22 +476,30 @@ const Orders = () => {
                           </span>
                         </p>
                       </UpperBoxIdBox>
-                      <UpperBoxStatusBox>
-                        {ord.tracking.length > 0 &&
-                          ord.paymentStatus === "completed" && (
-                            <button style={{ backgroundColor: "#ff9800" }}>
+                    </Link>
+                    <UpperBoxStatusBox>
+                      {ord.tracking.length > 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button
+                            style={{
+                              backgroundColor: "#ff9800",
+                              color: "white",
+                            }}
+                          >
+                            <Link to={ord.tracking} target="_blank">
                               <MyLocation /> Track order
-                            </button>
-                          )}
-                        {ord.tracking.length === 0 &&
-                          ord.paymentStatus === "completed" && (
-                            <button style={{ backgroundColor: "#963C51" }}>
-                              <ListAlt /> Order Received
-                            </button>
-                          )}
-                      </UpperBoxStatusBox>
-                    </OrderUpperBox>
-                  </Link>
+                            </Link>
+                          </button>
+                        )}
+                      {ord.tracking.length === 0 &&
+                        ord.paymentStatus === "completed" && (
+                          <button style={{ backgroundColor: "#963C51" }}>
+                            <ListAlt /> Order Received
+                          </button>
+                        )}
+                    </UpperBoxStatusBox>
+                  </OrderUpperBox>
+
                   <OrderMidBox>
                     <Link
                       to={`/product/${ord.category}/${ord.slug}/${ord.productId}`}

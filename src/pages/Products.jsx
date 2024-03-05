@@ -189,12 +189,27 @@ const EmptyPara = styled.div`
 `;
 
 const Products = (props) => {
+  const [optField, setOptField] = useState(null);
   const path = useParams().category;
   const [isLoading, setIsLoading] = useState(true);
   const [allProducts, setAllProducts] = useState(null);
   const [backupArr, setBackupArr] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState(null);
   const fetcher = async () => {
+    const defaultField = [
+      {
+        value: "popularity",
+        text: "Sort by price: popularity",
+      },
+      {
+        value: "lowToHigh",
+        text: "Sort by price: low to high",
+      },
+      {
+        value: "highToLow",
+        text: "Sort by price: high to low",
+      },
+    ];
     if (path === "all-products") {
       const resProducts = await fetch(
         `${process.env.REACT_APP_BASE_URL}/product/all-items`
@@ -221,12 +236,14 @@ const Products = (props) => {
       setAllProducts(data.products);
       setFilteredProducts(data.products.reverse());
     }
-
+    setOptField(defaultField);
     setIsLoading(false);
   };
 
   useEffect(() => {
+    setOptField(null);
     document.body.scrollTop = document.documentElement.scrollTop = 0;
+
     fetcher();
 
     return () => {};
@@ -253,8 +270,8 @@ const Products = (props) => {
       setFilteredProducts([...updatedArr]);
     }
     if (text === "high to low") {
-      let updatedArr = arr.sort((a, b) => a.price + b.price);
-      updatedArr.reverse();
+      let updatedArr = arr.sort((a, b) => b.price - a.price);
+
       setFilteredProducts([...updatedArr]);
     }
   };
@@ -280,16 +297,20 @@ const Products = (props) => {
                   placeholder="Search products..."
                   onChange={onChangeHandler}
                 />
+
                 <Select
                   name="searchFilter"
                   id="searchFilter"
                   onChange={getSelectValueHandler}
                 >
-                  <option value="default" defaultValue>
-                    Sort by price: popularity
-                  </option>
-                  <Option value="lowToHigh">Sort by price: low to high</Option>
-                  <Option value="highToLow">Sort by price: high to low</Option>
+                  {optField &&
+                    optField.map((opt) => {
+                      return (
+                        <Option value={opt.value} key={opt.value}>
+                          {opt.text}
+                        </Option>
+                      );
+                    })}
                 </Select>
               </FilterAndSearchBox>
             </ResultAndFilter>

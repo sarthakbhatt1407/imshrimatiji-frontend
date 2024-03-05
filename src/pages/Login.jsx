@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Navbar from "../component/Header.js/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
@@ -239,7 +239,6 @@ const Login = () => {
   const [mobileErr, setMobileErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [allValid, setAllValid] = useState(false);
-
   const [serverErr, setServerErr] = useState(false);
   const [serverTxt, setServerTxt] = useState("");
   const navigate = useNavigate();
@@ -252,6 +251,16 @@ const Login = () => {
     horizontal: "center",
   });
   const { vertical, horizontal, open } = state;
+
+  useEffect(() => {
+    const intv = setInterval(() => {
+      allFieldChecker();
+    }, 500);
+
+    return () => {
+      clearInterval(intv);
+    };
+  }, []);
 
   const handleClick = (newState) => () => {
     setState({ ...newState, open: true });
@@ -279,37 +288,35 @@ const Login = () => {
 
   const allFieldChecker = () => {
     setAllValid(false);
-    const email = !showMobile ? document.querySelector("#email").value : "";
-    const contactNum = showMobile
-      ? document.querySelector("#contactNum").value
-      : "";
+    const email = document.querySelector("#email");
+    const contactNum = document.querySelector("#contactNum");
+
     const password = document.querySelector("#password").value;
-
-    if (!showMobile && !validateEmail(email)) {
-      setEmailErr(true);
-      return;
+    if (contactNum) {
+      console.log("hi");
+      if (contactNum.value.length === 10 && password.length > 5) {
+        setAllValid(true);
+      }
+    } else {
+      console.log("1");
+      if (validateEmail(email.value) && password.length > 5) {
+        setAllValid(true);
+      }
     }
-
-    if (showMobile && contactNum.length < 10) {
-      setMobileErr(true);
-      return;
-    }
-    if (password.trim().length < 8) {
-      setPasswordErr(true);
-      return;
-    }
-    if (!emailErr && !passwordErr) {
-      setAllValid(true);
-      return;
-    }
-    if (!mobileErr && !passwordErr) {
-      setAllValid(true);
-      return;
-    }
-    return;
   };
-  const onBlurHandler = () => {
-    allFieldChecker();
+  const onBlurHandler = (e) => {
+    const id = e.target.id;
+    const val = document.querySelector(`#${e.target.id}`).value;
+    if (id === "email") {
+      if (!validateEmail(val)) {
+        setEmailErr(true);
+      }
+    }
+    if (id === "password") {
+      if (val.trim().length < 6) {
+        setPasswordErr(true);
+      }
+    }
   };
 
   const onChangeHandler = (e) => {
@@ -496,14 +503,14 @@ const Login = () => {
                   }}
                 />{" "}
                 {passwordErr && (
-                  <p>Password is too short (minimun 8 charcters.)</p>
+                  <p>Password is too short (minimun 6 charcters.)</p>
                 )}
                 {serverErr && <p>{serverTxt}</p>}
                 {showMobile && (
                   <span
                     data-aos="zoom-in"
                     onClick={() => {
-                      setShowMobile(!showMobile);
+                      setShowMobile(false);
                     }}
                   >
                     Login using Email
@@ -513,7 +520,7 @@ const Login = () => {
                   <span
                     data-aos="zoom-in"
                     onClick={() => {
-                      setShowMobile(!showMobile);
+                      setShowMobile(true);
                     }}
                   >
                     Login using mobile number

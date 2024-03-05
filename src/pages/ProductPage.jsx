@@ -392,7 +392,7 @@ const ProductsBox = styled.div`
   }
 `;
 const Select = styled.select`
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   border: none;
   color: #777;
   background-color: white;
@@ -400,6 +400,8 @@ const Select = styled.select`
   font-size: 1.3rem;
   font-weight: bold;
   letter-spacing: 0.04rem;
+  border: 1px solid #777;
+  border-style: dotted;
   &:focus {
     outline: none;
     border: none;
@@ -817,15 +819,7 @@ const ProductPage = (props) => {
                         )}
                       </i>
                     </h3>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Magni ab ut magnam commodi voluptates. Enim nisi quos in
-                      animi quae fugit magnam deserunt harum vel minima,
-                      mollitia asperiores facere laboriosam tempore et totam
-                      odio fugiat hic ad quam id! Nobis perspiciatis deserunt
-                      veniam vel velit nesciunt repellendus provident corporis
-                      quae?
-                    </p>
+                    <p>{product.desc}</p>
                     <RzrpayDiv>
                       <div id="razorpay-affordability-widget"></div>
                     </RzrpayDiv>

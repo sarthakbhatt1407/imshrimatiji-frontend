@@ -70,6 +70,7 @@ const ArrowRight = styled.button`
 `;
 
 const ImagesSlider = (props) => {
+  const product = props.product;
   const [imgSlides, setImgSlides] = useState([]);
   const images = props.product.images;
   const ImgArr = images.split(" ");
@@ -78,7 +79,7 @@ const ImagesSlider = (props) => {
   useEffect(() => {
     setImgSlides(ImgArr);
     return () => {};
-  }, []);
+  }, [product]);
 
   const imageLeft = () => {
     const images = document.querySelectorAll(".image");
