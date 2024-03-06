@@ -10,6 +10,7 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
   LocalMall,
+  ShoppingCartOutlined,
 } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import { colors } from "../../../data";
@@ -38,6 +39,13 @@ const PcNav = styled.div`
   grid-template-columns: 0.6fr 4fr 1fr;
   @media only screen and (max-width: 949px) {
     display: none;
+  }
+  a {
+    span {
+      svg {
+        transform: scale(1.8);
+      }
+    }
   }
 `;
 
@@ -82,7 +90,7 @@ const UserControlsDiv = styled.div`
   gap: 1.8rem;
   align-items: center;
   font-size: 1.4rem;
-  padding-right: 1.5rem;
+  padding-right: 2rem;
   a {
     text-decoration: none;
     transition: all 0.2s;
@@ -470,7 +478,7 @@ const Navbar = () => {
           )}
           <Link to="/cart">
             <Badge badgeContent={cartTotalItems} color="primary">
-              <LocalMall color="action" />
+              <ShoppingCartOutlined color="action" />
             </Badge>
           </Link>
         </UserControlsDiv>
