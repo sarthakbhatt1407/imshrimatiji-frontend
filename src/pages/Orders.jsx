@@ -298,7 +298,6 @@ const Orders = () => {
     }
     for (const order of data.orders) {
       if (order.paymentStatus === "completed" && order.deleted === false) {
-        setNoOrders(false);
         return;
       } else {
         const paymentVerifier = await fetch(
