@@ -279,7 +279,6 @@ const Span = styled.span`
 
 const Orders = () => {
   const { userId } = useParams();
-  const [nodOrders, setNoOrders] = useState(true);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const fetcher = async () => {
@@ -288,7 +287,6 @@ const Orders = () => {
     );
     const data = await res.json();
     if (data.orders.length === 0) {
-      setNoOrders(true);
     }
     if (data.orders) {
       setOrders(data.orders.reverse());
@@ -373,9 +371,6 @@ const Orders = () => {
             <CompLoader />
           </LoaderBox>
         )}
-        {nodOrders && !isLoading && (
-          <NoOrdersFoundBox>No orders found ...</NoOrdersFoundBox>
-        )}
 
         {orders.length > 0 && (
           <MainBox>
@@ -386,7 +381,7 @@ const Orders = () => {
                 <span>orders and track them here</span>
               </p>
             </HeadingBox>
-            {!isLoading && nodOrders && <Span>No orders found ...</Span>}
+
             {orders.map((ord) => {
               if (
                 ord.paymentStatus !== "completed" &&
