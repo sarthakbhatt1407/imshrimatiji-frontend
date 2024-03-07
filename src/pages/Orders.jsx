@@ -282,142 +282,82 @@ const Orders = () => {
   const [nodOrders, setNoOrders] = useState(true);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const fetcher = async () => {
+    const res = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/order/${userId}`
+    );
+    const data = await res.json();
+    if (data.orders.length === 0) {
+      setNoOrders(true);
+    }
+    if (data.orders) {
+      setOrders(data.orders.reverse());
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+    for (const order of data.orders) {
+      if (order.paymentStatus === "completed" && order.deleted === false) {
+        setNoOrders(false);
+        return;
+      } else {
+        const paymentVerifier = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await paymentVerifier.json();
 
-  useEffect(() => {
-    const fetcher = async () => {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/order/${userId}`
-      );
-      const data = await res.json();
-      if (data.orders.length === 0) {
-        setNoOrders(true);
-      }
-      if (data.orders) {
-        setOrders(data.orders.reverse());
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
-      }
-      data.orders.map(async (order) => {
-        if (order.paymentStatus === "completed" && order.deleted === false) {
-          setNoOrders(false);
-          return;
-        } else {
-          const paymentVerifier = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
+        if (data.captured === false) {
+          const orderPaymentUpdater = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
             {
-              method: "GET",
+              method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
+              body: JSON.stringify({
+                productId: order.productId,
+                size: order.size,
+                orderId: order._id,
+                orderPaymentStatus: false,
+                paymentMethod: "failed",
+              }),
             }
           );
-          const data = await paymentVerifier.json();
-
-          if (data.captured === false) {
-            const orderPaymentUpdater = await fetch(
-              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  productId: order.productId,
-                  size: order.size,
-                  orderId: order._id,
-                  orderPaymentStatus: false,
-                  paymentMethod: "",
-                }),
-              }
-            );
-            const ds = await orderPaymentUpdater.json();
-            console.log(ds);
-          }
-          if (data.captured) {
-            const orderPaymentUpdater = await fetch(
-              `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  orderId: order._id,
-                  orderPaymentStatus: data.captured,
-                  paymentMethod: data.method,
-                  productId: order.productId,
-                  size: order.size,
-                }),
-              }
-            );
-            const ds = await orderPaymentUpdater.json();
-          }
+          const ds = await orderPaymentUpdater.json();
+          console.log(ds);
         }
-      });
-    };
-    fetcher();
-
-    const intv = setInterval(() => {
-      fetcher();
-    }, 5000);
-
-    return () => {
-      clearInterval(intv);
-    };
-  }, []);
-  const paymentUpdater = async (order) => {
-    // if (!order.paymentOrderId) {
-    //   return;
-    // }
-    const paymentVerifier = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/payment/payment-verifier/${order.paymentOrderId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        if (data.captured) {
+          const orderPaymentUpdater = await fetch(
+            `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                orderId: order._id,
+                orderPaymentStatus: data.captured,
+                paymentMethod: data.method,
+                productId: order.productId,
+                size: order.size,
+              }),
+            }
+          );
+          const ds = await orderPaymentUpdater.json();
+          console.log(ds);
+        }
       }
-    );
-    const data = await paymentVerifier.json();
-    // console.log(data);
-    if (data.captured === false) {
-      const orderPaymentUpdater = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId: order._id,
-            orderPaymentStatus: false,
-            paymentMethod: "",
-          }),
-        }
-      );
-      const ds = await orderPaymentUpdater.json();
-      // console.log(ds);
-    }
-    if (data.captured) {
-      const orderPaymentUpdater = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/order/payment-updater`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId: order._id,
-            orderPaymentStatus: data.captured,
-            paymentMethod: data.method,
-          }),
-        }
-      );
-      const ds = await orderPaymentUpdater.json();
-      // console.log(ds);
     }
   };
+  useEffect(() => {
+    fetcher();
+  }, []);
 
   return (
     <>

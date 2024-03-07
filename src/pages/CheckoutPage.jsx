@@ -552,7 +552,6 @@ const CheckoutPage = () => {
                 orderPaymentStatus: true,
                 paymentMethod: "Waiting for confirmation.",
                 productId: order.productId,
-                size: order.size,
               }),
             }
           );
