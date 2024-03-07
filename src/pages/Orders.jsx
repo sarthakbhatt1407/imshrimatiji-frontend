@@ -357,12 +357,12 @@ const Orders = () => {
   };
   useEffect(() => {
     fetcher();
-    const intv = setInterval(() => {
-      fetcher();
-    }, 3000);
-    return () => {
-      clearInterval(intv);
-    };
+    // const intv = setInterval(() => {
+    //   fetcher();
+    // }, 3000);
+    // return () => {
+    //   clearInterval(intv);
+    // };
   }, []);
 
   return (
