@@ -619,10 +619,12 @@ const ProductPage = (props) => {
         `${process.env.REACT_APP_BASE_URL}/product/${productId}`
       );
       const data = await res.json();
-      if (!data.product) {
+
+      if (!data.product || data.product.status === false) {
         navigate("/not-found");
         return;
       }
+
       setProduct(data.product);
 
       setSelectedClr(data.product.color);

@@ -320,6 +320,9 @@ const Products = (props) => {
                 <ProductsDiv>
                   {allProducts &&
                     filteredProducts.map((item) => {
+                      if (item.status != true) {
+                        return <></>;
+                      }
                       const colors = item.color.split(",");
                       const image = item.images.split(" ")[0];
 
