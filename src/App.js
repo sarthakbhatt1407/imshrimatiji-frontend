@@ -44,7 +44,6 @@ const App = () => {
         <Route path="/not-found" exact element={<Error />} />
         {isLoggedIn && <Route path="/login" element={<Navigate to="/" />} />}
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
-        {isLoggedIn && <Route path="/login" element={<Login />} />}
         {isLoggedIn && <Route path="/account/:userId" element={<Profile />} />}
         <Route
           path="/product/:category/:product/:productId"

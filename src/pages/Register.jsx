@@ -304,7 +304,7 @@ const Register = () => {
       fullName.length > 4 &&
       validateEmail(email) &&
       contactNum.length === 10 &&
-      password.trim().length >= 8
+      password.trim().length >= 6
     ) {
       setAllValid(true);
       return;
@@ -330,7 +330,7 @@ const Register = () => {
       setMobileErr(true);
       return;
     }
-    if (id === "password" && password.trim().length < 8) {
+    if (id === "password" && password.trim().length < 6) {
       setPasswordErr(true);
       return;
     }

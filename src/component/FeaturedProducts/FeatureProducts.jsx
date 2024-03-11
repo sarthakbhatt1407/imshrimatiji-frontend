@@ -240,6 +240,9 @@ const FeatureProducts = () => {
           !isLoading &&
           products.length > 0 &&
           products.map((item) => {
+            if (item.status === false) {
+              return <></>;
+            }
             if (item.category === "saree") {
               sareeCounter++;
               const colors = item.color.split(",");
@@ -267,7 +270,9 @@ const FeatureProducts = () => {
               kurtiCounter++;
               const colors = item.color.split(",");
               const image = item.images.split(" ")[0];
-
+              if (item.status === false) {
+                return <></>;
+              }
               return (
                 <Link
                   to={`/product/${item.category}/${item.slug}/${item.id}`}
@@ -287,6 +292,9 @@ const FeatureProducts = () => {
           !isLoading &&
           products.length > 0 &&
           products.map((item) => {
+            if (item.status === false) {
+              return <></>;
+            }
             if (item.category === "suit") {
               suitCounter++;
               const colors = item.color.split(",");
@@ -310,6 +318,9 @@ const FeatureProducts = () => {
           !isLoading &&
           products.length > 0 &&
           products.map((item) => {
+            if (item.status === false) {
+              return <></>;
+            }
             if (item.category === "frock") {
               frockCounter++;
               const colors = item.color.split(",");
