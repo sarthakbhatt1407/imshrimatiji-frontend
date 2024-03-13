@@ -372,6 +372,11 @@ const Orders = () => {
             <CompLoader />
           </LoaderBox>
         )}
+        {!isLoading && orders.length === 0 && (
+          <NoOrdersFoundBox>
+            <span>No orders found.</span>
+          </NoOrdersFoundBox>
+        )}
 
         {orders.length > 0 && (
           <MainBox>
