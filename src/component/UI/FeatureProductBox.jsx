@@ -31,12 +31,12 @@ const MainBox = styled.div`
 const ImgBox = styled.div`
   img {
     transition: all 0.5s;
-    width: 32rem;
+    width: 29rem;
     height: 38rem;
     border-radius: 0.5rem;
     @media only screen and (max-width: 949px) {
       width: 26rem;
-      height: 33rem;
+      height: 35rem;
     }
   }
 `;
