@@ -4,8 +4,8 @@ import Navbar from "../component/Header.js/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import { colors } from "../data";
 import CompLoader from "../component/Loaders/CompLoader/CompLoader";
-import { useNavigate } from "react-router-dom";
-import { Alert, Snackbar } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { Alert, Snackbar, setRef } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 const OuterBox = styled.div`
@@ -158,6 +158,9 @@ const EmailVerificationBox = styled.div`
     margin-top: -2rem;
     letter-spacing: 0.08rem;
   }
+  a {
+    text-decoration: none;
+  }
 `;
 const LoaderBox = styled.div`
   position: absolute;
@@ -233,6 +236,10 @@ const Span = styled.span`
 `;
 
 const Login = () => {
+  const [forgotEmailSend, setForgotEmailSend] = useState(false);
+  const [forOtpVer, setForOtpVer] = useState(false);
+  const [forEmailValid, setForEmailValid] = useState(false);
+  const [forPassValid, setForPassValid] = useState(false);
   const [emailVer, setEmailVer] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
@@ -245,22 +252,27 @@ const Login = () => {
   const [showMobile, setShowMobile] = useState(false);
   const dispatch = useDispatch();
   const [name, setName] = useState("");
+  const [showForgot, setShowForgot] = useState(false);
+  const [refresher, setRefresher] = useState(0);
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
     horizontal: "center",
+    text: "",
   });
-  const { vertical, horizontal, open } = state;
+  const { vertical, horizontal, open, text } = state;
 
   useEffect(() => {
     const intv = setInterval(() => {
-      allFieldChecker();
+      if (!showForgot) {
+        allFieldChecker();
+      }
     }, 500);
 
     return () => {
       clearInterval(intv);
     };
-  }, []);
+  }, [showForgot, refresher]);
 
   const handleClick = (newState) => () => {
     setState({ ...newState, open: true });
@@ -298,7 +310,6 @@ const Login = () => {
         setAllValid(true);
       }
     } else {
-      console.log("1");
       if (validateEmail(email.value) && password.length > 5) {
         setAllValid(true);
       }
@@ -381,7 +392,11 @@ const Login = () => {
     console.log(data);
     if (data.success) {
       setName(data.user.name);
-      setState({ ...state, open: true });
+      setState({
+        ...state,
+        open: true,
+        text: "Log in successfull. We're thrilled to see you again",
+      });
 
       setTimeout(() => {
         dispatch({ type: "log in", data: { ...data } });
@@ -407,8 +422,7 @@ const Login = () => {
           variant="filled"
           sx={{ width: "100%", top: 0, fontSize: "1.6rem" }}
         >
-          Log in successfull. We're thrilled to see you again{" "}
-          <Span>{name}</Span>.
+          {text} <Span> {name}</Span>.
         </Alert>
       </Snackbar>
       <OuterBox>
@@ -430,107 +444,359 @@ const Login = () => {
             </button>
           </LeftDiv>
           <RightDiv>
-            <h2>Log In</h2>
-            <h3>Ready to dive back into your shopping journey?</h3>
-            {emailVer && (
-              <EmailVerificationBox>
-                {isLoading && (
-                  <LoaderBox>
-                    <CompLoader />
-                  </LoaderBox>
-                )}
-                {!showMobile && (
-                  <>
+            {!showForgot && (
+              <>
+                <h2>Log In</h2>
+                <h3>Ready to dive back into your shopping journey?</h3>
+                {emailVer && (
+                  <EmailVerificationBox>
+                    {isLoading && (
+                      <LoaderBox>
+                        <CompLoader />
+                      </LoaderBox>
+                    )}
+                    {!showMobile && (
+                      <>
+                        <Input
+                          type="text"
+                          className="inputField"
+                          name="email"
+                          data-aos="zoom-in"
+                          id="email"
+                          onChange={onChangeHandler}
+                          placeholder="Email"
+                          onBlur={onBlurHandler}
+                          value={inpFields.email}
+                          style={{
+                            border: `${
+                              emailErr
+                                ? "1px solid #d72020"
+                                : "1px solid rgba(166, 166, 166, 0.3)"
+                            }`,
+                          }}
+                        />
+                        {emailErr && <p>Invalid Email</p>}
+                      </>
+                    )}
+                    {showMobile && (
+                      <>
+                        <Input
+                          type="number"
+                          name=""
+                          className="inputField"
+                          id="contactNum"
+                          data-aos="zoom-in"
+                          onBlur={onBlurHandler}
+                          onChange={onChangeHandler}
+                          placeholder="Mobile number"
+                          value={inpFields.contactNum}
+                          style={{
+                            border: `${
+                              mobileErr
+                                ? "1px solid #d72020"
+                                : "1px solid rgba(166, 166, 166, 0.3)"
+                            }`,
+                          }}
+                        />{" "}
+                        {mobileErr && <p>Invalid Contact Number</p>}
+                      </>
+                    )}
                     <Input
-                      type="text"
-                      className="inputField"
-                      name="email"
-                      data-aos="zoom-in"
-                      id="email"
-                      onChange={onChangeHandler}
-                      placeholder="Email"
-                      onBlur={onBlurHandler}
-                      value={inpFields.email}
-                      style={{
-                        border: `${
-                          emailErr
-                            ? "1px solid #d72020"
-                            : "1px solid rgba(166, 166, 166, 0.3)"
-                        }`,
-                      }}
-                    />
-                    {emailErr && <p>Invalid Email</p>}
-                  </>
-                )}
-                {showMobile && (
-                  <>
-                    <Input
-                      type="number"
+                      type="password"
                       name=""
                       className="inputField"
-                      id="contactNum"
-                      data-aos="zoom-in"
+                      id="password"
                       onBlur={onBlurHandler}
+                      value={inpFields.password}
                       onChange={onChangeHandler}
-                      placeholder="Mobile number"
-                      value={inpFields.contactNum}
+                      placeholder="Password"
                       style={{
                         border: `${
-                          mobileErr
+                          passwordErr
                             ? "1px solid #d72020"
                             : "1px solid rgba(166, 166, 166, 0.3)"
                         }`,
                       }}
                     />{" "}
-                    {mobileErr && <p>Invalid Contact Number</p>}
-                  </>
+                    {passwordErr && (
+                      <p>Password is too short (minimun 6 charcters.)</p>
+                    )}
+                    {serverErr && <p>{serverTxt}</p>}
+                    {showMobile && (
+                      <span
+                        data-aos="zoom-in"
+                        onClick={() => {
+                          setShowMobile(false);
+                        }}
+                      >
+                        Login using Email
+                      </span>
+                    )}
+                    {!showMobile && (
+                      <span
+                        data-aos="zoom-in"
+                        onClick={() => {
+                          setShowMobile(true);
+                        }}
+                      >
+                        Login using mobile number
+                      </span>
+                    )}
+                    {allValid && (
+                      <SubmitButton onClick={onSubmitHandler}>
+                        Submit
+                      </SubmitButton>
+                    )}
+                    {!allValid && <DisabledBtn>Submit</DisabledBtn>}
+                    <p
+                      onClick={() => {
+                        setShowForgot(true);
+                      }}
+                      style={{
+                        textTransform: "capitalize",
+                        textAlign: "center",
+
+                        margin: "-1.2rem 0",
+                        color: "#e6758d",
+                        padding: "2.6px 1px",
+                        borderBottom: "1px dashed #e6758d",
+                        margin: "0 auto",
+                        width: "fit-content",
+                        cursor: "pointer",
+                      }}
+                    >
+                      forgot password
+                    </p>
+                  </EmailVerificationBox>
                 )}
-                <Input
-                  type="password"
-                  name=""
-                  className="inputField"
-                  id="password"
-                  onBlur={onBlurHandler}
-                  value={inpFields.password}
-                  onChange={onChangeHandler}
-                  placeholder="Password"
-                  style={{
-                    border: `${
-                      passwordErr
-                        ? "1px solid #d72020"
-                        : "1px solid rgba(166, 166, 166, 0.3)"
-                    }`,
-                  }}
-                />{" "}
-                {passwordErr && (
-                  <p>Password is too short (minimun 6 charcters.)</p>
+              </>
+            )}
+            {showForgot && (
+              <>
+                <h2>Forgot Password</h2>
+                <h3>Enter email to reset your password</h3>
+                {emailVer && (
+                  <EmailVerificationBox>
+                    {isLoading && (
+                      <LoaderBox>
+                        <CompLoader />
+                      </LoaderBox>
+                    )}
+                    {!showMobile && (
+                      <>
+                        {!forgotEmailSend && (
+                          <Input
+                            type="text"
+                            className="inputField"
+                            name="email"
+                            data-aos="zoom-in"
+                            id="email"
+                            value={inpFields.email}
+                            onChange={(e) => {
+                              setServerErr(false);
+                              setServerTxt("");
+                              setEmailErr(false);
+                              setInpFields({
+                                ...inpFields,
+                                email: e.target.value,
+                              });
+                              setForEmailValid(false);
+                              if (validateEmail(e.target.value)) {
+                                setForEmailValid(true);
+                              }
+                            }}
+                            placeholder="Email"
+                            onBlur={onBlurHandler}
+                            style={{
+                              border: `${
+                                emailErr
+                                  ? "1px solid #d72020"
+                                  : "1px solid rgba(166, 166, 166, 0.3)"
+                              }`,
+                            }}
+                          />
+                        )}
+                        {emailErr && <p>Invalid Email</p>}
+                      </>
+                    )}
+                    {forgotEmailSend && forOtpVer && (
+                      <Input
+                        type="password"
+                        name=""
+                        className="inputField"
+                        id="password"
+                        onBlur={onBlurHandler}
+                        onChange={(e) => {
+                          setForPassValid(false);
+                          setPasswordErr(false);
+                          if (e.target.value.trim().length < 6) {
+                            return;
+                          } else {
+                            setForPassValid(true);
+                          }
+                          setInpFields({
+                            ...inpFields,
+                            password: e.target.value,
+                          });
+                        }}
+                        placeholder="Password"
+                        style={{
+                          border: `${
+                            passwordErr
+                              ? "1px solid #d72020"
+                              : "1px solid rgba(166, 166, 166, 0.3)"
+                          }`,
+                        }}
+                      />
+                    )}
+                    {passwordErr && (
+                      <p>Password is too short (minimun 6 charcters.)</p>
+                    )}
+
+                    {forgotEmailSend && !forOtpVer && (
+                      <Input
+                        type="number"
+                        name=""
+                        className="inputField"
+                        id="otp"
+                        onChange={() => {
+                          setServerErr(false);
+                          setServerTxt("");
+                        }}
+                        placeholder="Enter otp sent to your email"
+                      />
+                    )}
+
+                    {serverErr && <p>{serverTxt}</p>}
+
+                    {forEmailValid && !forgotEmailSend && (
+                      <SubmitButton
+                        onClick={async () => {
+                          setIsLoading(true);
+                          const reslt = await fetch(
+                            `${process.env.REACT_APP_BASE_URL}/user/forgot-send-email`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                email: inpFields.email,
+                              }),
+                            }
+                          );
+                          const data = await reslt.json();
+                          console.log(data);
+                          if (reslt.ok) {
+                            setForgotEmailSend(true);
+                          } else {
+                            setServerErr(true);
+                            setServerTxt(data.message);
+                          }
+                          setIsLoading(false);
+                        }}
+                      >
+                        Submit
+                      </SubmitButton>
+                    )}
+                    {forgotEmailSend && !forOtpVer && (
+                      <SubmitButton
+                        onClick={async () => {
+                          setIsLoading(true);
+                          const val = document.querySelector("#otp").value;
+                          const reslt = await fetch(
+                            `${process.env.REACT_APP_BASE_URL}/user/forgot-verify-otp`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                otpInp: Number(val),
+                                email: inpFields.email,
+                              }),
+                            }
+                          );
+                          const data = await reslt.json();
+                          console.log(data);
+                          if (data.valid) {
+                            setForOtpVer(true);
+                          }
+                          if (!data.valid) {
+                            setServerErr(true);
+                            setServerTxt(data.message);
+                          }
+                          setIsLoading(false);
+                        }}
+                      >
+                        Submit
+                      </SubmitButton>
+                    )}
+                    {forgotEmailSend && forOtpVer && forPassValid && (
+                      <SubmitButton
+                        onClick={async () => {
+                          setIsLoading(true);
+
+                          const reslt = await fetch(
+                            `${process.env.REACT_APP_BASE_URL}/user/reset-password`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                email: inpFields.email,
+                                password: inpFields.password,
+                              }),
+                            }
+                          );
+                          const data = await reslt.json();
+                          console.log(data);
+                          if (reslt.ok) {
+                            setState({
+                              ...state,
+                              open: true,
+                              text: "Password has been changed.",
+                            });
+
+                            window.location.reload();
+                          }
+                          if (!data.valid) {
+                            setServerErr(true);
+                            setServerTxt(data.message);
+                          }
+                          setIsLoading(false);
+                        }}
+                      >
+                        Submit
+                      </SubmitButton>
+                    )}
+                    {!forEmailValid && <DisabledBtn>Submit</DisabledBtn>}
+                    {!forPassValid && forgotEmailSend && forOtpVer && (
+                      <DisabledBtn>Submit</DisabledBtn>
+                    )}
+                    <p
+                      onClick={() => {
+                        setShowForgot(false);
+                      }}
+                      style={{
+                        textTransform: "capitalize",
+                        textAlign: "center",
+
+                        margin: "-1.2rem 0",
+                        color: "#e6758d",
+                        padding: "2.6px 1px",
+                        borderBottom: "1px dashed #e6758d",
+                        margin: "0 auto",
+                        width: "fit-content",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Back to login
+                    </p>
+                  </EmailVerificationBox>
                 )}
-                {serverErr && <p>{serverTxt}</p>}
-                {showMobile && (
-                  <span
-                    data-aos="zoom-in"
-                    onClick={() => {
-                      setShowMobile(false);
-                    }}
-                  >
-                    Login using Email
-                  </span>
-                )}
-                {!showMobile && (
-                  <span
-                    data-aos="zoom-in"
-                    onClick={() => {
-                      setShowMobile(true);
-                    }}
-                  >
-                    Login using mobile number
-                  </span>
-                )}
-                {allValid && (
-                  <SubmitButton onClick={onSubmitHandler}>Submit</SubmitButton>
-                )}
-                {!allValid && <DisabledBtn>Submit</DisabledBtn>}
-              </EmailVerificationBox>
+              </>
             )}
           </RightDiv>
         </MainBox>
