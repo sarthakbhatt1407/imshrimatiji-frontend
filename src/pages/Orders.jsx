@@ -355,12 +355,12 @@ const Orders = () => {
   useEffect(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     fetcher();
-    // const intv = setInterval(() => {
-    //   fetcher();
-    // }, 3000);
-    // return () => {
-    //   clearInterval(intv);
-    // };
+    const intv = setInterval(() => {
+      fetcher();
+    }, 1500);
+    return () => {
+      clearInterval(intv);
+    };
   }, []);
 
   return (
