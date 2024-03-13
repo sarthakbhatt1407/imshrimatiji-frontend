@@ -250,6 +250,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     const fetcher = async () => {
       const reslt = await fetch(
         `${process.env.REACT_APP_BASE_URL}/user/get-user`,

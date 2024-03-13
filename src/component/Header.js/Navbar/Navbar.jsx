@@ -363,11 +363,6 @@ const Navbar = () => {
           </Link>
         )}
 
-        {linksActive && (
-          <Link onClick={menuButtonHandler} to="/">
-            Story
-          </Link>
-        )}
         {linksActive && isLoggedIn && (
           <Link onClick={menuButtonHandler} to={`/account/${userId}/orders`}>
             Orders
@@ -460,7 +455,6 @@ const Navbar = () => {
           )}
         </PageLinksDiv>
         <UserControlsDiv>
-          <Link to="/">Story</Link>
           {isLoggedIn && <Link to={`/account/${userId}/orders`}>Orders</Link>}
           {!isLoggedIn && <Link to="/login">Login</Link>}
           {!isLoggedIn && <Link to="/register">Register</Link>}

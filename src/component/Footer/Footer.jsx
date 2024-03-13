@@ -9,6 +9,7 @@ import {
   YouTube,
 } from "@mui/icons-material";
 import { colors } from "../../data";
+import { useSelector } from "react-redux";
 
 // css
 const MainBox = styled.footer`
@@ -59,10 +60,12 @@ const LogoBox = styled.div`
 const LinkAndCategoryBox = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 0 2rem;
   @media only screen and (max-width: 900px) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0;
   }
   @media only screen and (min-width: 900px) and (max-width: 949px) {
   }
@@ -102,7 +105,7 @@ const EmailSubBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
+  width: 40%;
   h4 {
     font-weight: bold;
     font-size: 2.5rem;
@@ -111,7 +114,8 @@ const EmailSubBox = styled.div`
     border: 1px solid #dbdbdb;
     outline: none;
     border-radius: 0.3rem;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
+    padding-right: 2rem;
   }
   button {
     width: 60%;
@@ -166,6 +170,8 @@ const SocialMediaBox = styled.div`
 `;
 
 const Footer = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const userId = useSelector((state) => state.userId);
   return (
     <MainBox>
       {/* Upper */}
@@ -177,17 +183,20 @@ const Footer = () => {
         <LinkAndCategoryBox>
           <LinksBox data-aos="fade-up">
             <h4>Links</h4>
-            <Link to="/">Story</Link>
-            <Link to="/">Orders</Link>
-            <Link to="/">Account</Link>
-            <Link to="/">Cart</Link>
+            {isLoggedIn && (
+              <>
+                <Link to={`/account/${userId}/orders`}>Orders</Link>
+                <Link to={`/account/${userId}`}>Account</Link>
+              </>
+            )}
+            <Link to="/cart">Cart</Link>
           </LinksBox>
           <LinksBox data-aos="fade-up">
-            <h4>Categories</h4>
-            <Link to="/">Saree</Link>
-            <Link to="/">Kurti</Link>
-            <Link to="/">Frock</Link>
-            <Link to="/">Suit</Link>
+            <h4>Categories</h4> <Link to="/product-category/saree">Saree</Link>
+            <Link to="/product-category/kurti">Kurti</Link>
+            <Link to="/product-category/frock">Frock</Link>
+            <Link to="/product-category/suit">Suit</Link>
+            <Link to="/product-category/all-products">Shop All</Link>
           </LinksBox>
           <EmailSubBox data-aos="fade-up">
             <h4>Subscribe</h4>

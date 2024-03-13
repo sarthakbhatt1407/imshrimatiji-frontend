@@ -20,6 +20,7 @@ const MainBox = styled.div`
   overflow-x: hidden;
   padding: 4rem 0;
   margin: 2rem 0;
+  margin-bottom: 4rem;
   @media only screen and (max-width: 1220px) {
     padding: 0;
     margin: 0;
