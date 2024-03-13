@@ -21,8 +21,7 @@ import { useEffect } from "react";
 
 const MainNav = styled.nav`
   padding: 1rem;
-  position: fixed;
-  width: 100%;
+  position: sticky;
   top: 0;
   background-color: #f7f7f7;
   padding: 1rem 0;
