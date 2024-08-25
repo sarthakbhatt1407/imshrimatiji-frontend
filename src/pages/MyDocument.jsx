@@ -240,7 +240,7 @@ const MyDocument = (props) => {
           </View>
           <View style={styles.companyDetailsBox}>
             <Text style={styles.upperBoxMainHeading}>SOLD BY:</Text>
-            <Text style={styles.upperBoxText}>FUSIONAVINYA. COM PVT LTD</Text>
+            <Text style={styles.upperBoxText}>Sarthak</Text>
             <Text style={styles.upperBoxText}>Banjarawala Chauwk</Text>
             <Text style={styles.upperBoxText}>
               {" "}
