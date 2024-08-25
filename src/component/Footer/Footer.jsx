@@ -209,9 +209,7 @@ const Footer = () => {
       {/* Lower */}
 
       <SocialMediaAndCopyBox>
-        <CopyBox>
-          Copyright © 2024 imshrimatiji | Powered by Fusion Avinya
-        </CopyBox>
+        <CopyBox>Copyright © 2024 imshrimatiji | Powered by Sarthak</CopyBox>
         <SocialMediaBox>
           <FacebookOutlined />
           <Instagram />

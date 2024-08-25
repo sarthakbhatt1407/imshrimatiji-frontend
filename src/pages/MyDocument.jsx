@@ -218,7 +218,7 @@ const MyDocument = (props) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.companyHeadingBox}>
-          <Text style={styles.companyHeading}>FUSIONAVINYA. COM PVT LTD</Text>
+          <Text style={styles.companyHeading}>Sarthak Bhatt</Text>
         </View>
         <View style={styles.taxHeading}>
           <Text>TAX INVOICE</Text>
